@@ -1,3 +1,28 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+    --sidebar-width: 230px
+}
+
+body {
+    background-color: #F7F8FA;
+}
+
+@layer components {
+    .input {
+        @apply px-4 py-2 border-black border-solid border-[1px] outline-none rounded-md
+    }
+
+    .errorMessage {
+        @apply p-2 text-red-500 text-[14px]
+    }
+}
+
+@layer utilities {
+    .disable {
+        @apply bg-gray-200
+    }
+
+}
