@@ -1,8 +1,4 @@
-import { Fragment } from "react/jsx-runtime";
-import { useAppDispatch, useAppSelector } from "../../redux/store";
-import Button from "../ui/Button";
-import { logout } from "../../redux/slices/authSlice";
-import { useNavigate } from "react-router-dom";
+import {useAppSelector } from "../../redux/store";
 import Sidebar from "../ui/Sidebar";
 import { ContentContainer } from "../ui/ContentContainer";
 

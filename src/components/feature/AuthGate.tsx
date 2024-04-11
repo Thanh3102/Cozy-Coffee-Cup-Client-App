@@ -7,7 +7,7 @@ import { refreshToken } from "../../redux/slices/authSlice";
 interface Props extends BaseProps {}
 
 const AuthGate = ({ children }: Props) => {
-  const { accessToken } = useAppSelector((state) => state.auth);
+  const { status } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
   const refresh = async () => {
@@ -16,8 +16,21 @@ const AuthGate = ({ children }: Props) => {
   useEffect(() => {
     console.log("Refresh new access token");
     refresh();
+    const intervalId = setInterval(() => {
+      console.log("Interval refresh token");
+      refresh();
+    }, 1000 * 14 * 60);
+    return () => {
+      clearInterval(intervalId);
+    };
   }, []);
-  return <Fragment>{children}</Fragment>;
+  if (status === "pending") {
+    return (
+      <Fragment>
+        <h1>Loading...</h1>
+      </Fragment>
+    );
+  } else return <Fragment>{children}</Fragment>;
 };
 
 export default AuthGate;

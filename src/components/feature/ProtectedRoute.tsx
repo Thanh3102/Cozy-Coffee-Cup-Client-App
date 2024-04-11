@@ -2,6 +2,7 @@ import { Fragment } from "react/jsx-runtime";
 import { BaseProps } from "../../utils/types/interface";
 import { useAppSelector } from "../../redux/store";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 interface Props extends BaseProps {}
 
@@ -9,9 +10,11 @@ const ProtectedRoute = ({ children }: Props) => {
   const { status } = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
 
-  if (status === "unauthenciation") {
-    navigate("/login");
-  }
+  useEffect(() => {
+    if (status === "unauthenciation") {
+      navigate("/login");
+    }
+  });
 
   if (status == "pending") {
     return (

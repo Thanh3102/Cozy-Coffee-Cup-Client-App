@@ -31,9 +31,10 @@ function App() {
     <div className="App">
       <ToastContainer autoClose={2000} hideProgressBar={true} />
       <Routes>
-        {routes.map((route) => {
+        {routes.map((route, index) => {
           return (
             <Route
+              key={index}
               path={route.path}
               element={
                 route.protected ? (
