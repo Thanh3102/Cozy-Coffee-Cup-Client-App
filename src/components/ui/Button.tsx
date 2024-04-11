@@ -47,7 +47,7 @@ const Button = ({
   className = "",
   ...rest
 }: Props) => {
-  let buttonClassName = `rounded-md text-white w-fit flex items-center justify-center gap-4 ${ButtonOption.color[color].normal} ${ButtonOption.color[color].hover} ${ButtonOption.size[size]} ${className}`;
+  let buttonClassName = `rounded-md text-white w-fit flex items-center justify-center gap-2 ${ButtonOption.color[color].normal} ${ButtonOption.color[color].hover} ${ButtonOption.size[size]} ${className}`;
 
   if (loading) {
     return (
@@ -60,7 +60,7 @@ const Button = ({
 
   return (
     <motion.button
-      whileTap={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
       className={buttonClassName}
       {...rest}
     >

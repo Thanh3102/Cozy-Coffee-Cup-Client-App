@@ -66,6 +66,7 @@ const ItemList = ({
       {items.map((item: Item, index) => {
         return (
           <li
+            key={index}
             className={`py-5 px-8 hover:cursor-pointer ${
               activePath === item.to
                 ? "text-amber-700 border-r-[3px] border-r-amber-700"
