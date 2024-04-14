@@ -11,7 +11,7 @@ import axiosClient from "../../../lib/axios";
 import Button from "../../ui/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faX } from "@fortawesome/free-solid-svg-icons";
-import Modal from "../../ui/Modal";
+import Modal, { ModalTitle } from "../../ui/Modal";
 import FormAddProvider from "../forms/FormAddProvider";
 import FormEditProvider from "../forms/FormEditProvider";
 
@@ -98,13 +98,14 @@ const TabProvider = () => {
         </Table>
       </motion.div>
       <Modal open={openAddProvider}>
-        <div className="bg-white p-5 rounded-lg w-[700px]">
+        <div className="bg-white p-5 rounded-lg w-[500px]">
           <div
-            className="flex justify-end cursor-pointer py-1"
+            className="flex justify-between cursor-pointer py-1"
             onClick={() => {
               setOpenAddProvider(false);
             }}
           >
+            <ModalTitle>Thêm nhà cung cấp mới</ModalTitle>
             <FontAwesomeIcon icon={faX} />
           </div>
           <FormAddProvider
@@ -115,13 +116,14 @@ const TabProvider = () => {
       </Modal>
       {openEditProvider && (
         <Modal open={openEditProvider}>
-          <div className="bg-white p-5 rounded-lg w-[700px]">
+          <div className="bg-white p-5 rounded-lg w-[500px]">
             <div
-              className="flex justify-end cursor-pointer py-1"
+              className="flex justify-between cursor-pointer py-1"
               onClick={() => {
                 setOpenEditProvider(false);
               }}
             >
+              <ModalTitle>Thông tin nhà cung cấp</ModalTitle>
               <FontAwesomeIcon icon={faX} />
             </div>
             <FormEditProvider

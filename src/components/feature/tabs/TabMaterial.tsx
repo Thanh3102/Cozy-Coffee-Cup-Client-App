@@ -170,14 +170,14 @@ const TabMaterial = () => {
       </motion.div>
 
       <Modal open={openAddMaterial}>
-        <div className="bg-white px-6 py-4 rounded-lg w-[600px]">
+        <div className="bg-white px-6 py-4 rounded-lg w-[500px]">
           <div
             className="flex justify-between items-center cursor-pointer py-1"
             onClick={() => {
               setOpenAddMaterial(false);
             }}
           >
-            <ModalTitle>Thông tin nguyên liệu</ModalTitle>
+            <ModalTitle>Thêm nguyên liệu</ModalTitle>
             <FontAwesomeIcon icon={faX} />
           </div>
           <FormAddMaterial
@@ -222,7 +222,7 @@ const TabMaterial = () => {
       </Modal>
       {selectedMaterial && (
         <Modal open={openEditMaterial}>
-          <div className="bg-white px-6 py-4 rounded-lg w-[900px]">
+          <div className="bg-white px-6 py-4 rounded-lg w-[500px]">
             <div
               className="flex justify-between items-center py-1"
               onClick={() => {

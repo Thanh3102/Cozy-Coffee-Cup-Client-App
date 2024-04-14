@@ -61,7 +61,7 @@ const Paginition = ({
                 : "hover:cursor-pointer"
             } text-[22px]`}
           />
-          <span>{`${startIndex} - ${endIndex} của ${count}`}</span>
+          <span>{`${startIndex} - ${endIndex} trên ${count}`}</span>
 
           <FontAwesomeIcon
             icon={faAngleRight}

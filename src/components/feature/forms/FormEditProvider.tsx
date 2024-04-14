@@ -51,10 +51,10 @@ const FormEditProvider = ({ provider, closeModal, fetchProvider }: Props) => {
     <Fragment>
       <form
         id="editProviderForm"
-        className="grid gap-4 grid-cols-2 grid-row-2"
+        className="flex flex-col gap-4"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div className="col-span-1 flex flex-col gap-1">
+        <div className="flex flex-col gap-1">
           <label htmlFor="name">Tên nhà cung cấp</label>
           <input
             type="text"
@@ -63,7 +63,7 @@ const FormEditProvider = ({ provider, closeModal, fetchProvider }: Props) => {
             {...register("name", { required: true })}
           />
         </div>
-        <div className="col-span-1 flex flex-col gap-1">
+        <div className="flex flex-col gap-1">
           <label htmlFor="address">Địa chỉ</label>
           <input
             type="text"
@@ -72,7 +72,7 @@ const FormEditProvider = ({ provider, closeModal, fetchProvider }: Props) => {
             {...register("address", { required: true })}
           />
         </div>
-        <div className="col-span-1 flex flex-col gap-1">
+        <div className="flex flex-col gap-1">
           <label htmlFor="phone">Số điện thoại</label>
           <input
             type="text"
@@ -81,7 +81,7 @@ const FormEditProvider = ({ provider, closeModal, fetchProvider }: Props) => {
             {...register("phone")}
           />
         </div>
-        <div className="col-span-1 flex flex-col gap-1">
+        <div className="flex flex-col gap-1">
           <label htmlFor="email">Email</label>
           <input
             type="text"
@@ -90,7 +90,7 @@ const FormEditProvider = ({ provider, closeModal, fetchProvider }: Props) => {
             {...register("email")}
           />
         </div>
-        <div className="col-span-1 flex items-center">
+        <div className="flex items-center">
           <input
             type="checkbox"
             className="w-[20px] h-[20px]"

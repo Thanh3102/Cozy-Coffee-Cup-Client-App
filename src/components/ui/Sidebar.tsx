@@ -48,9 +48,9 @@ const itemList: Item[] = [
     to: "/warehouse",
   },
   {
-    name: "Menu",
+    name: "Sản phẩm",
     icon: <FontAwesomeIcon icon={faMugSaucer} />,
-    to: "/menu",
+    to: "/product",
   },
 ];
 

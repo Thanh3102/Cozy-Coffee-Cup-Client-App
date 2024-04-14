@@ -90,7 +90,7 @@ const TableCell = ({
 }: TableCellProps) => {
   return (
     <td
-      className={`p-2 ${TableOption.tableCol.align[align]} text-[16px]`}
+      className={`p-2 ${TableOption.tableCol.align[align]} text-[16px] py-4`}
       colSpan={colSpan}
     >
       {children}

@@ -80,9 +80,9 @@ const FormEditMaterial = ({ reFetch, closeModal, material }: Props) => {
       <form
         id="addMaterialForm"
         onSubmit={handleSubmit(onSubmit)}
-        className="grid grid-cols-6 grid-rows-2 gap-x-8 gap-y-4"
+        className="flex flex-col gap-4"
       >
-        <div className="flex flex-col gap-1 col-span-3">
+        <div className="flex flex-col gap-2">
           <label htmlFor="name">Tên nguyên liệu</label>
           <input
             className="input"
@@ -91,7 +91,7 @@ const FormEditMaterial = ({ reFetch, closeModal, material }: Props) => {
             {...register("name", { required: true })}
           />
         </div>
-        <div className="flex flex-col gap-1 col-span-3">
+        <div className="flex flex-col gap-2">
           <label htmlFor="expiration_date">Ngày hết hạn</label>
           <input
             defaultValue={
@@ -105,7 +105,7 @@ const FormEditMaterial = ({ reFetch, closeModal, material }: Props) => {
             {...register("expiration_date", { valueAsDate: true })}
           />
         </div>
-        <div className="flex flex-col gap-1 col-span-3">
+        <div className="flex flex-col gap-2">
           <label htmlFor="stock_quantity">Số lượng</label>
           <input
             className="input"
@@ -119,7 +119,7 @@ const FormEditMaterial = ({ reFetch, closeModal, material }: Props) => {
             })}
           />
         </div>
-        <div className="flex flex-col gap-1 col-span-3">
+        <div className="flex flex-col gap-2">
           <label htmlFor="unit_id">Đơn vị tính</label>
           <select
             className="input"
@@ -136,7 +136,7 @@ const FormEditMaterial = ({ reFetch, closeModal, material }: Props) => {
             })}
           </select>
         </div>
-        <div className="flex items-center gap-2 col-span-3">
+        <div className="flex items-center gap-2">
           <input
             type="checkbox"
             id="active"
@@ -147,6 +147,14 @@ const FormEditMaterial = ({ reFetch, closeModal, material }: Props) => {
         </div>
       </form>
       <div className="flex justify-center gap-4 mt-5">
+        <Button
+          type="button"
+          size="small"
+          color="danger"
+          onClick={() => closeModal()}
+        >
+          Hủy
+        </Button>
         <Button type="submit" size="small" form="addMaterialForm">
           Cập nhật
         </Button>

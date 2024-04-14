@@ -59,9 +59,9 @@ const FormAddMaterial = ({ reFetch, closeModal }: Props) => {
       <form
         id="addMaterialForm"
         onSubmit={handleSubmit(onSubmit)}
-        className="grid grid-cols-6 grid-rows-2 gap-8"
+        className="flex flex-col gap-5"
       >
-        <div className="flex flex-col gap-1 col-span-3">
+        <div className="flex flex-col gap-1">
           <label htmlFor="name">Tên nguyên liệu</label>
           <input
             className="input"
@@ -70,7 +70,7 @@ const FormAddMaterial = ({ reFetch, closeModal }: Props) => {
             {...register("name", { required: true })}
           />
         </div>
-        <div className="flex flex-col gap-1 col-span-3">
+        <div className="flex flex-col gap-1">
           <label htmlFor="expiration_date">Ngày hết hạn</label>
           <input
             className="input"
@@ -79,7 +79,7 @@ const FormAddMaterial = ({ reFetch, closeModal }: Props) => {
             {...register("expiration_date", { valueAsDate: true })}
           />
         </div>
-        <div className="flex flex-col gap-1 col-span-3">
+        <div className="flex flex-col gap-1">
           <label htmlFor="stock_quantity">Số lượng</label>
           <input
             className="input"
@@ -93,7 +93,7 @@ const FormAddMaterial = ({ reFetch, closeModal }: Props) => {
             })}
           />
         </div>
-        <div className="flex flex-col gap-1 col-span-3">
+        <div className="flex flex-col gap-1">
           <label htmlFor="unit_id">Đơn vị tính</label>
           <select
             className="input"
