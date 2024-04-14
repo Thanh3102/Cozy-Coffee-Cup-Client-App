@@ -15,6 +15,9 @@ axiosClient.interceptors.request.use((config) => {
 
 axiosClient.interceptors.response.use(
   (res) => {
+    if (res.data instanceof ArrayBuffer) {
+      return Promise.resolve(res);
+    }
     const response = { status: res.status, ...res.data };
     return Promise.resolve(response);
   },
@@ -24,7 +27,7 @@ axiosClient.interceptors.response.use(
         status: 500,
         message: "Máy chủ không phản hồi",
       };
-      return response;
+      return Promise.reject(response);
     }
 
     const response = {
