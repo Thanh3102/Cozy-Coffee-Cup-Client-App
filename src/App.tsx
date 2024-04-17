@@ -6,6 +6,7 @@ import Login from "./components/page/Login";
 import Home from "./components/page/Home";
 import ProtectedRoute from "./components/feature/ProtectedRoute";
 import Warehouse from "./components/page/Warehouse";
+import Product from "./components/page/Product";
 
 function App() {
   const routes: { path: string; element: ReactElement; protected: boolean }[] =
@@ -23,6 +24,11 @@ function App() {
       {
         path: "/warehouse",
         element: <Warehouse />,
+        protected: true,
+      },
+      {
+        path: "product",
+        element: <Product />,
         protected: true,
       },
     ];

@@ -20,8 +20,8 @@ interface TableCellProps extends BaseProps {
 const tableDefault = {
   TableHead: {
     color: {
-      bg: "bg-amber-600",
-      text: "text-white",
+      bg: "bg-white",
+      text: "text-[#667085]",
     },
   },
   TableBody: {},
@@ -60,9 +60,9 @@ const TableHead = ({
 }: TableHeadProps) => {
   return (
     <thead
-      className={`${bgColor} ${textColor} ${
+      className={` text-[20px] font-medium cursor-default  ${bgColor} ${textColor} ${
         sticky ? "sticky top-0" : ""
-      } text-[18px] font-medium cursor-default ${className}`}
+      } ${className}`}
     >
       {children}
     </thead>

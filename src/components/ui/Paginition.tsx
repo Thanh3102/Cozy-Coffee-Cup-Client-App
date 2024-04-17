@@ -31,7 +31,7 @@ const Paginition = ({
     startIndex + itemPerPage - 1 > count ? count : startIndex + itemPerPage - 1;
 
   return (
-    <div className={`flex py-2 ${position ? positionOption[position] : ""}`}>
+    <div className={`flex py-4 ${position ? positionOption[position] : ""}`}>
       <div className="flex items-center gap-8">
         <div className="">
           <span>Số dòng mỗi trang</span>

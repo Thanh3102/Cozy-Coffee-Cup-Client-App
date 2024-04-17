@@ -55,7 +55,7 @@ const TabProvider = () => {
             Thêm mới
           </Button>
         </div>
-        <Table height={600}>
+        <Table height={500}>
           <TableHead sticky>
             <TableRow>
               <TableCell>Nhà cung cấp</TableCell>
