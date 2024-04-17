@@ -80,7 +80,7 @@ const FormEditMaterial = ({ reFetch, closeModal, material }: Props) => {
       <form
         id="addMaterialForm"
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-4"
+        className="flex flex-col gap-4 min-w-[25vw]"
       >
         <div className="flex flex-col gap-2">
           <label htmlFor="name">Tên nguyên liệu</label>

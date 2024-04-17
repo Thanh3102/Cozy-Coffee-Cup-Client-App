@@ -83,7 +83,7 @@ const FormAddExportNote = ({ closeModal, reFetchMaterial }: Props) => {
 
   return (
     <Fragment>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} className="min-w-[30vw]">
         <div className="flex gap-10">
           <div className="flex flex-col gap-2 flex-1">
             <label htmlFor="">Tên người nhập</label>
@@ -154,19 +154,17 @@ const FormAddExportNote = ({ closeModal, reFetchMaterial }: Props) => {
         </div>
       </form>
       <Modal open={openAddExportItem}>
-        <div className="bg-white p-4 rounded-lg w-[400px]">
-          <div
-            className="flex justify-between items-center my-3"
-            onClick={() => setOpenAddExportItem(false)}
-          >
-            <ModalTitle>Thêm nguyên liệu</ModalTitle>
-            <FontAwesomeIcon icon={faX} className="cursor-pointer" />
-          </div>
-          <FormAddExportItem
-            setExportItems={setExportItems}
-            closeModal={() => setOpenAddExportItem(false)}
-          />
+        <div
+          className="flex justify-between items-center my-3"
+          onClick={() => setOpenAddExportItem(false)}
+        >
+          <ModalTitle>Thêm nguyên liệu</ModalTitle>
+          <FontAwesomeIcon icon={faX} className="cursor-pointer" />
         </div>
+        <FormAddExportItem
+          setExportItems={setExportItems}
+          closeModal={() => setOpenAddExportItem(false)}
+        />
       </Modal>
     </Fragment>
   );

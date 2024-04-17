@@ -169,7 +169,6 @@ const TabImportExportHistory = () => {
         </div>
       </motion.div>
       <Modal open={openDetail}>
-        <div className="bg-white p-4 w-[600px] rounded-xl">
           <div
             className="flex justify-between items-center py-1"
             onClick={() => {
@@ -182,7 +181,6 @@ const TabImportExportHistory = () => {
           {selected && (
             <HistoryDetail data={selected} />
           )}
-        </div>
       </Modal>
     </Fragment>
   );

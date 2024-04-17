@@ -62,7 +62,7 @@ const FormAddImportItem = ({ setImportItems, closeModal }: Props) => {
   }, []);
 
   return (
-    <form className="flex flex-col w-[400px]" onSubmit={handleSubmit(onSubmit)}>
+    <form className="flex flex-col min-w-[25vw]" onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col gap-2 my-2">
         <label htmlFor="material_name">Tên nguyên liệu</label>
         <select

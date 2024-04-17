@@ -59,7 +59,7 @@ const FormAddMaterial = ({ reFetch, closeModal }: Props) => {
       <form
         id="addMaterialForm"
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-5"
+        className="flex flex-col gap-5 min-w-[30vw]"
       >
         <div className="flex flex-col gap-1">
           <label htmlFor="name">Tên nguyên liệu</label>

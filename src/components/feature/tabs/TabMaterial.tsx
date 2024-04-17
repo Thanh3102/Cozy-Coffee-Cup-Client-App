@@ -170,59 +170,52 @@ const TabMaterial = () => {
       </motion.div>
 
       <Modal open={openAddMaterial}>
-        <div className="bg-white px-6 py-4 rounded-lg w-[500px]">
-          <div
-            className="flex justify-between items-center cursor-pointer py-1"
-            onClick={() => {
-              setOpenAddMaterial(false);
-            }}
-          >
-            <ModalTitle>Thêm nguyên liệu</ModalTitle>
-            <FontAwesomeIcon icon={faX} />
-          </div>
-          <FormAddMaterial
-            reFetch={fetchMaterialData}
-            closeModal={() => setOpenAddMaterial(false)}
-          />
+        <div
+          className="flex justify-between items-center cursor-pointer py-1"
+          onClick={() => {
+            setOpenAddMaterial(false);
+          }}
+        >
+          <ModalTitle>Thêm nguyên liệu</ModalTitle>
+          <FontAwesomeIcon icon={faX} />
         </div>
+        <FormAddMaterial
+          reFetch={fetchMaterialData}
+          closeModal={() => setOpenAddMaterial(false)}
+        />
       </Modal>
       <Modal open={openAddImportNote}>
-        <div className="bg-white px-6 py-4 rounded-lg w-[900px]">
-          <div
-            className="flex items-center justify-between py-1"
-            onClick={() => {
-              setOpenAddImportNote(false);
-            }}
-          >
-            <ModalTitle>Phiếu nhập kho</ModalTitle>
-            <FontAwesomeIcon icon={faX} className="cursor-pointer" />
-          </div>
-          <FormAddImportNote
-            closeModal={() => setOpenAddImportNote(false)}
-            reFetchMaterial={() => fetchMaterialData()}
-          />
+        <div
+          className="flex items-center justify-between py-1"
+          onClick={() => {
+            setOpenAddImportNote(false);
+          }}
+        >
+          <ModalTitle>Phiếu nhập kho</ModalTitle>
+          <FontAwesomeIcon icon={faX} className="cursor-pointer" />
         </div>
+        <FormAddImportNote
+          closeModal={() => setOpenAddImportNote(false)}
+          reFetchMaterial={() => fetchMaterialData()}
+        />
       </Modal>
       <Modal open={openAddExportNote}>
-        <div className="bg-white px-6 py-4 rounded-lg w-[900px]">
-          <div
-            className="flex justify-between items-center py-1"
-            onClick={() => {
-              setOpenAddExportNote(false);
-            }}
-          >
-            <ModalTitle>Phiếu xuất kho</ModalTitle>
-            <FontAwesomeIcon icon={faX} className="cursor-pointer" />
-          </div>
-          <FormAddExportNote
-            closeModal={() => setOpenAddExportNote(false)}
-            reFetchMaterial={() => fetchMaterialData()}
-          />
+        <div
+          className="flex justify-between items-center py-1"
+          onClick={() => {
+            setOpenAddExportNote(false);
+          }}
+        >
+          <ModalTitle>Phiếu xuất kho</ModalTitle>
+          <FontAwesomeIcon icon={faX} className="cursor-pointer" />
         </div>
+        <FormAddExportNote
+          closeModal={() => setOpenAddExportNote(false)}
+          reFetchMaterial={() => fetchMaterialData()}
+        />
       </Modal>
       {selectedMaterial && (
         <Modal open={openEditMaterial}>
-          <div className="bg-white px-6 py-4 rounded-lg w-[500px]">
             <div
               className="flex justify-between items-center py-1"
               onClick={() => {
@@ -237,7 +230,6 @@ const TabMaterial = () => {
               closeModal={() => setOpenEditMaterial(false)}
               material={selectedMaterial}
             />
-          </div>
         </Modal>
       )}
     </Fragment>

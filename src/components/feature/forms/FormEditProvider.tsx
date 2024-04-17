@@ -51,7 +51,7 @@ const FormEditProvider = ({ provider, closeModal, fetchProvider }: Props) => {
     <Fragment>
       <form
         id="editProviderForm"
-        className="flex flex-col gap-4"
+        className="flex flex-col gap-4 min-w-[60vh]"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="flex flex-col gap-1">
@@ -99,7 +99,15 @@ const FormEditProvider = ({ provider, closeModal, fetchProvider }: Props) => {
           <span className="ml-4">Đang hoạt động</span>
         </div>
       </form>
-      <div className="flex justify-center gap-2 mt-4">
+      <div className="flex justify-center gap-4 mt-4">
+        <Button
+          size="small"
+          type="button"
+          color="danger"
+          onClick={() => closeModal()}
+        >
+          Hủy
+        </Button>
         <Button size="small" type="submit" form="editProviderForm">
           Cập nhật
         </Button>

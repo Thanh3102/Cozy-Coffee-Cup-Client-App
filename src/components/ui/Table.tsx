@@ -60,7 +60,7 @@ const TableHead = ({
 }: TableHeadProps) => {
   return (
     <thead
-      className={` text-[20px] font-medium cursor-default  ${bgColor} ${textColor} ${
+      className={` text-[20px] font-medium cursor-default ${bgColor} ${textColor} ${
         sticky ? "sticky top-0" : ""
       } ${className}`}
     >

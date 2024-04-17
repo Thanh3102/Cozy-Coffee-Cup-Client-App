@@ -39,7 +39,7 @@ const FormAddProvider = ({ closeModal, fetchProvider }: Props) => {
     <Fragment>
       <form
         id="addProviderForm"
-        className="flex flex-col gap-4"
+        className="flex flex-col gap-4 min-w-[60vh]"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="flex flex-col gap-1">

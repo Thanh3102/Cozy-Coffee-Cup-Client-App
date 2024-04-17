@@ -100,7 +100,7 @@ const FormAddImportNote = ({ closeModal, reFetchMaterial }: Props) => {
 
   return (
     <Fragment>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} className="min-w-[40vw]">
         <div className="flex gap-10">
           <div className="flex flex-col gap-2 flex-1">
             <label htmlFor="">Tên người nhập</label>
@@ -205,7 +205,6 @@ const FormAddImportNote = ({ closeModal, reFetchMaterial }: Props) => {
         </div>
       </form>
       <Modal open={openAddImportItem}>
-        <div className="bg-white p-4 rounded-lg">
           <div
             className="flex justify-between my-3"
             onClick={() => setOpenAddImportItem(false)}
@@ -217,7 +216,6 @@ const FormAddImportNote = ({ closeModal, reFetchMaterial }: Props) => {
             setImportItems={setImportItems}
             closeModal={() => setOpenAddImportItem(false)}
           />
-        </div>
       </Modal>
     </Fragment>
   );

@@ -38,6 +38,7 @@ const FormAddExportItem = ({ setExportItems, closeModal }: Props) => {
     register,
     formState: { errors },
   } = useForm<Inputs>();
+
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const newItem: ExportItem = {
       material: selectedMaterial,
@@ -52,7 +53,7 @@ const FormAddExportItem = ({ setExportItems, closeModal }: Props) => {
   }, []);
 
   return (
-    <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
+    <form className="flex flex-col min-w-[25vw]" onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col gap-2 my-2">
         <label htmlFor="material_name">Tên nguyên liệu</label>
         <select

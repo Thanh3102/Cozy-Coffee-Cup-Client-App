@@ -98,27 +98,24 @@ const TabProvider = () => {
         </Table>
       </motion.div>
       <Modal open={openAddProvider}>
-        <div className="bg-white p-5 rounded-lg w-[500px]">
-          <div
-            className="flex justify-between cursor-pointer py-1"
-            onClick={() => {
-              setOpenAddProvider(false);
-            }}
-          >
-            <ModalTitle>Thêm nhà cung cấp mới</ModalTitle>
-            <FontAwesomeIcon icon={faX} />
-          </div>
-          <FormAddProvider
-            closeModal={() => setOpenAddProvider(false)}
-            fetchProvider={fetchProvider}
-          />
+        <div
+          className="flex justify-between items-center cursor-pointer py-1"
+          onClick={() => {
+            setOpenAddProvider(false);
+          }}
+        >
+          <ModalTitle>Thêm nhà cung cấp mới</ModalTitle>
+          <FontAwesomeIcon icon={faX} />
         </div>
+        <FormAddProvider
+          closeModal={() => setOpenAddProvider(false)}
+          fetchProvider={fetchProvider}
+        />
       </Modal>
       {openEditProvider && (
         <Modal open={openEditProvider}>
-          <div className="bg-white p-5 rounded-lg w-[500px]">
             <div
-              className="flex justify-between cursor-pointer py-1"
+              className="flex justify-between items-center cursor-pointer py-1"
               onClick={() => {
                 setOpenEditProvider(false);
               }}
@@ -131,7 +128,6 @@ const TabProvider = () => {
               closeModal={() => setOpenEditProvider(false)}
               fetchProvider={fetchProvider}
             />
-          </div>
         </Modal>
       )}
     </Fragment>
