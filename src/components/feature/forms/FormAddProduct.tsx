@@ -1,0 +1,217 @@
+import { SubmitHandler, useForm } from "react-hook-form";
+import Button from "../../ui/Button";
+import { Fragment, useEffect, useState } from "react";
+import { BaseProps } from "../../../utils/types/interface";
+import axiosClient from "../../../lib/axios";
+import { toast } from "react-toastify";
+import { Category, ProductType } from "../../../utils/types/type";
+
+interface Props extends BaseProps {
+  fetchProduct: () => void;
+  closeModal: () => void;
+}
+
+interface Inputs {
+  name: string;
+  price: number;
+  type_id: number;
+  category_id: number;
+  description: string;
+  note: string;
+  image: File;
+}
+
+const FormAddProduct = ({ closeModal, fetchProduct }: Props) => {
+  const [image, setImage] = useState<string>();
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [types, setTypes] = useState<ProductType[]>([]);
+
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const fetchCategories = async () => {
+    try {
+      const { categories } = await axiosClient.get<
+        void,
+        { categories: Category[] }
+      >("/api/product/getCategory");
+      setCategories(categories);
+    } catch (error: any) {
+      toast.error(error.message ?? "Không thể tải danh mục");
+    }
+  };
+
+    const fetchTypes = async () => {
+      try {
+        const { types } = await axiosClient.get<void, { types: ProductType[] }>(
+          "/api/product/getType"
+        );
+        setTypes(types);
+      } catch (error: any) {
+        toast.error(error.message ?? "Không thể lấy loại sản phẩm");
+      }
+    };
+
+  useEffect(() => {
+    fetchCategories();
+    fetchTypes();
+  }, []);
+
+  const { register, handleSubmit, setValue } = useForm<Inputs>();
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    try {
+      setLoading(true);
+      const response = await axiosClient.post<
+        Inputs,
+        { status: number; message: string }
+      >("/api/product/create", data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      setLoading(false);
+      if (response.status === 200) {
+        toast.success(response.message ?? "Thêm thành công");
+        fetchProduct();
+        closeModal();
+      }
+    } catch (error: any) {
+      toast.error(error.message ?? "Đã có lỗi xảy ra");
+      setLoading(false);
+    }
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    try {
+      setImage(URL.createObjectURL(e.target.files[0]));
+      setValue("image", e.target.files[0]);
+    } catch (error) {}
+  };
+
+  return (
+    <Fragment>
+      <form
+        className="min-w-[30vw] grid grid-rows-6 grid-cols-3 mt-2 gap-x-4 gap-y-2"
+        onSubmit={handleSubmit(onSubmit)}
+        id="addProductForm"
+      >
+        <div className="grid col-span-1 gap-2">
+          <label htmlFor="">Tên sản phẩm</label>
+          <input
+            type="text"
+            className="input"
+            {...register("name", { required: true })}
+          />
+        </div>
+        <div className="grid col-span-1 gap-2">
+          <label htmlFor="">Giá tiền</label>
+          <input
+            type="text"
+            className="input"
+            {...register("price", { required: true, valueAsNumber: true })}
+          />
+        </div>
+        <div className="grid col-span-1 gap-2 row-start-2">
+          <label htmlFor="">Loại sản phẩm</label>
+          <select
+            className="input"
+            {...register("type_id", { valueAsNumber: true })}
+          >
+            <option value="" hidden>
+              Chọn loại sản phẩm
+            </option>
+            {types.map((type) => (
+              <option key={type.id} value={type.id}>
+                {type.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="grid col-span-1 gap-2 row-start-2">
+          <label htmlFor="">Danh mục</label>
+          <select
+            className="input"
+            {...register("category_id", {
+              required: true,
+              valueAsNumber: true,
+            })}
+          >
+            <option value="" hidden>
+              Chọn danh mục
+            </option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="grid col-span-3 row-span-2 row-start-3">
+          <label htmlFor="">Mô tả</label>
+          <textarea
+            cols={10}
+            rows={4}
+            className="input resize-none"
+            {...register("description")}
+          />
+        </div>
+        <div className="grid col-span-3 row-span-2 row-start-5">
+          <label htmlFor="">Ghi chú</label>
+          <textarea
+            cols={10}
+            rows={4}
+            className="input resize-none"
+            {...register("note")}
+          />
+        </div>
+        <div className="flex flex-col gap-4 items-center justify-center col-span-1 row-span-2">
+          <div
+            className={`w-[120px] h-[120px] rounded-lg ${
+              image ? "" : "border-[1px] border-dashed border-black"
+            }`}
+          >
+            <img
+              alt=""
+              src={image}
+              width={100}
+              height={100}
+              className="w-full h-full rounded-lg"
+            />
+          </div>
+          <span
+            className="text-blue-500 hover:cursor-pointer"
+            onClick={() => document.getElementById("productImage")?.click()}
+          >
+            Chọn hình ảnh
+          </span>
+          <input
+            className="hidden"
+            type="file"
+            id="productImage"
+            accept=""
+            multiple={false}
+            {...register("image")}
+            onChange={handleImageChange}
+          />
+        </div>
+      </form>
+      <div className="flex gap-4 mt-4 justify-end">
+        <Button size="small" color="danger" onClick={closeModal}>
+          Hủy
+        </Button>
+        <Button
+          size="small"
+          color="success"
+          form="addProductForm"
+          type="submit"
+          loading={loading}
+          className={`${loading ? "disable" : ""}`}
+        >
+          Thêm
+        </Button>
+      </div>
+    </Fragment>
+  );
+};
+
+export default FormAddProduct;

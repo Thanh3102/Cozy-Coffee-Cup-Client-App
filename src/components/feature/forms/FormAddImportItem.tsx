@@ -30,14 +30,12 @@ const fetchData = async (
 
 const FormAddImportItem = ({ setImportItems, closeModal }: Props) => {
   const [materials, setMaterials] = useState<Material[]>([]);
-  const [provider, setProvider] = useState<Provider[]>([]);
   const [selectedMaterial, setSelectedMaterial] = useState<
     Material | undefined | null
   >(null);
 
   const {
     register,
-    reset,
     handleSubmit,
     formState: { errors },
   } = useForm<ImportItemInput>();

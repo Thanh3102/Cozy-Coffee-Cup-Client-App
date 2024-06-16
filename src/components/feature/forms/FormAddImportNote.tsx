@@ -27,12 +27,7 @@ type Inputs = {
   receiver_name: string;
   provider_id: string;
   note: string;
-};
-
-const countTotal = (items: ImportItem[]) => {
-  return items.reduce((total, item) => {
-    return total + item.price * item.quantity;
-  }, 0);
+  total: number;
 };
 
 const FormAddImportNote = ({ closeModal, reFetchMaterial }: Props) => {
@@ -43,6 +38,7 @@ const FormAddImportNote = ({ closeModal, reFetchMaterial }: Props) => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<Inputs>();
 
@@ -84,6 +80,14 @@ const FormAddImportNote = ({ closeModal, reFetchMaterial }: Props) => {
     } catch (error: any) {
       toast.error(`${error.message}`);
     }
+  };
+
+  const countTotal = (items: ImportItem[]) => {
+    const total = items.reduce((total, item) => {
+      return total + item.price * item.quantity;
+    }, 0);
+    setValue("total", total);
+    return total;
   };
 
   const fetchProviders = async () => {
@@ -205,17 +209,17 @@ const FormAddImportNote = ({ closeModal, reFetchMaterial }: Props) => {
         </div>
       </form>
       <Modal open={openAddImportItem}>
-          <div
-            className="flex justify-between my-3"
-            onClick={() => setOpenAddImportItem(false)}
-          >
-            <ModalTitle>Thêm nguyên liệu</ModalTitle>
-            <FontAwesomeIcon icon={faX} className="cursor-pointer" />
-          </div>
-          <FormAddImportItem
-            setImportItems={setImportItems}
-            closeModal={() => setOpenAddImportItem(false)}
-          />
+        <div
+          className="flex justify-between my-3"
+          onClick={() => setOpenAddImportItem(false)}
+        >
+          <ModalTitle>Thêm nguyên liệu</ModalTitle>
+          <FontAwesomeIcon icon={faX} className="cursor-pointer" />
+        </div>
+        <FormAddImportItem
+          setImportItems={setImportItems}
+          closeModal={() => setOpenAddImportItem(false)}
+        />
       </Modal>
     </Fragment>
   );

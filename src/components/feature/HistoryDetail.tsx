@@ -19,10 +19,14 @@ interface Props extends BaseProps {
 
 const ImportNoteDetail = ({ data }: Props) => {
   const [detail, setDetail] = useState<ImportNote>();
-  const countTotal = detail?.import_note_detail.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
-  );
+
+  const countTotal = (note: ImportNote) => {
+    return note.import_note_detail.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
+  };
+
   const fetchDetailData = async () => {
     const { importNote } = await axiosClient.get<
       void,
@@ -53,57 +57,68 @@ const ImportNoteDetail = ({ data }: Props) => {
   }, []);
   return (
     <Fragment>
-      <div className="">
-        <p>
-          {`Thời gian tạo: ${
-            detail?.created_at ? formatDate(detail?.created_at) : ""
-          }`}
-        </p>
-        <p>{`Người tạo: ${detail?.user.name}`}</p>
-        <p>{`Người nhập kho: ${detail?.receiver_name}`}</p>
-        <p>{`Nhà cung cấp: ${detail?.provider.name}`}</p>
-        <div className="flex justify-end my-3">
-          <Button size="small" onClick={() => handleDownloadExcel(detail?.id)}>
-            Xuất Excel
-          </Button>
-        </div>
-      </div>
-      <h4 className="font-semibold text-[18px] mb-2">Danh sách nguyên liệu</h4>
-      <Table height={200}>
-        <TableHead sticky>
-          <TableRow>
-            <TableCell>Tên nguyên liệu</TableCell>
-            <TableCell>Số lượng</TableCell>
-            <TableCell>Giá tiền</TableCell>
-            <TableCell>Tổng tiền</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {detail?.import_note_detail.map((item, index) => {
-            return (
-              <TableRow key={index}>
-                <TableCell>{item.material.name}</TableCell>
-                <TableCell>{`${item.quantity} (${
-                  item.material.unit.short
-                    ? item.material.unit.short
-                    : item.material.unit.name
-                })`}</TableCell>
-                <TableCell>{`${currencyFormatter.format(
-                  item.price
-                )}`}</TableCell>
-                <TableCell>
-                  {`${currencyFormatter.format(item.price * item.quantity)}`}
-                </TableCell>
+      {detail && (
+        <Fragment>
+          <div className="">
+            <p>
+              {`Thời gian tạo: ${
+                detail?.created_at ? formatDate(detail?.created_at) : ""
+              }`}
+            </p>
+            <p>{`Người tạo: ${detail?.user.name}`}</p>
+            <p>{`Người nhập kho: ${detail?.receiver_name}`}</p>
+            <p>{`Nhà cung cấp: ${detail?.provider.name}`}</p>
+            <div className="flex justify-end my-3">
+              <Button
+                size="small"
+                onClick={() => handleDownloadExcel(detail?.id)}
+              >
+                Xuất Excel
+              </Button>
+            </div>
+          </div>
+          <h4 className="font-semibold text-[18px] mb-2">
+            Danh sách nguyên liệu
+          </h4>
+          <Table height={200}>
+            <TableHead sticky>
+              <TableRow>
+                <TableCell>Tên nguyên liệu</TableCell>
+                <TableCell>Số lượng</TableCell>
+                <TableCell>Giá tiền</TableCell>
+                <TableCell>Tổng tiền</TableCell>
               </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-      <div className="flex justify-end font-semibold text-[16px] my-2">
-        <span>{`Thành tiền: ${
-          countTotal ? currencyFormatter.format(countTotal) : ""
-        }`}</span>
-      </div>
+            </TableHead>
+            <TableBody>
+              {detail?.import_note_detail.map((item, index) => {
+                return (
+                  <TableRow key={index}>
+                    <TableCell>{item.material.name}</TableCell>
+                    <TableCell>{`${item.quantity} (${
+                      item.material.unit.short
+                        ? item.material.unit.short
+                        : item.material.unit.name
+                    })`}</TableCell>
+                    <TableCell>{`${currencyFormatter.format(
+                      item.price
+                    )}`}</TableCell>
+                    <TableCell>
+                      {`${currencyFormatter.format(
+                        item.price * item.quantity
+                      )}`}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+          <div className="flex justify-end font-semibold text-[16px] my-2">
+            <span>{`Thành tiền: ${
+              countTotal ? currencyFormatter.format(countTotal(detail)) : ""
+            }`}</span>
+          </div>
+        </Fragment>
+      )}
     </Fragment>
   );
 };
@@ -139,43 +154,52 @@ const ExportNoteDetail = ({ data }: Props) => {
   }, []);
   return (
     <Fragment>
-      <div className="">
-        <p>
-          {`Thời gian tạo: ${
-            detail?.created_at ? formatDate(detail?.created_at) : ""
-          }`}
-        </p>
-        <p>{`Người tạo: ${detail?.user.name}`}</p>
-        <p>{`Người lấy hàng: ${detail?.picker_name}`}</p>
-        <div className="flex justify-end my-3">
-          <Button size="small" onClick={() => handleDownloadExcel(detail?.id)}>
-            Xuất Excel
-          </Button>
-        </div>
-      </div>
-      <h4 className="font-semibold text-[18px] mb-2">Danh sách nguyên liệu</h4>
-      <Table height={200}>
-        <TableHead sticky>
-          <TableRow>
-            <TableCell>Tên nguyên liệu</TableCell>
-            <TableCell>Số lượng</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {detail?.export_note_detail.map((item, index) => {
-            return (
-              <TableRow key={index}>
-                <TableCell>{item.material.name}</TableCell>
-                <TableCell>{`${item.quantity} (${
-                  item.material.unit.short
-                    ? item.material.unit.short
-                    : item.material.unit.name
-                })`}</TableCell>
+      {detail && (
+        <Fragment>
+          <div className="min-w-[30vw]">
+            <p>
+              {`Thời gian tạo: ${
+                detail?.created_at ? formatDate(detail?.created_at) : ""
+              }`}
+            </p>
+            <p>{`Người tạo: ${detail?.user.name}`}</p>
+            <p>{`Người lấy hàng: ${detail?.picker_name}`}</p>
+            <div className="flex justify-end my-3">
+              <Button
+                size="small"
+                onClick={() => handleDownloadExcel(detail.id)}
+              >
+                Xuất Excel
+              </Button>
+            </div>
+          </div>
+          <h4 className="font-semibold text-[18px] mb-2">
+            Danh sách nguyên liệu
+          </h4>
+          <Table height={200}>
+            <TableHead sticky>
+              <TableRow>
+                <TableCell>Tên nguyên liệu</TableCell>
+                <TableCell>Số lượng</TableCell>
               </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
+            </TableHead>
+            <TableBody>
+              {detail?.export_note_detail.map((item, index) => {
+                return (
+                  <TableRow key={index}>
+                    <TableCell>{item.material.name}</TableCell>
+                    <TableCell>{`${item.quantity} (${
+                      item.material.unit.short
+                        ? item.material.unit.short
+                        : item.material.unit.name
+                    })`}</TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </Fragment>
+      )}
     </Fragment>
   );
 };

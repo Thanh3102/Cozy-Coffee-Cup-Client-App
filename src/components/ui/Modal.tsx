@@ -6,7 +6,11 @@ interface Props extends BaseProps {
 }
 
 export const ModalTitle = ({ children }: BaseProps) => {
-  return <span className="text-[20px] font-semibold">{children}</span>;
+  return <span className="text-[22px] font-semibold">{children}</span>;
+};
+
+export const ModalDescription = ({ children }: BaseProps) => {
+  return <p className="max-w-[25vw] my-3">{children}</p>;
 };
 
 const Modal = ({ children, open }: Props) => {
@@ -25,11 +29,7 @@ const Modal = ({ children, open }: Props) => {
             exit={{ scale: 0 }}
             className="flex justify-center items-center absolute top-0 left-0 right-0 bottom-0"
           >
-            <div
-              className="bg-white px-6 py-4 rounded-lg"
-            >
-              {children}
-            </div>
+            <div className="bg-white px-6 py-4 rounded-lg">{children}</div>
           </motion.div>
         </motion.div>
       )}

@@ -1,7 +1,7 @@
 import { BaseProps } from "../../utils/types/interface";
 interface TableProps extends BaseProps {
-  width?: number;
-  height?: number;
+  width?: number | string;
+  height?: number | string;
 }
 interface TableHeadProps extends BaseProps {
   bgColor?: string | null;
@@ -37,13 +37,18 @@ const TableOption = {
   },
 };
 
-const Table = ({ children = "", width, height, className }: TableProps) => {
+const Table = ({
+  children = "",
+  width = "auto",
+  height = "auto",
+  className = "",
+}: TableProps) => {
   return (
     <div
+      className="overflow-y-auto"
       style={{
-        width: `${width}px`,
-        height: `${height}px`,
-        overflowY: "auto",
+        width: `${typeof width == "number" ? `${width}px` : width}`,
+        height: `${typeof height == "number" ? `${height}px` : height}`,
       }}
     >
       <table className={`w-full ${className}`}>{children}</table>
@@ -60,7 +65,7 @@ const TableHead = ({
 }: TableHeadProps) => {
   return (
     <thead
-      className={` text-[20px] font-medium cursor-default ${bgColor} ${textColor} ${
+      className={`font-medium cursor-default [&>tr]:text-[16px] ${bgColor} ${textColor} ${
         sticky ? "sticky top-0" : ""
       } ${className}`}
     >
@@ -71,13 +76,13 @@ const TableHead = ({
 
 const TableBody = ({ children }: TableBodyProps) => {
   return (
-    <tbody className="p-2 bg-white [&>*:hover]:bg-slate-100">{children}</tbody>
+    <tbody className="p-2 bg-white [&>tr:hover]:bg-slate-100">{children}</tbody>
   );
 };
 
-const TableRow = ({ children, className = "" }: TableRowProps) => {
+const TableRow = ({ children, className = "", ...rest }: TableRowProps) => {
   return (
-    <tr className={`${className} border-b-[1px] last:border-none`}>
+    <tr className={`${className} border-b-[1px] last:border-none`} {...rest}>
       {children}
     </tr>
   );
@@ -85,12 +90,13 @@ const TableRow = ({ children, className = "" }: TableRowProps) => {
 
 const TableCell = ({
   children,
+  className = "",
   align = "left",
   colSpan = 1,
 }: TableCellProps) => {
   return (
     <td
-      className={`p-2 ${TableOption.tableCol.align[align]} text-[16px] py-4`}
+      className={`px-2 py-4 ${TableOption.tableCol.align[align]} ${className}`}
       colSpan={colSpan}
     >
       {children}

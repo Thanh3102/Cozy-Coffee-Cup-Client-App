@@ -1,7 +1,9 @@
 import {
   faArrowRightFromBracket,
-  faBell,
+  faChair,
+  faClipboardList,
   faHome,
+  faMarker,
   faMoneyBill1Wave,
   faMugSaucer,
   faUserLock,
@@ -32,15 +34,15 @@ const itemList: Item[] = [
     icon: <FontAwesomeIcon icon={faUserLock} />,
     to: "/user",
   },
+  // {
+  //   name: "Phục vụ",
+  //   icon: <FontAwesomeIcon icon={faChair} />,
+  //   to: "/service",
+  // },
   {
-    name: "Phục vụ",
-    icon: <FontAwesomeIcon icon={faBell} />,
+    name: "Hóa đơn",
+    icon: <FontAwesomeIcon icon={faClipboardList} />,
     to: "/order",
-  },
-  {
-    name: "Thanh toán",
-    icon: <FontAwesomeIcon icon={faMoneyBill1Wave} />,
-    to: "/payment",
   },
   {
     name: "Kho",
@@ -51,6 +53,11 @@ const itemList: Item[] = [
     name: "Sản phẩm",
     icon: <FontAwesomeIcon icon={faMugSaucer} />,
     to: "/product",
+  },
+  {
+    name: "Định nghĩa",
+    icon: <FontAwesomeIcon icon={faMarker} />,
+    to: "/definition",
   },
 ];
 

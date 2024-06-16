@@ -51,9 +51,12 @@ const Button = ({
 
   if (loading) {
     return (
-      <button className={`${buttonClassName}`}>
-        <div className=" border-l-2 border-t-2 animate-spin border-white rounded-full h-4 w-4"></div>
-        Loading...
+      <button
+        disabled
+        className={`${buttonClassName} hover:cursor-default bg-gray-400 hover:bg-gray-400`}
+      >
+        <div className="border-gray-300 border-2 border-solid border-t-2 border-t-white border-x-2 border-x-white  rounded-full h-5 w-5 animate-spin"></div>
+        Loading
       </button>
     );
   }

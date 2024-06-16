@@ -5,6 +5,8 @@ import axiosClient from "../../../lib/axios";
 import Button from "../../ui/Button";
 import { toast } from "react-toastify";
 import { BaseProps } from "../../../utils/types/interface";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faRotateRight, faX } from "@fortawesome/free-solid-svg-icons";
 
 interface Props extends BaseProps {
   reFetch: () => void;
@@ -15,6 +17,7 @@ type Inputs = {
   name: string;
   stock_quantity: number;
   expiration_date: Date;
+  min_stock: number;
   unit_id: number;
 };
 
@@ -29,7 +32,11 @@ const FormAddMaterial = ({ reFetch, closeModal }: Props) => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm<Inputs>({
+    defaultValues: {
+      min_stock: 0,
+    },
+  });
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     setFormLoading(true);
@@ -59,7 +66,7 @@ const FormAddMaterial = ({ reFetch, closeModal }: Props) => {
       <form
         id="addMaterialForm"
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-5 min-w-[30vw]"
+        className="flex flex-col gap-5 w-[25vw]"
       >
         <div className="flex flex-col gap-1">
           <label htmlFor="name">Tên nguyên liệu</label>
@@ -112,17 +119,45 @@ const FormAddMaterial = ({ reFetch, closeModal }: Props) => {
             })}
           </select>
         </div>
+        <div className="flex flex-col gap-1">
+          <label htmlFor="min_stock">Số lượng tối thiểu</label>
+          <input
+            className="input"
+            type="text"
+            id="min_stock"
+            {...register("min_stock", {
+              required: true,
+              min: 0,
+              valueAsNumber: true,
+            })}
+          />
+        </div>
       </form>
       <div className="flex justify-center gap-4 mt-5">
         <Button
+          size="small"
+          color="danger"
+          icon={<FontAwesomeIcon icon={faX} />}
+          onClick={closeModal}
+        >
+          Đóng
+        </Button>
+        <Button
           type="reset"
           size="small"
-          form="addMaterialForm"
           color="warning"
+          form="addMaterialForm"
+          icon={<FontAwesomeIcon icon={faRotateRight} />}
         >
           Reset
         </Button>
-        <Button type="submit" size="small" form="addMaterialForm">
+        <Button
+          type="submit"
+          size="small"
+          form="addMaterialForm"
+          color="success"
+          icon={<FontAwesomeIcon icon={faPlus} />}
+        >
           Thêm
         </Button>
       </div>

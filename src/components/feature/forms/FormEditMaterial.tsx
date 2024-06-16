@@ -6,6 +6,8 @@ import Button from "../../ui/Button";
 import { toast } from "react-toastify";
 import { BaseProps } from "../../../utils/types/interface";
 import { Material } from "../../../utils/types/type";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFloppyDisk, faX } from "@fortawesome/free-solid-svg-icons";
 
 interface Props extends BaseProps {
   reFetch: () => void;
@@ -18,6 +20,7 @@ type Inputs = {
   stock_quantity: number;
   expiration_date: Date;
   unit_id: number;
+  min_stock: number;
   active: boolean;
 };
 
@@ -37,6 +40,7 @@ const FormEditMaterial = ({ reFetch, closeModal, material }: Props) => {
       name: material.name,
       unit_id: material.unit.id,
       stock_quantity: material.stock_quantity,
+      min_stock: material.min_stock,
       active: material.active,
     },
   });
@@ -55,7 +59,7 @@ const FormEditMaterial = ({ reFetch, closeModal, material }: Props) => {
       );
       setFormLoading(false);
       if (status === 200) {
-        toast.success("Đã thêm thành công");
+        toast.success("Cập nhật thành công");
         reset();
         reFetch();
         closeModal();
@@ -136,6 +140,19 @@ const FormEditMaterial = ({ reFetch, closeModal, material }: Props) => {
             })}
           </select>
         </div>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="min_stock">Số lượng tối thiểu</label>
+          <input
+            className="input"
+            type="text"
+            id="min_stock"
+            {...register("min_stock", {
+              required: true,
+              min: 0,
+              valueAsNumber: true,
+            })}
+          />
+        </div>
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
@@ -151,11 +168,17 @@ const FormEditMaterial = ({ reFetch, closeModal, material }: Props) => {
           type="button"
           size="small"
           color="danger"
+          icon={<FontAwesomeIcon icon={faX} />}
           onClick={() => closeModal()}
         >
-          Hủy
+          Đóng
         </Button>
-        <Button type="submit" size="small" form="addMaterialForm">
+        <Button
+          type="submit"
+          size="small"
+          form="addMaterialForm"
+          icon={<FontAwesomeIcon icon={faFloppyDisk} />}
+        >
           Cập nhật
         </Button>
       </div>

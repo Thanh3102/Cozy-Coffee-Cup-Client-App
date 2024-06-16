@@ -35,7 +35,7 @@ const FormLogin = () => {
 
   return (
     <div className="flex items-center justify-center absolute top-0 left-0 right-0 bottom-0 flex-col">
-      <div className="bg-white p-16 rounded-md w-[520px]">
+      <div className="bg-white p-16 rounded-lg w-[30vw] shadow-lg">
         <h3 className="text-amber-700 text-center text-[28px] mb-10 font-bold flex justify-center items-center gap-4">
           <FontAwesomeIcon icon={faMugHot} />
           Cozy Coffee Cup

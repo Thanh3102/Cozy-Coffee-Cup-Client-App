@@ -32,7 +32,7 @@ const Input = ({
       readOnly={readOnly}
       value={value}
       {...rest}
-      className={`px-4 py-2 border-black border-solid border-[1px] outline-none rounded-md ${className} ${
+      className={`px-4 py-1 border-black border-solid border-[1px] outline-none rounded-md ${className} ${
         disable ? "bg-gray-200" : null
       }`}
     />

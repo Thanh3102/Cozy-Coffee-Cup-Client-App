@@ -170,15 +170,7 @@ const TabMaterial = () => {
       </motion.div>
 
       <Modal open={openAddMaterial}>
-        <div
-          className="flex justify-between items-center cursor-pointer py-1"
-          onClick={() => {
-            setOpenAddMaterial(false);
-          }}
-        >
-          <ModalTitle>Thêm nguyên liệu</ModalTitle>
-          <FontAwesomeIcon icon={faX} />
-        </div>
+        <ModalTitle>Thêm nguyên liệu</ModalTitle>
         <FormAddMaterial
           reFetch={fetchMaterialData}
           closeModal={() => setOpenAddMaterial(false)}
@@ -216,20 +208,12 @@ const TabMaterial = () => {
       </Modal>
       {selectedMaterial && (
         <Modal open={openEditMaterial}>
-            <div
-              className="flex justify-between items-center py-1"
-              onClick={() => {
-                setOpenEditMaterial(false);
-              }}
-            >
-              <ModalTitle>Thông tin nguyên liệu</ModalTitle>
-              <FontAwesomeIcon icon={faX} className="cursor-pointer" />
-            </div>
-            <FormEditMaterial
-              reFetch={fetchMaterialData}
-              closeModal={() => setOpenEditMaterial(false)}
-              material={selectedMaterial}
-            />
+          <ModalTitle>Thông tin nguyên liệu</ModalTitle>
+          <FormEditMaterial
+            reFetch={fetchMaterialData}
+            closeModal={() => setOpenEditMaterial(false)}
+            material={selectedMaterial}
+          />
         </Modal>
       )}
     </Fragment>
