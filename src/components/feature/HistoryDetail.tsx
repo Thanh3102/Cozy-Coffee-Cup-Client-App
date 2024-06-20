@@ -12,12 +12,15 @@ import axiosClient from "../../lib/axios";
 import Table, { TableBody, TableCell, TableHead, TableRow } from "../ui/Table";
 import { currencyFormatter } from "../../utils/currencyFormat";
 import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faX } from "@fortawesome/free-solid-svg-icons";
 
 interface Props extends BaseProps {
   data: HistoryListItem;
+  close: () => void;
 }
 
-const ImportNoteDetail = ({ data }: Props) => {
+const ImportNoteDetail = ({ data, close }: Props) => {
   const [detail, setDetail] = useState<ImportNote>();
 
   const countTotal = (note: ImportNote) => {
@@ -112,10 +115,18 @@ const ImportNoteDetail = ({ data }: Props) => {
               })}
             </TableBody>
           </Table>
-          <div className="flex justify-end font-semibold text-[16px] my-2">
+          <div className="flex justify-between font-semibold text-[16px] my-2">
             <span>{`Thành tiền: ${
               countTotal ? currencyFormatter.format(countTotal(detail)) : ""
             }`}</span>
+            <Button
+              size="small"
+              color="danger"
+              icon={<FontAwesomeIcon icon={faX} />}
+              onClick={close}
+            >
+              Đóng
+            </Button>
           </div>
         </Fragment>
       )}
@@ -123,7 +134,7 @@ const ImportNoteDetail = ({ data }: Props) => {
   );
 };
 
-const ExportNoteDetail = ({ data }: Props) => {
+const ExportNoteDetail = ({ data, close }: Props) => {
   const [detail, setDetail] = useState<ExportNote>();
   const fetchDetailData = async () => {
     const { exportNote } = await axiosClient.get<
@@ -198,15 +209,26 @@ const ExportNoteDetail = ({ data }: Props) => {
               })}
             </TableBody>
           </Table>
+          <div className="flex justify-end">
+            <Button
+              size="small"
+              color="danger"
+              icon={<FontAwesomeIcon icon={faX} />}
+              onClick={close}
+            >
+              Đóng
+            </Button>
+          </div>
         </Fragment>
       )}
     </Fragment>
   );
 };
 
-const HistoryDetail = ({ data }: Props) => {
-  if (data.type === "Nhập kho") return <ImportNoteDetail data={data} />;
-  return <ExportNoteDetail data={data} />;
+const HistoryDetail = ({ data, close }: Props) => {
+  if (data.type === "Nhập kho")
+    return <ImportNoteDetail data={data} close={close} />;
+  return <ExportNoteDetail data={data} close={close} />;
 };
 
 export default HistoryDetail;

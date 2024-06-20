@@ -6,20 +6,17 @@ import Table, {
   TableHead,
   TableRow,
 } from "../../ui/Table";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash, faX } from "@fortawesome/free-solid-svg-icons";
 import Modal, { ModalTitle } from "../../ui/Modal";
 import { SubmitHandler, useForm } from "react-hook-form";
-import {
-  BaseProps,
-  CreateExportNoteDto,
-  CreateImportNoteDto,
-} from "../../../utils/types/interface";
+import { BaseProps } from "../../../utils/types/interface";
 import FormAddExportItem from "./FormAddExportItem";
 import { ExportItem } from "../../../utils/types/type";
-import axiosClient from "../../../lib/axios";
 import { toast } from "react-toastify";
+import { CreateExportNoteDto } from "../../../utils/types/dto";
+import MaterialApi from "../../../api/Material";
 
 interface Props extends BaseProps {
   closeModal: () => void;
@@ -59,26 +56,18 @@ const FormAddExportNote = ({ closeModal, reFetchMaterial }: Props) => {
       return;
     }
 
-    const sendData = {
+    const dto: CreateExportNoteDto = {
       export_note_detail: exportList,
       ...data,
     };
 
-    try {
-      const response = await axiosClient.post<CreateExportNoteDto, any>(
-        "/api/import-export/createExportNote",
-        sendData
-      );
-      if (response.status === 200) {
-        toast.success("Đã tạo phiếu xuất kho");
-        closeModal();
-        reFetchMaterial();
-      }
-    } catch (error: any) {
-      console.log(error);
-
-      toast.error(`${error.message}`);
+    const materialApi = new MaterialApi();
+    const message = await materialApi.createExportNote(dto);
+    if (message !== null) {
+      toast.success(message ?? "Đã tạo phiếu xuất kho");
     }
+    closeModal();
+    reFetchMaterial();
   };
 
   return (
@@ -147,20 +136,27 @@ const FormAddExportNote = ({ closeModal, reFetchMaterial }: Props) => {
             {...register("note")}
           ></textarea>
         </div>
-        <div className="flex justify-end mt-4">
-          <Button size="small" color="success">
+        <div className="flex justify-end mt-4 gap-4">
+          <Button
+            size="small"
+            color="danger"
+            icon={<FontAwesomeIcon icon={faX} />}
+            onClick={closeModal}
+          >
+            Đóng
+          </Button>
+
+          <Button
+            size="small"
+            color="success"
+            icon={<FontAwesomeIcon icon={faPlus} />}
+          >
             Tạo
           </Button>
         </div>
       </form>
       <Modal open={openAddExportItem}>
-        <div
-          className="flex justify-between items-center my-3"
-          onClick={() => setOpenAddExportItem(false)}
-        >
-          <ModalTitle>Thêm nguyên liệu</ModalTitle>
-          <FontAwesomeIcon icon={faX} className="cursor-pointer" />
-        </div>
+        <ModalTitle>Thêm nguyên liệu</ModalTitle>
         <FormAddExportItem
           setExportItems={setExportItems}
           closeModal={() => setOpenAddExportItem(false)}

@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { BaseProps } from "../../../utils/types/interface";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faRotateRight, faX } from "@fortawesome/free-solid-svg-icons";
+import MaterialApi from "../../../api/Material";
 
 interface Props extends BaseProps {
   reFetch: () => void;
@@ -30,7 +31,6 @@ const FormAddMaterial = ({ reFetch, closeModal }: Props) => {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<Inputs>({
     defaultValues: {
@@ -39,23 +39,19 @@ const FormAddMaterial = ({ reFetch, closeModal }: Props) => {
   });
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    const materialApi = new MaterialApi();
     setFormLoading(true);
-    const { status } = await axiosClient.post<Inputs, any>(
-      "/api/material/addMaterial",
-      data
-    );
+    const message = await materialApi.createMaterial(data);
     setFormLoading(false);
-    if (status === 200) {
-      toast.success("Đã thêm thành công");
-      reset();
-      reFetch();
-      closeModal();
-    }
+    message && toast.success(message);
+    reFetch();
+    closeModal();
   };
 
   const fetchUnits = async () => {
-    const { data } = await axiosClient.get("/api/material/getUnits");
-    setUnits(data);
+    const materialApi = new MaterialApi();
+    const units = await materialApi.fetchUnit();
+    setUnits(units);
   };
 
   useEffect(() => {
@@ -83,6 +79,7 @@ const FormAddMaterial = ({ reFetch, closeModal }: Props) => {
             className="input"
             type="date"
             id="expiration_date"
+            min={new Date().toISOString().split("T")[0]}
             {...register("expiration_date", { valueAsDate: true })}
           />
         </div>
@@ -139,6 +136,7 @@ const FormAddMaterial = ({ reFetch, closeModal }: Props) => {
           color="danger"
           icon={<FontAwesomeIcon icon={faX} />}
           onClick={closeModal}
+          className={`${formLoading ? "hidden" : ""}`}
         >
           Đóng
         </Button>
@@ -148,6 +146,7 @@ const FormAddMaterial = ({ reFetch, closeModal }: Props) => {
           color="warning"
           form="addMaterialForm"
           icon={<FontAwesomeIcon icon={faRotateRight} />}
+          className={`${formLoading ? "hidden" : ""}`}
         >
           Reset
         </Button>
@@ -157,6 +156,7 @@ const FormAddMaterial = ({ reFetch, closeModal }: Props) => {
           form="addMaterialForm"
           color="success"
           icon={<FontAwesomeIcon icon={faPlus} />}
+          loading={formLoading}
         >
           Thêm
         </Button>

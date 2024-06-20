@@ -14,7 +14,8 @@ import Table, {
 import { SetStateAction, useState } from "react";
 import { currencyFormatter } from "../../../utils/currencyFormat";
 import { toast } from "react-toastify";
-import axiosClient from "../../../lib/axios";
+import ProductApi from "../../../api/Product";
+import { CreateProductOptionDto } from "../../../utils/types/dto";
 
 interface Props extends BaseProps {
   closeModal: () => void;
@@ -28,12 +29,7 @@ interface Inputs {
 }
 
 type Value = { name: string; price: number };
-type Data = {
-  title: string;
-  required: boolean;
-  allows_multiple: boolean;
-  values: Value[];
-};
+
 
 const FormAddProductOption = ({ closeModal, fetchOptions }: Props) => {
   const [openAddValue, setOpenAddValue] = useState<boolean>(false);
@@ -45,21 +41,15 @@ const FormAddProductOption = ({ closeModal, fetchOptions }: Props) => {
     },
   });
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    const sendData = {
+    const dto : CreateProductOptionDto = {
       ...data,
       values: values,
     };
-    try {
-      const { message } = await axiosClient.post<Data, { message: string }>(
-        "/api/product/createOption",
-        sendData
-      );
-      toast.success(message);
-      fetchOptions();
-      closeModal();
-    } catch (error: any) {
-      toast.error(error.message ?? "Đã có lỗi xảy ra");
-    }
+    const productApi = new ProductApi();
+    const message = await productApi.createOption(dto);
+    message && toast.success(message);
+    fetchOptions();
+    closeModal();
   };
 
   return (
@@ -133,7 +123,9 @@ const FormAddProductOption = ({ closeModal, fetchOptions }: Props) => {
             id="product_option_allows_multiple"
             {...register("allows_multiple")}
           />
-          <label htmlFor="product_option_allows_multiple">Chọn nhiều giá trị</label>
+          <label htmlFor="product_option_allows_multiple">
+            Chọn nhiều giá trị
+          </label>
         </div>
       </div>
       <div className="flex gap-4 justify-center mt-2">
@@ -173,6 +165,7 @@ interface ValueProps extends BaseProps {
   close: () => void;
   setValues: React.Dispatch<SetStateAction<Value[]>>;
 }
+
 const FormAddProductOptionValue = ({ close, setValues }: ValueProps) => {
   const { register, handleSubmit } = useForm<ValueInputs>();
   const onSubmit: SubmitHandler<ValueInputs> = async (data) => {

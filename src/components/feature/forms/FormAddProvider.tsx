@@ -4,6 +4,9 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import axiosClient from "../../../lib/axios";
 import { toast } from "react-toastify";
 import { BaseProps } from "../../../utils/types/interface";
+import ProviderApi from "../../../api/Provider";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlug, faPlus, faRotate, faX } from "@fortawesome/free-solid-svg-icons";
 
 interface Props extends BaseProps {
   closeModal: () => void;
@@ -25,15 +28,13 @@ const FormAddProvider = ({ closeModal, fetchProvider }: Props) => {
     formState: { errors },
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    console.log(data);
-
-    const response = await axiosClient.post("/api/provider/create", data);
-    if (response.status === 200) {
-      toast.success("Đã thêm thành công");
-      reset();
-      closeModal();
-      fetchProvider();
+    const providerApi = new ProviderApi();
+    const message = await providerApi.create(data);
+    if (message !== null) {
+      toast.success(message ?? "Đã thêm thành công");
     }
+    closeModal();
+    fetchProvider();
   };
   return (
     <Fragment>
@@ -80,10 +81,31 @@ const FormAddProvider = ({ closeModal, fetchProvider }: Props) => {
         </div>
       </form>
       <div className="flex justify-center gap-2 mt-4">
-        <Button size="small" type="button" color="warning" onClick={reset}>
+        <Button
+          size="small"
+          type="button"
+          color="danger"
+          onClick={closeModal}
+          icon={<FontAwesomeIcon icon={faX} />}
+        >
+          Đóng
+        </Button>
+        <Button
+          size="small"
+          type="button"
+          color="warning"
+          onClick={reset}
+          icon={<FontAwesomeIcon icon={faRotate} />}
+        >
           Reset
         </Button>
-        <Button size="small" type="submit" form="addProviderForm">
+        <Button
+          size="small"
+          type="submit"
+          color="success"
+          form="addProviderForm"
+          icon={<FontAwesomeIcon icon={faPlus} />}
+        >
           Thêm
         </Button>
       </div>

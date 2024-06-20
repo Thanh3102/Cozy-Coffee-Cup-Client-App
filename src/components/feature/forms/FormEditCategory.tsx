@@ -5,6 +5,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import axiosClient from "../../../lib/axios";
 import { Category } from "../../../utils/types/type";
+import ProductApi from "../../../api/Product";
 
 interface Props extends BaseProps {
   category: Category;
@@ -19,17 +20,11 @@ const FormEditCategory = ({ category, close, fetchCategories }: Props) => {
     defaultValues: { name: category.name, id: category.id },
   });
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    try {
-      const { message } = await axiosClient.post<Inputs, { message: string }>(
-        "/api/product/updateCategory",
-        data
-      );
-      toast.success(message);
-      fetchCategories();
-      close();
-    } catch (error: any) {
-      toast.error(error.message ?? "Đã có lỗi xảy ra");
-    }
+    const productApi = new ProductApi();
+    const message = await productApi.updateCategory(data);
+    message ?? toast.success(message);
+    fetchCategories();
+    close();
   };
   return (
     <Fragment>

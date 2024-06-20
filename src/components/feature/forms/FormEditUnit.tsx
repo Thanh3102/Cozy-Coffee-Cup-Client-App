@@ -1,11 +1,10 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { BaseProps } from "../../../utils/types/interface";
-import Button from "../../ui/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faPlus, faX } from "@fortawesome/free-solid-svg-icons";
-import axiosClient from "../../../lib/axios";
-import { toast } from "react-toastify";
+import { faCheck, faX } from "@fortawesome/free-solid-svg-icons";
 import { Unit } from "../../../utils/types/type";
+import Button from "../../ui/Button";
+import MaterialApi from "../../../api/Material";
 
 interface Props extends BaseProps {
   unit: Unit;
@@ -25,23 +24,14 @@ const FormEditUnit = ({ unit, closeModal, fetchUnit }: Props) => {
       short: unit.short,
     },
   });
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    try {
-      console.log(data);
 
-      const response = await axiosClient.post<
-        Inputs,
-        { status: number; message: string }
-      >("/api/material/updateUnit", { id: unit.id, ...data });
-      if (response.status === 200) {
-        toast.success(response.message);
-      }
-      fetchUnit();
-      closeModal();
-    } catch (error: any) {
-      toast.error(error.message ?? "Đã có lỗi xảy ra");
-    }
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    const materialApi = new MaterialApi();
+    await materialApi.updateUnit({ id: unit.id, ...data });
+    fetchUnit();
+    closeModal();
   };
+
   return (
     <form
       className="min-w-[20vw] flex flex-col gap-4 mt-3"

@@ -5,6 +5,9 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import axiosClient from "../../../lib/axios";
 import { toast } from "react-toastify";
 import Button from "../../ui/Button";
+import ProviderApi from "../../../api/Provider";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFileArchive, faX } from "@fortawesome/free-solid-svg-icons";
 interface Props extends BaseProps {
   provider: Provider;
   closeModal: () => void;
@@ -37,15 +40,13 @@ const FormEditProvider = ({ provider, closeModal, fetchProvider }: Props) => {
     },
   });
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    const response = await axiosClient.post("/api/provider/update", data);
-    console.log(response);
-
-    if (response.status === 200) {
-      toast.success("Đã cập nhật thông tin");
-      reset();
-      closeModal();
-      fetchProvider();
+    const providerApi = new ProviderApi();
+    const message = await providerApi.update(data);
+    if (message !== null) {
+      toast.success(message ?? "Đã cập nhật thông tin");
     }
+    closeModal();
+    fetchProvider();
   };
   return (
     <Fragment>
@@ -105,11 +106,18 @@ const FormEditProvider = ({ provider, closeModal, fetchProvider }: Props) => {
           type="button"
           color="danger"
           onClick={() => closeModal()}
+          icon={<FontAwesomeIcon icon={faX} />}
         >
           Hủy
         </Button>
-        <Button size="small" type="submit" form="editProviderForm">
-          Cập nhật
+        <Button
+          size="small"
+          type="submit"
+          form="editProviderForm"
+          color="success"
+          icon={<FontAwesomeIcon icon={faFileArchive} />}
+        >
+          Lưu
         </Button>
       </div>
     </Fragment>

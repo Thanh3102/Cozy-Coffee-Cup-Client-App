@@ -1,7 +1,6 @@
 import Sidebar from "../ui/Sidebar";
 import { ContentContainer } from "../ui/ContentContainer";
 import { Tab, TabContainer } from "../ui/TabContainer";
-import { Fragment } from "react/jsx-runtime";
 import TabDefinitionUnit from "../feature/tabs/TabDefinitionUnit";
 import TabDefinitionCategory from "../feature/tabs/TabDefinitionCategory";
 import TabDefinitionType from "../feature/tabs/TabDefinitionType";

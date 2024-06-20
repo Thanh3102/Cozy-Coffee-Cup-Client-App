@@ -29,6 +29,8 @@ import { OrderStatus, OrderType } from "../../../utils/types/enum";
 import { Option, OrderDetail, OrderItem } from "../../../utils/types/type";
 import { formatDate } from "../../../utils/dateFormat";
 import FormOrderPayment from "./FormOrderPayment";
+import { UpdateOrderDto } from "../../../utils/types/dto";
+import OrderApi from "../../../api/Order";
 
 interface Props extends BaseProps {
   id: number;
@@ -57,22 +59,18 @@ const FormEditOrder = ({ id, close }: Props) => {
       return;
     }
 
-    const requestData = {
+    const dto: UpdateOrderDto = {
       ...data,
       id: id,
       items: orderItems,
       deleteItems: deleteId,
     };
-    try {
-      const { message } = await axiosClient.post<any, { message: string }>(
-        "/api/order/updateOrder",
-        requestData
-      );
+    const orderApi = new OrderApi();
+    const message = await orderApi.updateOrder(dto);
+    if (message) {
       toast.success(message);
-      close();
-    } catch (error: any) {
-      toast.error(error.message ?? "Đã có lỗi xảy ra");
     }
+    close();
   };
 
   const convertValueToString = (option: Option) => {

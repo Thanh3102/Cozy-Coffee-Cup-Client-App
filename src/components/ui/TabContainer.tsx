@@ -22,15 +22,10 @@ const TabOptions = {
   },
 };
 
-export const TabContainer = ({
-  tabs,
-  width = "100%",
-  height = "100%",
-  size = "normal",
-}: Props) => {
+export const TabContainer = ({ tabs, size = "normal" }: Props) => {
   const [selectedTab, setSelectedTab] = useState<number>(0);
   return (
-    <div style={{ width: width, height: height }}>
+    <div>
       <ul className="bg-white flex w-full border-b-[1px]">
         {tabs.map((tab, index) => {
           return (

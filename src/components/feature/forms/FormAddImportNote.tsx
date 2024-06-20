@@ -13,10 +13,12 @@ import Modal, { ModalTitle } from "../../ui/Modal";
 import FormAddImportItem from "./FormAddImportItem";
 import { ImportItem, Provider } from "../../../utils/types/type";
 import { currencyFormatter } from "../../../utils/currencyFormat";
-import axiosClient from "../../../lib/axios";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { BaseProps, CreateImportNoteDto } from "../../../utils/types/interface";
+import { BaseProps } from "../../../utils/types/interface";
 import { toast } from "react-toastify";
+import { CreateImportNoteDto } from "../../../utils/types/dto";
+import MaterialApi from "../../../api/Material";
+import ProviderApi from "../../../api/Provider";
 
 interface Props extends BaseProps {
   closeModal: () => void;
@@ -46,40 +48,36 @@ const FormAddImportNote = ({ closeModal, reFetchMaterial }: Props) => {
     const importList: {
       price: number;
       quantity: number;
-      material_id: number | undefined;
+      material_id: number;
     }[] = [];
 
     if (deliveryItems.length !== 0) {
-      deliveryItems.forEach((item) =>
-        importList.push({
-          price: item.price,
-          quantity: item.quantity,
-          material_id: item.material?.id,
-        })
-      );
+      deliveryItems.forEach((item) => {
+        if (item?.material?.id) {
+          importList.push({
+            price: item.price,
+            quantity: item.quantity,
+            material_id: item.material.id,
+          });
+        }
+      });
     } else {
       toast.error("Danh sách nguyên liệu trống");
       return;
     }
 
-    const sendData: CreateImportNoteDto = {
+    const dto: CreateImportNoteDto = {
       import_note_detail: importList,
       ...data,
     };
 
-    try {
-      const response = await axiosClient.post<CreateImportNoteDto, any>(
-        "/api/import-export/createImportNote",
-        sendData
-      );
-      if (response.status === 200) {
-        toast.success("Đã tạo phiếu nhập kho");
-        closeModal();
-        reFetchMaterial();
-      }
-    } catch (error: any) {
-      toast.error(`${error.message}`);
+    const materialApi = new MaterialApi();
+    const message = await materialApi.createImportNote(dto);
+    if (message !== null) {
+      message && toast.success("Đã tạo phiếu nhập kho");
     }
+    closeModal();
+    reFetchMaterial();
   };
 
   const countTotal = (items: ImportItem[]) => {
@@ -91,11 +89,9 @@ const FormAddImportNote = ({ closeModal, reFetchMaterial }: Props) => {
   };
 
   const fetchProviders = async () => {
-    const fetchProviderResponse = await axiosClient.get<
-      void,
-      { providers: Provider[] }
-    >("/api/provider/getAllActive");
-    setProviders(fetchProviderResponse.providers);
+    const providerApi = new ProviderApi();
+    const providers = await providerApi.getAllActive();
+    setProviders(providers);
   };
 
   useEffect(() => {
@@ -202,20 +198,27 @@ const FormAddImportNote = ({ closeModal, reFetchMaterial }: Props) => {
             {...register("note")}
           ></textarea>
         </div>
-        <div className="flex justify-end mt-4">
-          <Button size="small" color="success">
+        <div className="flex justify-end mt-4 gap-4">
+          <Button
+            size="small"
+            color="danger"
+            icon={<FontAwesomeIcon icon={faX} />}
+            onClick={closeModal}
+          >
+            Đóng
+          </Button>
+          <Button
+            size="small"
+            color="success"
+            icon={<FontAwesomeIcon icon={faPlus} />}
+          >
             Tạo
           </Button>
         </div>
       </form>
       <Modal open={openAddImportItem}>
-        <div
-          className="flex justify-between my-3"
-          onClick={() => setOpenAddImportItem(false)}
-        >
-          <ModalTitle>Thêm nguyên liệu</ModalTitle>
-          <FontAwesomeIcon icon={faX} className="cursor-pointer" />
-        </div>
+        <ModalTitle>Chọn nguyên liệu</ModalTitle>
+
         <FormAddImportItem
           setImportItems={setImportItems}
           closeModal={() => setOpenAddImportItem(false)}

@@ -25,10 +25,12 @@ import { currencyFormatter } from "../../../utils/currencyFormat";
 import { toast } from "react-toastify";
 import axiosClient from "../../../lib/axios";
 import { OrderType } from "../../../utils/types/enum";
+import { CreateOrderDto } from "../../../utils/types/dto";
+import OrderApi from "../../../api/Order";
 
 interface Props extends BaseProps {
   close: () => void;
-  refreshFilter: () => void;
+  // refreshFilter: () => void;
 }
 
 type Inputs = {
@@ -37,7 +39,7 @@ type Inputs = {
   total: number;
 };
 
-const FormAddOrder = ({ close, refreshFilter }: Props) => {
+const FormAddOrder = ({ close }: Props) => {
   const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
   const [openAdd, setOpenAdd] = useState<boolean>(false);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
@@ -53,22 +55,17 @@ const FormAddOrder = ({ close, refreshFilter }: Props) => {
       toast.error("Chưa thêm sản phẩm");
       return;
     }
-    const requestData = {
+    const dto: CreateOrderDto = {
       ...data,
       items: orderItems,
     };
 
-    try {
-      const { message } = await axiosClient.post<any, { message: string }>(
-        "/api/order/createOrder",
-        requestData
-      );
+    const orderApi = new OrderApi();
+    const message = await orderApi.createOrder(dto);
+    if (message) {
       toast.success(message);
-      refreshFilter();
-      close();
-    } catch (error: any) {
-      toast.error(error.message ?? "Đã có lỗi xảy ra");
     }
+    close();
   };
 
   const convertValueToString = (option: Option) => {

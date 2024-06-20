@@ -1,9 +1,9 @@
 import { Fragment } from "react/jsx-runtime";
-import Button from "../../ui/Button";
-import { BaseProps } from "../../../utils/types/interface";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import axiosClient from "../../../lib/axios";
+import { BaseProps } from "../../../utils/types/interface";
+import Button from "../../ui/Button";
+import ProductApi from "../../../api/Product";
 
 interface Props extends BaseProps {
   close: () => void;
@@ -15,17 +15,11 @@ type Inputs = { name: string };
 const FormAddCategory = ({ close, fetchCategories }: Props) => {
   const { register, handleSubmit } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    try {
-      const { message } = await axiosClient.post<Inputs, { message: string }>(
-        "/api/product/createCategory",
-        data
-      );
-      toast.success(message);
-      fetchCategories();
-      close();
-    } catch (error: any) {
-      toast.error(error.message ?? "Đã có lỗi xảy ra");
-    }
+    const productApi = new ProductApi();
+    const message = await productApi.createCategory(data);
+    message && toast.success(message);
+    fetchCategories();
+    close();
   };
   return (
     <Fragment>

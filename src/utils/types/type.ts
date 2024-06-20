@@ -106,7 +106,7 @@ export type Product = {
   price: number;
   image: string;
   description: string;
-  category: Category | null;
+  category: Category;
   type: ProductType;
   note: string;
   sold: number;
@@ -165,6 +165,13 @@ export type Table = {
   floor: number;
   number: number;
   order_id: number;
+};
+
+export type Order = {
+  id: number;
+  note: string;
+  created_at: Date;
+  status: OrderStatus;
 };
 
 export type OrderItem = {

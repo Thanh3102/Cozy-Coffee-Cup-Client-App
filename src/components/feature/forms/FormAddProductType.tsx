@@ -4,6 +4,7 @@ import { BaseProps } from "../../../utils/types/interface";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import axiosClient from "../../../lib/axios";
+import ProductApi from "../../../api/Product";
 
 interface Props extends BaseProps {
   close: () => void;
@@ -16,11 +17,9 @@ const FormAddProductType = ({ close, fetchProductType }: Props) => {
   const { register, handleSubmit } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
-      const { message } = await axiosClient.post<Inputs, { message: string }>(
-        "/api/product/createType",
-        data
-      );
-      toast.success(message);
+      const productApi = new ProductApi();
+      const message = await productApi.createType(data);
+      message && toast.success(message);
       fetchProductType();
       close();
     } catch (error: any) {

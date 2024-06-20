@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { AnimatePresence, motion } from "framer-motion";
 import Button from "../../ui/Button";
 import { BaseProps } from "../../../utils/types/interface";
+import ProductApi from "../../../api/Product";
 
 interface Props extends BaseProps {
   product_id: number;
@@ -25,35 +26,22 @@ const FormUpdateProductOption = ({ product_id, close, reFetchData }: Props) => {
   const [options, setOptions] = useState<ProductOption[]>([]);
   const [selectedOptions, setSelectedOptions] = useState<SelectedOption[]>([]);
   const fetchOptions = async () => {
-    try {
-      const { options } = await axiosClient.get<
-        void,
-        { options: ProductOption[] }
-      >("/api/product/getOption");
-
-      setOptions(options);
-    } catch (error: any) {
-      toast.error(error.message ?? "Không thể load dữ liệu tùy chọn");
-    }
+    const productApi = new ProductApi();
+    const options = await productApi.getAllOption();
+    setOptions(options);
   };
 
   const fetchProductOption = async () => {
-    try {
-      const { options } = await axiosClient.get<void, { options: Option[] }>(
-        `api/product/getProductOption?id=${product_id}`
-      );
-
-      const productOption = options.map((option) => {
-        const values = option.values.map((v) => v.id);
-        return {
-          option_id: option.id,
-          values: values,
-        };
-      });
-      setSelectedOptions(productOption);
-    } catch (error: any) {
-      toast.error(error.message ?? "Đã có lỗi xảy ra");
-    }
+    const productApi = new ProductApi();
+    const options = await productApi.getOptionByProductId(product_id);
+    const productOption = options.map((option) => {
+      const values = option.values.map((v) => v.id);
+      return {
+        option_id: option.id,
+        values: values,
+      };
+    });
+    setSelectedOptions(productOption);
   };
 
   useEffect(() => {

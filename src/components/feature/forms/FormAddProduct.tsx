@@ -5,6 +5,9 @@ import { BaseProps } from "../../../utils/types/interface";
 import axiosClient from "../../../lib/axios";
 import { toast } from "react-toastify";
 import { Category, ProductType } from "../../../utils/types/type";
+import ProductApi from "../../../api/Product";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faX } from "@fortawesome/free-solid-svg-icons";
 
 interface Props extends BaseProps {
   fetchProduct: () => void;
@@ -25,31 +28,19 @@ const FormAddProduct = ({ closeModal, fetchProduct }: Props) => {
   const [image, setImage] = useState<string>();
   const [categories, setCategories] = useState<Category[]>([]);
   const [types, setTypes] = useState<ProductType[]>([]);
-
   const [loading, setLoading] = useState<boolean>(false);
 
   const fetchCategories = async () => {
-    try {
-      const { categories } = await axiosClient.get<
-        void,
-        { categories: Category[] }
-      >("/api/product/getCategory");
-      setCategories(categories);
-    } catch (error: any) {
-      toast.error(error.message ?? "Không thể tải danh mục");
-    }
+    const productApi = new ProductApi();
+    const categories = await productApi.getAllCategory();
+    setCategories(categories);
   };
 
-    const fetchTypes = async () => {
-      try {
-        const { types } = await axiosClient.get<void, { types: ProductType[] }>(
-          "/api/product/getType"
-        );
-        setTypes(types);
-      } catch (error: any) {
-        toast.error(error.message ?? "Không thể lấy loại sản phẩm");
-      }
-    };
+  const fetchTypes = async () => {
+    const productApi = new ProductApi();
+    const types = await productApi.getAllType();
+    setTypes(types);
+  };
 
   useEffect(() => {
     fetchCategories();
@@ -58,26 +49,13 @@ const FormAddProduct = ({ closeModal, fetchProduct }: Props) => {
 
   const { register, handleSubmit, setValue } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    try {
-      setLoading(true);
-      const response = await axiosClient.post<
-        Inputs,
-        { status: number; message: string }
-      >("/api/product/create", data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      setLoading(false);
-      if (response.status === 200) {
-        toast.success(response.message ?? "Thêm thành công");
-        fetchProduct();
-        closeModal();
-      }
-    } catch (error: any) {
-      toast.error(error.message ?? "Đã có lỗi xảy ra");
-      setLoading(false);
-    }
+    setLoading(true);
+    const productApi = new ProductApi();
+    const message = await productApi.createProduct(data);
+    setLoading(false);
+    toast.success(message ?? "Thêm thành công");
+    fetchProduct();
+    closeModal();
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -196,8 +174,13 @@ const FormAddProduct = ({ closeModal, fetchProduct }: Props) => {
         </div>
       </form>
       <div className="flex gap-4 mt-4 justify-end">
-        <Button size="small" color="danger" onClick={closeModal}>
-          Hủy
+        <Button
+          size="small"
+          color="danger"
+          onClick={closeModal}
+          icon={<FontAwesomeIcon icon={faX} />}
+        >
+          Đóng
         </Button>
         <Button
           size="small"
@@ -205,7 +188,7 @@ const FormAddProduct = ({ closeModal, fetchProduct }: Props) => {
           form="addProductForm"
           type="submit"
           loading={loading}
-          className={`${loading ? "disable" : ""}`}
+          icon={<FontAwesomeIcon icon={faPlus} />}
         >
           Thêm
         </Button>

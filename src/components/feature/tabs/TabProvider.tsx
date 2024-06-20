@@ -14,6 +14,7 @@ import { faPlus, faX } from "@fortawesome/free-solid-svg-icons";
 import Modal, { ModalTitle } from "../../ui/Modal";
 import FormAddProvider from "../forms/FormAddProvider";
 import FormEditProvider from "../forms/FormEditProvider";
+import ProviderApi from "../../../api/Provider";
 
 const TabProvider = () => {
   const [openAddProvider, setOpenAddProvider] = useState<boolean>(false);
@@ -22,10 +23,8 @@ const TabProvider = () => {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
   const fetchProvider = async () => {
-    const { providers } = await axiosClient.get<
-      void,
-      { providers: Provider[] }
-    >("/api/provider/getAll");
+    const providerApi = new ProviderApi();
+    const providers = await providerApi.getAll();
     setProviders(providers);
   };
 
@@ -98,15 +97,7 @@ const TabProvider = () => {
         </Table>
       </motion.div>
       <Modal open={openAddProvider}>
-        <div
-          className="flex justify-between items-center cursor-pointer py-1"
-          onClick={() => {
-            setOpenAddProvider(false);
-          }}
-        >
-          <ModalTitle>Thêm nhà cung cấp mới</ModalTitle>
-          <FontAwesomeIcon icon={faX} />
-        </div>
+        <ModalTitle>Thêm nhà cung cấp mới</ModalTitle>
         <FormAddProvider
           closeModal={() => setOpenAddProvider(false)}
           fetchProvider={fetchProvider}
@@ -114,20 +105,12 @@ const TabProvider = () => {
       </Modal>
       {openEditProvider && (
         <Modal open={openEditProvider}>
-            <div
-              className="flex justify-between items-center cursor-pointer py-1"
-              onClick={() => {
-                setOpenEditProvider(false);
-              }}
-            >
-              <ModalTitle>Thông tin nhà cung cấp</ModalTitle>
-              <FontAwesomeIcon icon={faX} />
-            </div>
-            <FormEditProvider
-              provider={providers[selectedIndex]}
-              closeModal={() => setOpenEditProvider(false)}
-              fetchProvider={fetchProvider}
-            />
+          <ModalTitle>Thông tin nhà cung cấp</ModalTitle>
+          <FormEditProvider
+            provider={providers[selectedIndex]}
+            closeModal={() => setOpenEditProvider(false)}
+            fetchProvider={fetchProvider}
+          />
         </Modal>
       )}
     </Fragment>

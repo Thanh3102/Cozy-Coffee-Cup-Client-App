@@ -9,8 +9,8 @@ import { toast } from "react-toastify";
 import axiosClient from "../../lib/axios";
 import OrderTypePercentChart from "../feature/charts/OrderTypePercentChart";
 import ProductCategoryPercentChart from "../feature/charts/ProductCategoryPercentChart";
-import TopSaleProductTable from "../feature/tables/TopSaleProductTable";
-import RunOutMaterialTable from "../feature/tables/RunOutMaterialTable";
+import TopSaleProductTable from "../feature/tables/TableTopSaleProduct";
+import RunOutMaterialTable from "../feature/tables/TableRunOutMaterial";
 
 const HomeContent = () => {
   const [revenueOverview, setRevenueOverview] = useState<RevenueOverview>({

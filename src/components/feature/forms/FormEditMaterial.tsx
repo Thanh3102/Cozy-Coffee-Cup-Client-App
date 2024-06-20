@@ -8,6 +8,8 @@ import { BaseProps } from "../../../utils/types/interface";
 import { Material } from "../../../utils/types/type";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFloppyDisk, faX } from "@fortawesome/free-solid-svg-icons";
+import { UpdateMaterialDto } from "../../../utils/types/dto";
+import MaterialApi from "../../../api/Material";
 
 interface Props extends BaseProps {
   reFetch: () => void;
@@ -47,33 +49,24 @@ const FormEditMaterial = ({ reFetch, closeModal, material }: Props) => {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     setFormLoading(true);
-    try {
-      console.log(data);
-
-      const { status } = await axiosClient.post<any, any>(
-        "/api/material/updateMaterial",
-        {
-          id: material.id,
-          ...data,
-        }
-      );
-      setFormLoading(false);
-      if (status === 200) {
-        toast.success("Cập nhật thành công");
-        reset();
-        reFetch();
-        closeModal();
-      }
-    } catch (error: any) {
-      toast.error(
-        `${error.message ? error.message : "Đã xảy ra lỗi. Vui lòng thử lại"}`
-      );
+    const dto: UpdateMaterialDto = {
+      id: material.id,
+      ...data,
+    };
+    const materialApi = new MaterialApi();
+    const message = await materialApi.updateMaterial(dto);
+    setFormLoading(false);
+    if (message !== null) {
+      message && toast.success(message ?? "Cập nhật thành công");
     }
+    reFetch();
+    closeModal();
   };
 
   const fetchUnits = async () => {
-    const { data } = await axiosClient.get("/api/material/getUnits");
-    setUnits(data);
+    const materialApi = new MaterialApi();
+    const units = await materialApi.fetchUnit();
+    setUnits(units);
   };
 
   useEffect(() => {
@@ -98,6 +91,7 @@ const FormEditMaterial = ({ reFetch, closeModal, material }: Props) => {
         <div className="flex flex-col gap-2">
           <label htmlFor="expiration_date">Ngày hết hạn</label>
           <input
+            min={new Date().toISOString().split("T")[0]}
             defaultValue={
               material.expiration_date
                 ? material.expiration_date.toString().split("T")[0]
@@ -176,10 +170,11 @@ const FormEditMaterial = ({ reFetch, closeModal, material }: Props) => {
         <Button
           type="submit"
           size="small"
+          color="success"
           form="addMaterialForm"
           icon={<FontAwesomeIcon icon={faFloppyDisk} />}
         >
-          Cập nhật
+          Lưu
         </Button>
       </div>
     </Fragment>

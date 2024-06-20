@@ -1,4 +1,4 @@
-import { AnimatePresence, animate, motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { BaseProps } from "../../utils/types/interface";
 
 interface Props extends BaseProps {
@@ -29,7 +29,7 @@ const Modal = ({ children, open }: Props) => {
             exit={{ scale: 0 }}
             className="flex justify-center items-center absolute top-0 left-0 right-0 bottom-0"
           >
-            <div className="bg-white px-6 py-4 rounded-lg">{children}</div>
+            <div className="bg-white px-6 py-4 rounded-lg shadow-lg">{children}</div>
           </motion.div>
         </motion.div>
       )}

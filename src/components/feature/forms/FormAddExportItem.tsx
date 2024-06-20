@@ -1,11 +1,11 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ExportItem, Material } from "../../../utils/types/type";
 import { useEffect, useState } from "react";
-import axiosClient from "../../../lib/axios";
 import Button from "../../ui/Button";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { BaseProps } from "../../../utils/types/interface";
+import MaterialApi from "../../../api/Material";
 
 interface Props extends BaseProps {
   setExportItems: React.Dispatch<React.SetStateAction<ExportItem[]>>;
@@ -20,11 +20,9 @@ type Inputs = {
 const fetchData = async (
   setMaterial: React.Dispatch<React.SetStateAction<Material[]>>
 ) => {
-  const fetchMaterialResponse = await axiosClient.get<
-    void,
-    { data: Material[] }
-  >("/api/material/getAllActive");
-  setMaterial(fetchMaterialResponse.data);
+  const materialApi = new MaterialApi();
+  const materials = await materialApi.getAllActive();
+  setMaterial(materials);
 };
 
 const FormAddExportItem = ({ setExportItems, closeModal }: Props) => {
@@ -53,7 +51,10 @@ const FormAddExportItem = ({ setExportItems, closeModal }: Props) => {
   }, []);
 
   return (
-    <form className="flex flex-col min-w-[25vw]" onSubmit={handleSubmit(onSubmit)}>
+    <form
+      className="flex flex-col min-w-[25vw]"
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <div className="flex flex-col gap-2 my-2">
         <label htmlFor="material_name">Tên nguyên liệu</label>
         <select
@@ -96,9 +97,22 @@ const FormAddExportItem = ({ setExportItems, closeModal }: Props) => {
           defaultValue={selectedMaterial ? `${selectedMaterial.unit.name}` : ""}
         />
       </div>
-      <div className="flex justify-end mt-3">
-        <Button color="success" size="small" type="submit">
-          <FontAwesomeIcon icon={faPlus} />
+      <div className="flex justify-end mt-3 gap-4">
+        <Button
+          color="danger"
+          size="small"
+          type="submit"
+          icon={<FontAwesomeIcon icon={faX} />}
+          onClick={closeModal}
+        >
+          Đóng
+        </Button>
+        <Button
+          color="success"
+          size="small"
+          type="submit"
+          icon={<FontAwesomeIcon icon={faPlus} />}
+        >
           Thêm
         </Button>
       </div>

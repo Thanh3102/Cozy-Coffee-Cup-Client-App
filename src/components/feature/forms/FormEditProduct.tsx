@@ -5,7 +5,8 @@ import Button from "../../ui/Button";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import axiosClient from "../../../lib/axios";
+import ProductApi from "../../../api/Product";
+import { UpdateProductDto } from "../../../utils/types/dto";
 
 interface Props extends BaseProps {
   product: Product;
@@ -17,7 +18,7 @@ interface Inputs {
   name: string;
   price: number;
   type_id: number;
-  category_id: number | null;
+  category_id: number;
   description: string;
   note: string;
   image: File;
@@ -31,69 +32,44 @@ const FormEditProduct = ({ product, close, fetchProduct }: Props) => {
   const [types, setTypes] = useState<ProductType[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  console.log(product);
-  
-
   const { register, handleSubmit, setValue, reset } = useForm<Inputs>({
     defaultValues: {
       name: product.name,
       price: product.price,
       discount: product.discount,
       type_id: product.type.id,
-      category_id: product?.category?.id ?? null,
+      category_id: product.category.id,
       status: product.status,
       note: product.note,
       description: product.description,
     },
   });
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    try {
-      setLoading(true);
-      const response = await axiosClient.post<
-        Inputs,
-        { status: number; message: string }
-      >(
-        "/api/product/update",
-        { id: product.id, ...data },
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      setLoading(false);
-      toast.success(response.message);
-      fetchProduct();
-      close();
-    } catch (error: any) {
-      toast.error(error.message ?? "Đã có lỗi xảy ra");
-      setLoading(false);
-    }
+    const productApi = new ProductApi();
+    setLoading(true);
+    const dto: UpdateProductDto = {
+      id: product.id,
+      ...data,
+    };
+    const message = await productApi.updateProduct(dto);
+    setLoading(false);
+    message && toast.success(message);
+    fetchProduct();
+    close();
   };
 
   const fetchCategories = async () => {
-    try {
-      const { categories } = await axiosClient.get<
-        void,
-        { categories: Category[] }
-      >("/api/product/getCategory");
-      setCategories(categories);
-      reset({ category_id: product?.category?.id ?? null });
-    } catch (error: any) {
-      toast.error(error.message ?? "Không thể lấy danh mục");
-    }
+    const productApi = new ProductApi();
+    const categories = await productApi.getAllCategory();
+    setCategories(categories);
+    setValue("category_id", product.category.id);
   };
 
   const fetchTypes = async () => {
-    try {
-      const { types } = await axiosClient.get<void, { types: ProductType[] }>(
-        "/api/product/getType"
-      );
-      setTypes(types);
-      reset({ type_id: product.type.id });
-    } catch (error: any) {
-      toast.error(error.message ?? "Không thể lấy loại sản phẩm");
-    }
+    const productApi = new ProductApi();
+    const types = await productApi.getAllType();
+    setTypes(types);
+    setValue("type_id", product.type.id);
   };
 
   useEffect(() => {
@@ -177,7 +153,7 @@ const FormEditProduct = ({ product, close, fetchProduct }: Props) => {
               setValueAs: (v) => Boolean(v),
             })}
           >
-            <option value={"false"}>Ngừng bán</option>
+            <option value={""}>Ngừng bán</option>
             <option value={"true"}>Đang bán</option>
           </select>
         </div>

@@ -1,14 +1,14 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { ImportItem, Material, Provider } from "../../../utils/types/type";
-import axiosClient from "../../../lib/axios";
 import Button from "../../ui/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faX } from "@fortawesome/free-solid-svg-icons";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { BaseProps } from "../../../utils/types/interface";
+import MaterialApi from "../../../api/Material";
 
 interface Props extends BaseProps {
-  setImportItems: React.Dispatch<React.SetStateAction<ImportItem[]>>;
+  setImportItems: Dispatch<SetStateAction<ImportItem[]>>;
   closeModal: () => void;
 }
 
@@ -21,11 +21,9 @@ type ImportItemInput = {
 const fetchData = async (
   setMaterial: React.Dispatch<React.SetStateAction<Material[]>>
 ) => {
-  const fetchMaterialResponse = await axiosClient.get<
-    void,
-    { data: Material[] }
-  >("/api/material/getAllActive");
-  setMaterial(fetchMaterialResponse.data);
+  const materialApi = new MaterialApi();
+  const materials = await materialApi.getAllActive();
+  setMaterial(materials);
 };
 
 const FormAddImportItem = ({ setImportItems, closeModal }: Props) => {
@@ -60,7 +58,10 @@ const FormAddImportItem = ({ setImportItems, closeModal }: Props) => {
   }, []);
 
   return (
-    <form className="flex flex-col min-w-[25vw]" onSubmit={handleSubmit(onSubmit)}>
+    <form
+      className="flex flex-col min-w-[25vw]"
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <div className="flex flex-col gap-2 my-2">
         <label htmlFor="material_name">Tên nguyên liệu</label>
         <select
@@ -107,7 +108,16 @@ const FormAddImportItem = ({ setImportItems, closeModal }: Props) => {
           {...register("price", { required: true, valueAsNumber: true })}
         />
       </div>
-      <div className="flex justify-end">
+      <div className="flex justify-end gap-4">
+        <Button
+          color="danger"
+          size="small"
+          type="button"
+          icon={<FontAwesomeIcon icon={faX} />}
+          onClick={closeModal}
+        >
+          Đóng
+        </Button>
         <Button color="success" size="small" type="submit">
           <FontAwesomeIcon icon={faPlus} />
           Thêm

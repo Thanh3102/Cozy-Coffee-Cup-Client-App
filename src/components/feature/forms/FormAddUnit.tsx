@@ -3,8 +3,7 @@ import { BaseProps } from "../../../utils/types/interface";
 import Button from "../../ui/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faX } from "@fortawesome/free-solid-svg-icons";
-import axiosClient from "../../../lib/axios";
-import { toast } from "react-toastify";
+import MaterialApi from "../../../api/Material";
 
 interface Props extends BaseProps {
   closeModal: () => void;
@@ -19,19 +18,10 @@ type Inputs = {
 const FormAddUnit = ({ closeModal, fetchUnit }: Props) => {
   const { register, handleSubmit } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    try {
-      const response = await axiosClient.post<
-        Inputs,
-        { status: number; message: string }
-      >("/api/material/createUnit", data);
-      if (response.status === 200) {
-        toast.success(response.message);
-      }
-      fetchUnit();
-      closeModal();
-    } catch (error: any) {
-      toast.error(error.message ?? "Đã có lỗi xảy ra");
-    }
+    const materialApi = new MaterialApi();
+    await materialApi.createUnit(data);
+    fetchUnit();
+    closeModal();
   };
   return (
     <form

@@ -1,10 +1,6 @@
-import { Fragment } from "react/jsx-runtime";
 import { BaseProps } from "../../../utils/types/interface";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { Product, ProductDetail } from "../../../utils/types/type";
-import axiosClient from "../../../lib/axios";
-import { toast } from "react-toastify";
+import { Product } from "../../../utils/types/type";
 import { currencyFormatter } from "../../../utils/currencyFormat";
 import { formatDate } from "../../../utils/dateFormat";
 
@@ -17,7 +13,7 @@ const TabProductInfo = ({ product }: Props) => {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="flex max-h-[80vh] overflow-y-scroll"
+      className="flex overflow-y-auto w-[80vw] h-[70vh]"
     >
       <div className="flex-[2] flex-col pr-2">
         <div className="flex py-3">

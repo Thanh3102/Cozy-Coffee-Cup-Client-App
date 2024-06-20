@@ -10,8 +10,7 @@ import TabProductOption from "./tabs/TabProductOption";
 import Modal, { ModalTitle } from "../ui/Modal";
 import { useEffect, useState } from "react";
 import FormEditProduct from "./forms/FormEditProduct";
-import { toast } from "react-toastify";
-import axiosClient from "../../lib/axios";
+import ProductApi from "../../api/Product";
 
 interface Props extends BaseProps {
   product_id: number;
@@ -19,36 +18,30 @@ interface Props extends BaseProps {
 }
 
 const ProductDetail = ({ product_id, closeModal }: Props) => {
-  const [product, setProduct] = useState<Product>();
+  const [product, setProduct] = useState<Product | undefined>();
   const tabs: Tab[] = [
     { title: "Thông tin", content: <TabProductInfo product={product} /> },
     {
       title: "Tùy chọn",
       content: <TabProductOption product_id={product_id} />,
     },
-    { title: "Doanh số", content: <Fragment /> },
   ];
 
   const fetchProduct = async () => {
-    try {
-      const { product } = await axiosClient.get<void, { product: Product }>(
-        `/api/product/findById?id=${product_id}`
-      );
-      setProduct(product);
-    } catch (error: any) {
-      toast.error(error.message ?? "Không thể lấy dữ liệu sản phẩm");
-    }
+    const productApi = new ProductApi();
+    const product = await productApi.getProductById(product_id);
+    setProduct(product);
   };
 
   useEffect(() => {
     fetchProduct();
-  },[]);
+  }, []);
 
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   return (
     <Fragment>
       {product && (
-        <div className="w-[80vw]">
+        <div className="">
           <div className="flex justify-between items-center">
             <span className="font-bold text-[20px]">{product.name}</span>
             <div className="flex gap-4">

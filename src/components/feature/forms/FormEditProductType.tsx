@@ -3,8 +3,8 @@ import Button from "../../ui/Button";
 import { BaseProps } from "../../../utils/types/interface";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import axiosClient from "../../../lib/axios";
 import { ProductType } from "../../../utils/types/type";
+import ProductApi from "../../../api/Product";
 
 interface Props extends BaseProps {
   type: ProductType;
@@ -20,11 +20,9 @@ const FormEditProductType = ({ type, close, fetchType }: Props) => {
   });
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
-      const { message } = await axiosClient.post<Inputs, { message: string }>(
-        "/api/product/updateType",
-        data
-      );
-      toast.success(message);
+      const productApi = new ProductApi();
+      const message = await productApi.updateType(data);
+      message && toast.success(message);
       fetchType();
       close();
     } catch (error: any) {
