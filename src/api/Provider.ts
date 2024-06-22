@@ -16,6 +16,7 @@ export default class ProviderApi {
       return [];
     }
   };
+
   getAllActive = async () => {
     try {
       const { providers } = await axiosClient.get<
@@ -28,6 +29,7 @@ export default class ProviderApi {
       return [];
     }
   };
+
   create = async (dto: CreateProviderDto) => {
     try {
       const { message } = await axiosClient.post<
@@ -39,6 +41,7 @@ export default class ProviderApi {
       toast.error(error.message ?? "Đã có lỗi xảy ra");
     }
   };
+
   update = async (dto: UpdateProviderDto) => {
     try {
       const { message } = await axiosClient.post<

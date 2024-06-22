@@ -17,16 +17,6 @@ interface TableCellProps extends BaseProps {
   colSpan?: number;
 }
 
-const tableDefault = {
-  TableHead: {
-    color: {
-      bg: "bg-white",
-      text: "text-[#667085]",
-    },
-  },
-  TableBody: {},
-};
-
 const TableOption = {
   tableCol: {
     align: {
@@ -59,15 +49,19 @@ const Table = ({
 const TableHead = ({
   children,
   className = "",
-  bgColor = tableDefault.TableHead.color.bg,
-  textColor = tableDefault.TableHead.color.text,
+  bgColor,
+  textColor,
   sticky,
 }: TableHeadProps) => {
   return (
     <thead
-      className={`font-medium cursor-default [&>tr]:text-[16px] ${bgColor} ${textColor} ${
-        sticky ? "sticky top-0" : ""
+      className={`font-medium cursor-default [&>tr]:text-[16px] ${textColor} ${
+        sticky ? "sticky top-0 z-10" : ""
       } ${className}`}
+      style={{
+        backgroundColor: bgColor ?? "#FFF",
+        color: bgColor ? "#FFF" : "#667085",
+      }}
     >
       {children}
     </thead>
@@ -97,7 +91,7 @@ const TableCell = ({
   return (
     <td
       className={`px-2 py-4 ${TableOption.tableCol.align[align]} ${className}`}
-      colSpan={colSpan}
+      // colSpan={colSpan}
     >
       {children}
     </td>

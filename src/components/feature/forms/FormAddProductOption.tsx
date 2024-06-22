@@ -30,7 +30,6 @@ interface Inputs {
 
 type Value = { name: string; price: number };
 
-
 const FormAddProductOption = ({ closeModal, fetchOptions }: Props) => {
   const [openAddValue, setOpenAddValue] = useState<boolean>(false);
   const [values, setValues] = useState<Value[]>([]);
@@ -41,7 +40,7 @@ const FormAddProductOption = ({ closeModal, fetchOptions }: Props) => {
     },
   });
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    const dto : CreateProductOptionDto = {
+    const dto: CreateProductOptionDto = {
       ...data,
       values: values,
     };

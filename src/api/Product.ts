@@ -73,6 +73,7 @@ export default class ProductApi {
       toast.error(error.message ?? "Đã có lỗi xảy ra");
     }
   };
+
   updateProduct = async (dto: UpdateProductDto) => {
     try {
       const { message } = await axiosClient.post<
@@ -172,6 +173,7 @@ export default class ProductApi {
       return [];
     }
   };
+
   searchType = async (query: string) => {
     try {
       const { types } = await axiosClient.get<void, { types: ProductType[] }>(
@@ -188,6 +190,7 @@ export default class ProductApi {
       return [];
     }
   };
+
   createType = async (data: CreateProductTypeDto) => {
     try {
       const { message } = await axiosClient.post<
@@ -199,6 +202,7 @@ export default class ProductApi {
       toast.error(error.message ?? "Đã có lỗi xảy ra");
     }
   };
+
   updateType = async (data: UpdateProductTypeDto) => {
     try {
       const { message } = await axiosClient.post<
@@ -210,6 +214,7 @@ export default class ProductApi {
       toast.error(error.message ?? "Đã có lỗi xảy ra");
     }
   };
+
   deleteType = async (id: number) => {
     try {
       const { message } = await axiosClient.delete<void, { message: string }>(
@@ -243,6 +248,7 @@ export default class ProductApi {
       return [];
     }
   };
+
   getAllOption = async () => {
     try {
       const { options } = await axiosClient.get<
@@ -255,6 +261,7 @@ export default class ProductApi {
       return [];
     }
   };
+
   getOptionByProductId = async (id: number) => {
     try {
       const { options } = await axiosClient.get<
@@ -283,6 +290,7 @@ export default class ProductApi {
       toast.error(error.message ?? "Đã có lỗi xảy ra");
     }
   };
+
   updateOption = async () => {};
   deleteOption = async () => {};
 }

@@ -171,6 +171,7 @@ export type Order = {
   id: number;
   note: string;
   created_at: Date;
+  type: string,
   status: OrderStatus;
 };
 
@@ -207,9 +208,13 @@ export type OrderDetail = {
   id: number;
   type: OrderType;
   status: OrderStatus;
+  payment_at: Date;
+  payment: { id: number; type: string };
   note: string;
   created_at: Date;
   orderItems: Array<OrderDetailItem>;
+  paymentUser: { name: string };
+  user: { name: string };
 };
 
 export type OrderDetailItem = {
@@ -217,7 +222,7 @@ export type OrderDetailItem = {
   quantity: number;
   price: number;
   discount: number;
-  isGift: boolean;
+  is_gift: boolean;
   product_id: number;
   order_id: number;
   product: {

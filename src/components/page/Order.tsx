@@ -12,18 +12,34 @@ import OrderApi from "../../api/Order";
 import FormFilterOrder from "../feature/forms/FormFilterOrder";
 import OrderTable from "../feature/tables/TableOrder";
 import { Order as TypeOrder } from "../../utils/types/type";
+import { useForm } from "react-hook-form";
+
+type FilterInput = {
+  id?: string;
+  startDate: string;
+  endDate: string;
+  status: OrderStatus | "";
+  type: OrderType | "";
+};
 
 const OrderContent = () => {
   const [orders, setOrders] = useState<TypeOrder[]>([]);
   const [openAdd, setOpenAdd] = useState<boolean>(false);
 
-  // const [openPayment, setOpenPayment] = useState<boolean>(false);
+  const filterForm = useForm<FilterInput>({
+    defaultValues: {
+      startDate: new Date().toISOString().split("T")[0],
+      endDate: new Date().toISOString().split("T")[0],
+      status: "",
+      type: "",
+    },
+  });
 
   const fetchOrders = async (
-    startDate: string = new Date().toISOString().split("T")[0],
-    endDate: string = new Date().toISOString().split("T")[0],
-    status: OrderStatus | "" = OrderStatus.UNPAID,
-    type: OrderType | "" = "",
+    startDate: string = filterForm.getValues("startDate"),
+    endDate: string = filterForm.getValues("endDate"),
+    status: OrderStatus | "" = filterForm.getValues("status"),
+    type: OrderType | "" = filterForm.getValues("type"),
     id?: number
   ) => {
     const orderApi = new OrderApi();
@@ -57,14 +73,14 @@ const OrderContent = () => {
         </div>
       </div>
 
-      <FormFilterOrder fetchOrders={fetchOrders} />
+      <FormFilterOrder form={filterForm} fetchOrders={fetchOrders} />
 
-      <OrderTable orders={orders} />
+      <OrderTable orders={orders} fetchOrders={fetchOrders} />
 
       <Modal open={openAdd}>
         <FormAddOrder
           close={() => setOpenAdd(false)}
-          // refreshFilter={refreshFilter}
+          fetchOrders={fetchOrders}
         />
       </Modal>
     </ContentContainer>

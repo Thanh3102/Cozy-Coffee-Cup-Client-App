@@ -35,6 +35,7 @@ import OrderApi from "../../../api/Order";
 interface Props extends BaseProps {
   id: number;
   close: () => void;
+  fetchOrders: () => void;
 }
 
 type Inputs = {
@@ -43,14 +44,13 @@ type Inputs = {
   total: number;
 };
 
-const FormEditOrder = ({ id, close }: Props) => {
+const FormEditOrder = ({ id, close, fetchOrders }: Props) => {
   const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
   const [orderDetail, setOrderDetail] = useState<OrderDetail>();
   const [deleteitemIndex, setDeleteitemIndex] = useState(-1);
   const [deleteId, setDeleteId] = useState<Array<number>>([]);
   const [openAdd, setOpenAdd] = useState<boolean>(false);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
-  const [openPayment, setOpenPayment] = useState<boolean>(false);
   const { register, handleSubmit, setValue } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
@@ -70,6 +70,7 @@ const FormEditOrder = ({ id, close }: Props) => {
     if (message) {
       toast.success(message);
     }
+    fetchOrders();
     close();
   };
 
@@ -208,7 +209,7 @@ const FormEditOrder = ({ id, close }: Props) => {
             quantity: item.quantity,
             price: item.price,
             discount: item.discount,
-            is_gift: item.isGift,
+            is_gift: item.is_gift,
             options: options,
           };
         })
@@ -241,8 +242,8 @@ const FormEditOrder = ({ id, close }: Props) => {
                   onClick={() => setOpenAdd(true)}
                 />
               </div>
-              <div className="max-h-[80vh] overflow-y-scroll">
-                <Table>
+              <div className="max-h-[80vh]">
+                <Table height={400}>
                   <TableHead sticky>
                     <TableRow>
                       <TableCell>Tên</TableCell>
@@ -255,8 +256,8 @@ const FormEditOrder = ({ id, close }: Props) => {
                   <TableBody>
                     {orderItems.map((item, index) => (
                       <TableRow key={index} className="select-none">
-                        <TableCell>
-                          {item.name + `${item.is_gift ? "(Tặng kèm)" : ""}`}
+                        <TableCell className="text-[12px]">
+                          {item.name + `${item.is_gift ? " (Tặng kèm)" : ""}`}
                         </TableCell>
                         <TableCell>
                           {currencyFormatter.format(
@@ -288,7 +289,7 @@ const FormEditOrder = ({ id, close }: Props) => {
                             </motion.div>
                           </div>
                         </TableCell>
-                        <TableCell className="max-w-[15vw] whitespace-nowrap overflow-hidden relative group/options">
+                        <TableCell className="max-w-[15vw] whitespace-nowrap overflow-hidden relative group/options text-[12px]">
                           <ul className="list-disc">
                             {item.options.map((opt) => (
                               <li key={opt.id}>{`${
@@ -375,15 +376,6 @@ const FormEditOrder = ({ id, close }: Props) => {
                   </Button>
                   <Button
                     size="small"
-                    color="warning"
-                    type="button"
-                    icon={<FontAwesomeIcon icon={faMoneyBill1Wave} />}
-                    onClick={() => setOpenPayment(true)}
-                  >
-                    Thanh toán
-                  </Button>
-                  <Button
-                    size="small"
                     type="submit"
                     color="success"
                     icon={<FontAwesomeIcon icon={faFileArchive} />}
@@ -415,16 +407,6 @@ const FormEditOrder = ({ id, close }: Props) => {
                 Xóa
               </Button>
             </div>
-          </Modal>
-          <Modal open={openPayment}>
-            <FormOrderPayment
-              orderId={id}
-              close={() => setOpenPayment(false)}
-              closeAll={() => {
-                setOpenPayment(false);
-                close();
-              }}
-            />
           </Modal>
         </Fragment>
       ) : (

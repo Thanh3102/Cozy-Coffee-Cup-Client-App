@@ -21,7 +21,7 @@ const Modal = ({ children, open }: Props) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed top-0 left-0 right-0 bottom-0 z-10 bg-[rgba(0,0,0,0.3)]"
+          className="fixed top-0 left-0 right-0 bottom-0 z-[50] bg-[rgba(0,0,0,0.3)]"
         >
           <motion.div
             initial={{ scale: 0 }}
@@ -29,7 +29,9 @@ const Modal = ({ children, open }: Props) => {
             exit={{ scale: 0 }}
             className="flex justify-center items-center absolute top-0 left-0 right-0 bottom-0"
           >
-            <div className="bg-white px-6 py-4 rounded-lg shadow-lg">{children}</div>
+            <div className="bg-white px-6 py-4 rounded-lg shadow-lg">
+              {children}
+            </div>
           </motion.div>
         </motion.div>
       )}

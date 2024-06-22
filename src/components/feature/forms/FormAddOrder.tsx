@@ -30,7 +30,7 @@ import OrderApi from "../../../api/Order";
 
 interface Props extends BaseProps {
   close: () => void;
-  // refreshFilter: () => void;
+  fetchOrders: () => void;
 }
 
 type Inputs = {
@@ -39,7 +39,7 @@ type Inputs = {
   total: number;
 };
 
-const FormAddOrder = ({ close }: Props) => {
+const FormAddOrder = ({ close, fetchOrders }: Props) => {
   const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
   const [openAdd, setOpenAdd] = useState<boolean>(false);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
@@ -65,6 +65,7 @@ const FormAddOrder = ({ close }: Props) => {
     if (message) {
       toast.success(message);
     }
+    fetchOrders();
     close();
   };
 
@@ -194,7 +195,7 @@ const FormAddOrder = ({ close }: Props) => {
               <TableBody>
                 {orderItems.map((item, index) => (
                   <TableRow key={index} className="select-none">
-                    <TableCell>
+                    <TableCell className="text-[12px]">
                       {item.name + `${item.is_gift ? "(Tặng kèm)" : ""}`}
                     </TableCell>
                     <TableCell>
@@ -225,7 +226,7 @@ const FormAddOrder = ({ close }: Props) => {
                         </motion.div>
                       </div>
                     </TableCell>
-                    <TableCell className="max-w-[15vw] whitespace-nowrap overflow-hidden relative group/options">
+                    <TableCell className="max-w-[15vw] whitespace-nowrap overflow-hidden relative group/options text-[12px]">
                       <ul className="list-disc">
                         {item.options.map((opt) => (
                           <li>{`${opt.title}: ${convertValueToString(

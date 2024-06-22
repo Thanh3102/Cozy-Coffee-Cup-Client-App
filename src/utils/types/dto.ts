@@ -158,3 +158,9 @@ export type UpdateOrderDto = {
   }>;
   deleteItems: Array<number>;
 };
+
+export type PayOrderDto = {
+  id: number;
+  paymentMethod: number;
+  paymentAt: Date;
+};

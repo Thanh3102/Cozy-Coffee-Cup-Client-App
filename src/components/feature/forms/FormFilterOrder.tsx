@@ -1,4 +1,4 @@
-import { SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, UseFormReturn, useForm } from "react-hook-form";
 import { OrderStatus, OrderType } from "../../../utils/types/enum";
 import { toast } from "react-toastify";
 import Button from "../../ui/Button";
@@ -17,26 +17,19 @@ interface Props {
     type: OrderType | "",
     id?: number
   ) => void;
+  form: UseFormReturn<FilterInput, any, undefined>;
 }
 
 type FilterInput = {
   id?: string;
   startDate: string;
   endDate: string;
-  status: OrderStatus;
+  status: OrderStatus | "";
   type: OrderType | "";
 };
 
-const FormFilterOrder = ({ fetchOrders }: Props) => {
-  const { register, handleSubmit, setValue, getValues } = useForm<FilterInput>({
-    defaultValues: {
-      startDate: new Date().toISOString().split("T")[0],
-      endDate: new Date().toISOString().split("T")[0],
-      status: OrderStatus.UNPAID,
-      type: "",
-    },
-  });
-
+const FormFilterOrder = ({ form, fetchOrders }: Props) => {
+  const { register, handleSubmit, setValue, getValues } = form;
   const onSubmit: SubmitHandler<FilterInput> = async (data) => {
     try {
       fetchOrders(
@@ -54,7 +47,7 @@ const FormFilterOrder = ({ fetchOrders }: Props) => {
   const resetFilter = () => {
     const startDate = new Date().toISOString().split("T")[0];
     const endDate = new Date().toISOString().split("T")[0];
-    const status = OrderStatus.UNPAID;
+    const status = "";
     const type = "";
     const id = "";
     setValue("startDate", startDate);
