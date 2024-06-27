@@ -73,7 +73,7 @@ const TabMaterial = () => {
         />
         <Paginition
           position="right"
-          itemPerPage={itemPerPage}
+          // itemPerPage={itemPerPage}
           page={page}
           count={count}
           onItemPerPageChange={(page) => {
