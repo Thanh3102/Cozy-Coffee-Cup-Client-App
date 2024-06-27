@@ -117,9 +117,8 @@ export default class OrderApi {
       >("/api/order/payOrder", dto);
       return message;
     } catch (error: any) {
-      toast.error(
-        error.messsage ?? "Thanh toán không thành công. Đã có lỗi xảy ra"
-      );
+      toast.error(error.messsage ?? "Đã có lỗi xảy ra");
+      throw new Error();
     }
   };
 }
