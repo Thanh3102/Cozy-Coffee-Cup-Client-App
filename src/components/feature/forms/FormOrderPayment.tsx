@@ -39,13 +39,13 @@ const FormOrderPayment = ({ orderId, close, fetchOrders }: Props) => {
   });
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    const orderApi = new OrderApi();
-    const message = await orderApi.payOrder(data);
-    if (message !== null) {
+    try {
+      const orderApi = new OrderApi();
+      const message = await orderApi.payOrder(data);
       toast.success(message ?? "Thanh toán hóa đơn thành công");
-    }
-    fetchOrders();
-    close();
+      fetchOrders();
+      close();
+    } catch (error) {}
   };
 
   const fetchOrderData = async () => {
