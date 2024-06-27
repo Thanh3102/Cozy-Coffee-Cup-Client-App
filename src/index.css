@@ -25,6 +25,15 @@
     background: #555;
 }
 
+::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+::-webkit-color-swatch {
+    border: none;
+    border-radius: 100%;
+}
+
 body {
     background-color: #F7F8FA;
 }

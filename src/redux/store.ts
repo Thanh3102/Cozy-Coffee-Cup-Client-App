@@ -13,11 +13,12 @@ import { persistStore } from "redux-persist";
 
 const authPersistConfig = { key: "auth", storage: storageSession };
 
-// const PersistReducer = persistReducer(persistConfig, authReducer);
+const PersistReducer = persistReducer(authPersistConfig, authReducer);
 
 export const store = configureStore({
   reducer: {
-    auth: persistReducer(authPersistConfig, authReducer),
+    // auth: persistReducer(authPersistConfig, authReducer),
+    auth: PersistReducer,
   },
   devTools: true,
   middleware: (getDefaultMiddleware) =>

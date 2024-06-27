@@ -171,7 +171,7 @@ export type Order = {
   id: number;
   note: string;
   created_at: Date;
-  type: string,
+  type: string;
   status: OrderStatus;
 };
 
@@ -262,3 +262,29 @@ export type RevenueOverview = {
   revenue: number;
   numberOfOrder: number;
 };
+
+export type Account = {
+  id: string;
+  username: string;
+  name: string;
+  roles: {
+    id: string;
+    name: string;
+    color: string;
+  }[];
+};
+
+export type Role = {
+  id: string;
+  name: string;
+  color: string;
+  created_at: Date;
+  user: {
+    name: string;
+    username: string;
+  };
+  _count: {
+    user_role: number;
+  };
+};
+

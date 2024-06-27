@@ -4,18 +4,19 @@ import { toast } from "react-toastify";
 import { RootState } from "../store";
 
 export interface AuthState {
-  user: any;
+  user: { id: string; username: string; name: string } | null;
   status: "authenciation" | "unauthenciation" | "pending";
   error: string | null | unknown;
   accessToken: string | null;
 }
 
 interface SignInSuccess {
-  user: { id: string; username: string; name: string; role: string };
+  user: { id: string; username: string; name: string };
   accessToken: string;
 }
 
 interface SignInFailed {
+  user: null;
   message: string;
   status: number;
 }
@@ -92,7 +93,7 @@ export const refreshToken = createAsyncThunk<
 >("auth/refresh", async (_, { getState, rejectWithValue }) => {
   const state = getState();
   const accessToken = state.auth.accessToken;
-  console.log("Access token", state.auth.accessToken);
+  // console.log("Access token", state.auth.accessToken);
   try {
     const response = await axiosClient.post<void, RefreshSucess>(
       "/auth/refresh",
@@ -103,7 +104,7 @@ export const refreshToken = createAsyncThunk<
         },
       }
     );
-    console.log(response);
+    // console.log(response);
     return response;
   } catch (error: any) {
     return rejectWithValue(error);
@@ -116,11 +117,11 @@ export const authSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(signInUser.fulfilled, (state, { payload }) => {
+      .addCase(signInUser.fulfilled, (state, action) => {
         state.status = "authenciation";
-        state.user = payload.user;
+        state.user = action.payload.user;
         state.error = null;
-        state.accessToken = payload.accessToken;
+        state.accessToken = action.payload.accessToken;
       })
       .addCase(signInUser.pending, (state) => {
         state.status = "pending";

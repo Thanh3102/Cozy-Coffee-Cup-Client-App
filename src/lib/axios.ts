@@ -22,7 +22,7 @@ axiosClient.interceptors.response.use(
     return Promise.resolve(response);
   },
   async (err) => {
-    if (err.message === "Network Error" || err.status === 500) {
+    if (err.message === "Network Error") {
       const response = {
         status: 500,
         message: "Máy chủ không phản hồi",

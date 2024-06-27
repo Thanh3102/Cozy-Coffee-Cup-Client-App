@@ -1,4 +1,4 @@
-import React, { Fragment, ReactElement } from "react";
+import { ReactElement } from "react";
 import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -21,6 +21,9 @@ import Warehouse from "./components/page/Warehouse";
 import Product from "./components/page/Product";
 import Definition from "./components/page/Definition";
 import Order from "./components/page/Order";
+import Account from "./components/page/Account";
+import { Permission } from "./utils/types/enum";
+import PermissionRequire from "./components/feature/PermissionRequire";
 
 ChartJS.register(
   CategoryScale,
@@ -34,45 +37,69 @@ ChartJS.register(
   Legend
 );
 
-type RouteType = { path: string; element: ReactElement; protected: boolean };
+type RouteType = {
+  path: string;
+  element: ReactElement;
+  authenticationRequired: boolean;
+};
 
 function App() {
   const routes: RouteType[] = [
     {
       path: "/",
       element: <Home />,
-      protected: true,
+      authenticationRequired: true,
     },
     {
       path: "/login",
       element: <Login />,
-      protected: false,
+      authenticationRequired: false,
     },
     {
       path: "/warehouse",
-      element: <Warehouse />,
-      protected: true,
+      element: (
+        <PermissionRequire require={Permission.Warehouse_View}>
+          <Warehouse />
+        </PermissionRequire>
+      ),
+      authenticationRequired: true,
     },
     {
       path: "/product",
-      element: <Product />,
-      protected: true,
+      element: (
+        <PermissionRequire require={Permission.Product_View}>
+          <Product />
+        </PermissionRequire>
+      ),
+      authenticationRequired: true,
     },
     {
       path: "/definition",
-      element: <Definition />,
-      protected: true,
+      element: (
+        <PermissionRequire require={Permission.Definition_View}>
+          <Definition />
+        </PermissionRequire>
+      ),
+      authenticationRequired: true,
     },
     {
       path: "/order",
-      element: <Order />,
-      protected: true,
+      element: (
+        <PermissionRequire require={Permission.Order_View}>
+          <Order />
+        </PermissionRequire>
+      ),
+      authenticationRequired: true,
     },
-    // {
-    //   path: "/service",
-    //   element: <Service />,
-    //   protected: true,
-    // },
+    {
+      path: "/account",
+      element: (
+        <PermissionRequire require={Permission.Account_View}>
+          <Account />
+        </PermissionRequire>
+      ),
+      authenticationRequired: true,
+    },
   ];
 
   return (
@@ -85,7 +112,7 @@ function App() {
               key={index}
               path={route.path}
               element={
-                route.protected ? (
+                route.authenticationRequired ? (
                   <ProtectedRoute>{route.element}</ProtectedRoute>
                 ) : (
                   route.element
