@@ -1,14 +1,15 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { BaseProps } from "../../utils/types/interface";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { useState } from "react";
 
 interface Props extends BaseProps {
   position?: "left" | "center" | "right";
   count: number;
-  itemPerPage: number;
+  // itemPerPage: number;
   page: number;
   onPageChange: (page: number) => void;
-  onItemPerPageChange: (page: number) => void;
+  onItemPerPageChange: (itemPerPage: number) => void;
 }
 
 const positionOption = {
@@ -20,11 +21,12 @@ const positionOption = {
 const Paginition = ({
   position,
   count,
-  itemPerPage,
+  // itemPerPage,
   page,
   onPageChange,
   onItemPerPageChange,
 }: Props) => {
+  const [itemPerPage, setItemPerPage] = useState<number>(10);
   const totalPage = Math.floor(count / itemPerPage) + 1;
   var startIndex = (page - 1) * itemPerPage + 1;
   const endIndex =
@@ -39,11 +41,15 @@ const Paginition = ({
             name=""
             id=""
             className="mx-3 text-[14px] p-1 bg-gray-200"
-            onChange={(e) => onItemPerPageChange(parseInt(e.target.value))}
+            onChange={(e) => {
+              onItemPerPageChange(parseInt(e.target.value));
+              setItemPerPage(parseInt(e.target.value));
+            }}
           >
             <option value={10}>10</option>
             <option value={20}>20</option>
-            <option value={30}>30</option>
+            <option value={50}>50</option>
+            <option value={100}>100</option>
           </select>
         </div>
         <div className="text-[16px] flex gap-2 items-center">

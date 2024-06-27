@@ -3,10 +3,14 @@ import { BaseProps } from "../../utils/types/interface";
 import { useAppSelector } from "../../redux/store";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import Loading from "../ui/Loading";
+import { Permission } from "../../utils/types/enum";
 
-interface Props extends BaseProps {}
+interface Props extends BaseProps {
+  required_perm?: Permission
+}
 
-const ProtectedRoute = ({ children }: Props) => {
+const ProtectedRoute = ({ required_perm, children }: Props) => {
   const { status } = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
 
@@ -17,11 +21,7 @@ const ProtectedRoute = ({ children }: Props) => {
   });
 
   if (status == "pending") {
-    return (
-      <Fragment>
-        <h1>Loading...</h1>
-      </Fragment>
-    );
+    return <Loading />;
   }
   if (status == "authenciation") {
     return <Fragment>{children}</Fragment>;

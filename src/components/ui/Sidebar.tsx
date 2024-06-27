@@ -1,10 +1,8 @@
 import {
   faArrowRightFromBracket,
-  faChair,
   faClipboardList,
   faHome,
   faMarker,
-  faMoneyBill1Wave,
   faMugSaucer,
   faUserLock,
   faWarehouse,
@@ -32,13 +30,8 @@ const itemList: Item[] = [
   {
     name: "Tài khoản",
     icon: <FontAwesomeIcon icon={faUserLock} />,
-    to: "/user",
+    to: "/account",
   },
-  // {
-  //   name: "Phục vụ",
-  //   icon: <FontAwesomeIcon icon={faChair} />,
-  //   to: "/service",
-  // },
   {
     name: "Hóa đơn",
     icon: <FontAwesomeIcon icon={faClipboardList} />,
@@ -103,7 +96,7 @@ const UserProfile = () => {
   };
   return (
     <div className="absolute bottom-0 px-8">
-      <div className="">User: {user.name}</div>
+      <div className="">User: {user?.name}</div>
       <motion.div
         className="cursor-pointer pb-6 pt-3"
         whileHover={{ scale: 1.105, color: "red" }}
