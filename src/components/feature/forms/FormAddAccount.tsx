@@ -55,7 +55,7 @@ const FormAddAccount = ({ close, fetchAccounts }: Props) => {
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="flex flex-wrap gap-y-2 -mx-2">
-          <div className="flex-col flex px-2 gap-1 lg:w-[33.33%] md:w-full">
+          <div className="flex-col flex px-2 gap-1 lg:w-[33.33%] w-full">
             <label htmlFor="">Tên đăng nhập</label>
             <input
               type="text"
@@ -63,7 +63,7 @@ const FormAddAccount = ({ close, fetchAccounts }: Props) => {
               {...register("username", { required: true })}
             />
           </div>
-          <div className="flex-col flex px-2 gap-1 lg:w-[33.33%] md:w-full">
+          <div className="flex-col flex px-2 gap-1 lg:w-[33.33%] w-full">
             <label htmlFor="">Mật khẩu</label>
             <input
               type="password"
@@ -71,7 +71,7 @@ const FormAddAccount = ({ close, fetchAccounts }: Props) => {
               {...register("password", { required: true })}
             />
           </div>
-          <div className="flex-col flex px-2 gap-1 lg:w-[33.33%] md:w-full">
+          <div className="flex-col flex px-2 gap-1 lg:w-[33.33%] w-full">
             <label htmlFor="">Tên hiển thị</label>
             <input
               type="text"

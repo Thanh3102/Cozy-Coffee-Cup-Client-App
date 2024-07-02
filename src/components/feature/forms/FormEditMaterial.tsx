@@ -35,7 +35,6 @@ const FormEditMaterial = ({ reFetch, closeModal, material }: Props) => {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<Inputs>({
     defaultValues: {
@@ -77,7 +76,7 @@ const FormEditMaterial = ({ reFetch, closeModal, material }: Props) => {
       <form
         id="addMaterialForm"
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-4 min-w-[25vw]"
+        className="flex flex-col gap-4 w-[25vw] min-w-[300px]"
       >
         <div className="flex flex-col gap-2">
           <label htmlFor="name">Tên nguyên liệu</label>

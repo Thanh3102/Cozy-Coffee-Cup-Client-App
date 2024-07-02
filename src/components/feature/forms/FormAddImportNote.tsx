@@ -100,7 +100,10 @@ const FormAddImportNote = ({ closeModal, reFetchMaterial }: Props) => {
 
   return (
     <Fragment>
-      <form onSubmit={handleSubmit(onSubmit)} className="min-w-[40vw]">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-[50vw] min-w-[500px]"
+      >
         <div className="flex gap-10">
           <div className="flex flex-col gap-2 flex-1">
             <label htmlFor="">Tên người nhập</label>
@@ -137,8 +140,8 @@ const FormAddImportNote = ({ closeModal, reFetchMaterial }: Props) => {
             type="button"
             color="success"
             onClick={() => setOpenAddImportItem(true)}
+            icon={<FontAwesomeIcon icon={faPlus} />}
           >
-            <FontAwesomeIcon icon={faPlus} />
             Thêm
           </Button>
         </div>
@@ -218,7 +221,6 @@ const FormAddImportNote = ({ closeModal, reFetchMaterial }: Props) => {
       </form>
       <Modal open={openAddImportItem}>
         <ModalTitle>Chọn nguyên liệu</ModalTitle>
-
         <FormAddImportItem
           setImportItems={setImportItems}
           closeModal={() => setOpenAddImportItem(false)}

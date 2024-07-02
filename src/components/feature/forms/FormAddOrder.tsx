@@ -170,10 +170,10 @@ const FormAddOrder = ({ close, fetchOrders }: Props) => {
 
   return (
     <Fragment>
-      <div className="flex min-w-[80vw] min-h-[80vh]">
-        <div className="flex-[6]">
+      <div className="flex w-[80vw] h-[80vh] min-h-[500px] md:min-h-[600px] min-w-[600px] flex-col lg:flex-row">
+        <div className="flex-1 md:flex-[6] flex flex-col">
           <div className="flex gap-4 items-center">
-            <h1 className="font-semibold text-[18px]">Sản phẩm</h1>
+            <h1 className="font-semibold text-lg">Sản phẩm</h1>
             <Button
               size="small"
               color="success"
@@ -181,80 +181,81 @@ const FormAddOrder = ({ close, fetchOrders }: Props) => {
               onClick={() => setOpenAdd(true)}
             />
           </div>
-          <div className="max-h-[80vh] overflow-y-scroll">
-            <Table>
-              <TableHead sticky>
-                <TableRow>
-                  <TableCell>Tên</TableCell>
-                  <TableCell>Giá</TableCell>
-                  <TableCell>Số lượng</TableCell>
-                  <TableCell>Tùy chọn</TableCell>
-                  <TableCell>Xóa</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {orderItems.map((item, index) => (
-                  <TableRow key={index} className="select-none">
-                    <TableCell className="text-[12px]">
-                      {item.name + `${item.is_gift ? "(Tặng kèm)" : ""}`}
-                    </TableCell>
-                    <TableCell>
-                      {currencyFormatter.format(calcProductTotalMoney(item))}
-                    </TableCell>
-                    <TableCell>
-                      <div className="text-black flex items-center">
-                        <motion.div
-                          whileHover={{ scale: 1.2 }}
-                          whileTap={{ scale: 0.9 }}
-                        >
-                          <FontAwesomeIcon
-                            icon={faSquareMinus}
-                            className="hover:cursor-pointer hover:text-red-400"
-                            onClick={() => handleDecreaseButton(index)}
-                          />
-                        </motion.div>
-                        <p className="w-10 text-center">{item.quantity}</p>
-                        <motion.div
-                          whileHover={{ scale: 1.2 }}
-                          whileTap={{ scale: 0.9 }}
-                        >
-                          <FontAwesomeIcon
-                            icon={faSquarePlus}
-                            className="hover:cursor-pointer hover:text-green-400"
-                            onClick={() => handleIncreaseButton(index)}
-                          />
-                        </motion.div>
-                      </div>
-                    </TableCell>
-                    <TableCell className="max-w-[15vw] whitespace-nowrap overflow-hidden relative group/options text-[12px]">
-                      <ul className="list-disc">
-                        {item.options.map((opt) => (
-                          <li>{`${opt.title}: ${convertValueToString(
-                            opt
-                          )}`}</li>
-                        ))}
-                      </ul>
-                    </TableCell>
-                    <TableCell>
-                      <span
-                        className="text-red-500 hover:cursor-pointer hover:underline"
-                        onClick={() => {
-                          setDeleteitemIndex(index);
-                          setOpenDelete(true);
-                        }}
-                      >
-                        Xóa
-                      </span>
-                    </TableCell>
+          <div className="flex-1">
+            <div className="h-[250px] lg:h-[70vh] overflow-y-auto">
+              <Table>
+                <TableHead sticky>
+                  <TableRow>
+                    <TableCell>Tên</TableCell>
+                    <TableCell>Giá</TableCell>
+                    <TableCell>Số lượng</TableCell>
+                    <TableCell>Tùy chọn</TableCell>
+                    <TableCell>Xóa</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHead>
+                <TableBody>
+                  {orderItems.map((item, index) => (
+                    <TableRow key={index} className="select-none">
+                      <TableCell className="text-sm">
+                        {item.name + `${item.is_gift ? "(Tặng kèm)" : ""}`}
+                      </TableCell>
+                      <TableCell>
+                        {currencyFormatter.format(calcProductTotalMoney(item))}
+                      </TableCell>
+                      <TableCell>
+                        <div className="text-black flex items-center">
+                          <motion.div
+                            whileHover={{ scale: 1.2 }}
+                            whileTap={{ scale: 0.9 }}
+                          >
+                            <FontAwesomeIcon
+                              icon={faSquareMinus}
+                              className="hover:cursor-pointer hover:text-red-400 sm:text-base"
+                              onClick={() => handleDecreaseButton(index)}
+                            />
+                          </motion.div>
+                          <p className="w-10 text-center">{item.quantity}</p>
+                          <motion.div
+                            whileHover={{ scale: 1.2 }}
+                            whileTap={{ scale: 0.9 }}
+                          >
+                            <FontAwesomeIcon
+                              icon={faSquarePlus}
+                              className="hover:cursor-pointer hover:text-green-400 sm:text-base"
+                              onClick={() => handleIncreaseButton(index)}
+                            />
+                          </motion.div>
+                        </div>
+                      </TableCell>
+                      <TableCell className="max-w-[15vw] whitespace-nowrap overflow-hidden relative group/options text-[12px]">
+                        <ul className="list-disc">
+                          {item.options.map((opt) => (
+                            <li>{`${opt.title}: ${convertValueToString(
+                              opt
+                            )}`}</li>
+                          ))}
+                        </ul>
+                      </TableCell>
+                      <TableCell>
+                        <span
+                          className="text-red-500 hover:cursor-pointer hover:underline"
+                          onClick={() => {
+                            setDeleteitemIndex(index);
+                            setOpenDelete(true);
+                          }}
+                        >
+                          Xóa
+                        </span>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           </div>
         </div>
-
-        <div className="w-[2px] bg-gray-400 mx-5"></div>
-        <div className="flex-[4]">
+        <div className=" w-full h-[1px] my-2 bg-gray-400 lg:mx-5 lg:my-0 lg:w-[1px] lg:h-full"></div>
+        <div className="flex-1 md:flex-[4]">
           <h1 className="font-semibold text-[18px]">Thông tin hóa đơn</h1>
           <form className="mt-2" onSubmit={handleSubmit(onSubmit)}>
             <div className="flex gap-4 items-center">
@@ -310,7 +311,7 @@ const FormAddOrder = ({ close, fetchOrders }: Props) => {
         />
       </Modal>
       <Modal open={openDelete}>
-        <h5 className="font-medium text-[20px]">Xác nhận xóa ?</h5>
+        <h5 className="font-medium text-lg">Xác nhận xóa ?</h5>
         <p className="my-2">Bạn muốn xóa sản phẩm này khỏi hóa đơn ?</p>
         <div className="flex gap-4 justify-end">
           <Button size="small" onClick={() => setOpenDelete(false)}>

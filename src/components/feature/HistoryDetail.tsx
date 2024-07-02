@@ -62,7 +62,7 @@ const ImportNoteDetail = ({ data, close }: Props) => {
     <Fragment>
       {detail && (
         <Fragment>
-          <div className="">
+          <div className="w-[50vw] min-w-[400px]">
             <p>
               {`Thời gian tạo: ${
                 detail?.created_at ? formatDate(detail?.created_at) : ""
@@ -80,7 +80,7 @@ const ImportNoteDetail = ({ data, close }: Props) => {
               </Button>
             </div>
           </div>
-          <h4 className="font-semibold text-[18px] mb-2">
+          <h4 className="font-semibold text-lg mb-2">
             Danh sách nguyên liệu
           </h4>
           <Table height={200}>
@@ -167,7 +167,7 @@ const ExportNoteDetail = ({ data, close }: Props) => {
     <Fragment>
       {detail && (
         <Fragment>
-          <div className="min-w-[30vw]">
+          <div className="w-[50vw] min-w-[400px]">
             <p>
               {`Thời gian tạo: ${
                 detail?.created_at ? formatDate(detail?.created_at) : ""

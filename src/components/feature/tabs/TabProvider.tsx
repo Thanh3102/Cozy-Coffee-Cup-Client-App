@@ -49,8 +49,8 @@ const TabProvider = () => {
             size="small"
             color="success"
             onClick={() => setOpenAddProvider(true)}
+            icon={<FontAwesomeIcon icon={faPlus} />}
           >
-            <FontAwesomeIcon icon={faPlus} />
             Thêm mới
           </Button>
         </div>

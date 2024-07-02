@@ -2,7 +2,6 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import Button from "../../ui/Button";
 import { Fragment, useEffect, useState } from "react";
 import { BaseProps } from "../../../utils/types/interface";
-import axiosClient from "../../../lib/axios";
 import { toast } from "react-toastify";
 import { Category, ProductType } from "../../../utils/types/type";
 import ProductApi from "../../../api/Product";
@@ -67,13 +66,13 @@ const FormAddProduct = ({ closeModal, fetchProduct }: Props) => {
   };
 
   return (
-    <Fragment>
+    <div className="w-[50vw] h-[550px] min-w-[500px] overflow-y-auto">
       <form
-        className="min-w-[30vw] grid grid-rows-6 grid-cols-3 mt-2 gap-x-4 gap-y-2"
+        className=" grid grid-cols-2 grid-rows-8 gap-x-2 md:grid-cols-3 md:grid-rows-6"
         onSubmit={handleSubmit(onSubmit)}
         id="addProductForm"
       >
-        <div className="grid col-span-1 gap-2">
+        <div className="flex flex-col gap-2 col-start-1 row-start-1">
           <label htmlFor="">Tên sản phẩm</label>
           <input
             type="text"
@@ -81,7 +80,7 @@ const FormAddProduct = ({ closeModal, fetchProduct }: Props) => {
             {...register("name", { required: true })}
           />
         </div>
-        <div className="grid col-span-1 gap-2">
+        <div className="flex flex-col gap-2 col-start-1 row-start-2 md:col-start-2 md:row-start-1">
           <label htmlFor="">Giá tiền</label>
           <input
             type="text"
@@ -89,7 +88,7 @@ const FormAddProduct = ({ closeModal, fetchProduct }: Props) => {
             {...register("price", { required: true, valueAsNumber: true })}
           />
         </div>
-        <div className="grid col-span-1 gap-2 row-start-2">
+        <div className="flex flex-col gap-2 col-start-1 row-start-3 md:col-start-1 md:row-start-2">
           <label htmlFor="">Loại sản phẩm</label>
           <select
             className="input"
@@ -105,7 +104,7 @@ const FormAddProduct = ({ closeModal, fetchProduct }: Props) => {
             ))}
           </select>
         </div>
-        <div className="grid col-span-1 gap-2 row-start-2">
+        <div className="flex flex-col gap-2 col-start-1 row-start-4 md:col-start-2 md:row-start-2">
           <label htmlFor="">Danh mục</label>
           <select
             className="input"
@@ -124,7 +123,7 @@ const FormAddProduct = ({ closeModal, fetchProduct }: Props) => {
             ))}
           </select>
         </div>
-        <div className="grid col-span-3 row-span-2 row-start-3">
+        <div className="flex flex-col gap-2 col-start-1 row-start-5 col-span-2 row-span-2 md:col-start-1 md:row-start-3 md:row-span-2 md:col-span-full">
           <label htmlFor="">Mô tả</label>
           <textarea
             cols={10}
@@ -133,7 +132,7 @@ const FormAddProduct = ({ closeModal, fetchProduct }: Props) => {
             {...register("description")}
           />
         </div>
-        <div className="grid col-span-3 row-span-2 row-start-5">
+        <div className="flex flex-col gap-2 col-start-1 row-start-7 col-span-2 row-span-2 md:col-start-1 md:row-start-5 md:row-span-3 md:col-span-full">
           <label htmlFor="">Ghi chú</label>
           <textarea
             cols={10}
@@ -142,7 +141,7 @@ const FormAddProduct = ({ closeModal, fetchProduct }: Props) => {
             {...register("note")}
           />
         </div>
-        <div className="flex flex-col gap-4 items-center justify-center col-span-1 row-span-2">
+        <div className="flex flex-col gap-4 items-center justify-center col-start-2 col-span-1 row-span-4 md:col-start-3 md:row-start-1 md:row-span-2">
           <div
             className={`w-[120px] h-[120px] rounded-lg ${
               image ? "" : "border-[1px] border-dashed border-black"
@@ -193,7 +192,7 @@ const FormAddProduct = ({ closeModal, fetchProduct }: Props) => {
           Thêm
         </Button>
       </div>
-    </Fragment>
+    </div>
   );
 };
 

@@ -60,7 +60,7 @@ const FormAddRole = ({ close, fetchRoles }: Props) => {
 
   return (
     <Fragment>
-      <form className="w-[35vw]" onSubmit={handleSubmit(onSubmit)}>
+      <form className="w-[35vw] min-w-[400px]" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex gap-4">
           <div className="w-[80%] flex flex-col gap-2">
             <label htmlFor="">Tên vai trò</label>
@@ -82,7 +82,7 @@ const FormAddRole = ({ close, fetchRoles }: Props) => {
         </div>
         <div className="mt-2">
           <h5>Quyền hạn</h5>
-          <div className="flex flex-wrap -mx-4 gap-y-4 h-60 overflow-y-auto my-4">
+          <div className="flex flex-wrap -mx-4 gap-y-4 h-60 overflow-y-auto my-4 overflow-x-hidden">
             {permissions.map((perm) => {
               return (
                 <div className="px-4 w-1/2 flex items-center gap-2">
@@ -93,7 +93,7 @@ const FormAddRole = ({ close, fetchRoles }: Props) => {
                     value={perm.id}
                     {...register("perms")}
                   />
-                  <label htmlFor={`cb-perm-${perm.id}`}>{perm.name}</label>
+                  <label htmlFor={`cb-perm-${perm.id}`} className="lg:text-base text-sm">{perm.name}</label>
                 </div>
               );
             })}

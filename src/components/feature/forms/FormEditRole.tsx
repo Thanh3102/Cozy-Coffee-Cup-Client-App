@@ -73,10 +73,13 @@ const FormEditRole = ({ role, close, fetchRole }: Props) => {
     fetchPermssions();
     fetchRolePermssions();
   }, []);
-  
+
   return (
     <Fragment>
-      <form className="w-[35vw]" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        className="w-[35vw] min-w-[400px]"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <div className="flex gap-4">
           <div className="w-[80%] flex flex-col gap-2">
             <label htmlFor="name" className="font-semibold text-lg">
@@ -114,7 +117,12 @@ const FormEditRole = ({ role, close, fetchRole }: Props) => {
                     value={perm.id}
                     {...register("perms")}
                   />
-                  <label htmlFor={`cb-perm-${perm.id}`}>{perm.name}</label>
+                  <label
+                    htmlFor={`cb-perm-${perm.id}`}
+                    className="text-sm lg:text-base"
+                  >
+                    {perm.name}
+                  </label>
                 </div>
               );
             })}

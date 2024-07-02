@@ -31,10 +31,10 @@ const ButtonOption = {
     },
   },
   size: {
-    tiny: "px-2 py-1 text-[12px]",
-    small: "px-4 py-2 text-[14px]",
-    medium: "px-6 py-3 text-[16px]",
-    big: "px-8 py-4 text-[18px]",
+    tiny: "px-2 py-1 text-xs",
+    small: "px-3 py-2 text-sm md:px-4 md:py-2 md:text-sm",
+    medium: "px-5 py-3 text-sm md:px-6 md:py-3 md:text-base",
+    big: "px-4 py-2 text-base",
   },
 };
 
@@ -47,7 +47,11 @@ const Button = ({
   className = "",
   ...rest
 }: Props) => {
-  let buttonClassName = `rounded-md text-white w-fit flex items-center justify-center gap-2 ${ButtonOption.color[color].normal} ${ButtonOption.color[color].hover} ${ButtonOption.size[size]} ${className}`;
+  let buttonClassName = `rounded-md text-white w-fit flex items-center justify-center ${
+    icon ? "gap-2" : ""
+  } ${ButtonOption.color[color].normal} ${ButtonOption.color[color].hover} ${
+    ButtonOption.size[size]
+  } ${className}`;
 
   if (loading) {
     return (
@@ -67,7 +71,7 @@ const Button = ({
       className={buttonClassName}
       {...rest}
     >
-      {icon}
+      <div className="text-sm md:text-base">{icon}</div>
       {children}
     </motion.button>
   );

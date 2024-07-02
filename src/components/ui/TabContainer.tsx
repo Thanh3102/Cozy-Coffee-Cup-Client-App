@@ -17,7 +17,7 @@ interface Props extends BaseProps {
 
 const TabOptions = {
   size: {
-    normal: "p-5 text-[16px]",
+    normal: "p-3 sm:p-5 sm:text-sm md:text-base",
     small: "py-3 px-4 text-[15px]",
   },
 };
@@ -26,7 +26,7 @@ export const TabContainer = ({ tabs, size = "normal" }: Props) => {
   const [selectedTab, setSelectedTab] = useState<number>(0);
   return (
     <div>
-      <ul className="bg-white flex w-full border-b-[1px]">
+      <ul className="bg-white flex border-b-[1px]">
         {tabs.map((tab, index) => {
           return (
             <motion.li
@@ -36,7 +36,7 @@ export const TabContainer = ({ tabs, size = "normal" }: Props) => {
               key={index}
               className={`${
                 TabOptions.size[size]
-              } font-semibold hover:cursor-pointer hover:text-amber-700 ${
+              } font-semibold hover:cursor-pointer hover:text-amber-700 text-sm lg:text-base ${
                 selectedTab === index
                   ? "border-b-[2px] border-amber-700 text-amber-700"
                   : ""

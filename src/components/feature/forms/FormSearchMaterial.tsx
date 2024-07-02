@@ -29,7 +29,7 @@ const FormSearchMaterial = ({ setMaterials }: Props) => {
     <form className="flex py-2 pl-2 items-center border-r-[1px] border-solid">
       <FontAwesomeIcon icon={faSearch} className="text-[#9CA3B7]" />
       <input
-        className="input border-none w-[400px]"
+        className="input border-none"
         type="text"
         placeholder="Nhập từ khóa tìm kiếm"
         onChange={handleSearchMaterial}

@@ -37,11 +37,11 @@ const FormFilterExportImportNote = ({ setHistoryList }: Props) => {
   return (
     <div className="bg-white rounded-lg px-3 py-3">
       <form
-        className="flex gap-8"
+        className="flex flex-wrap gap-2 md:gap-4"
         onSubmit={handleSubmit(onSubmit)}
         id="historyNoteFilter"
       >
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1 md:gap-2">
           <label htmlFor="startDate">Ngày bắt đầu</label>
           <input
             className="input"
@@ -50,7 +50,7 @@ const FormFilterExportImportNote = ({ setHistoryList }: Props) => {
             {...register("start")}
           />
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1 md:gap-2">
           <label htmlFor="endDate">Ngày kết thúc</label>
           <input
             className="input"
@@ -59,11 +59,11 @@ const FormFilterExportImportNote = ({ setHistoryList }: Props) => {
             {...register("end")}
           />
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1 md:gap-2">
           <label htmlFor="">Người tạo</label>
           <input className="input" type="text" id="" {...register("name")} />
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1 md:gap-2">
           <label htmlFor="">Loại phiếu</label>
           <select className="input" {...register("type")}>
             <option value="">Tất cả</option>

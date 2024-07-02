@@ -17,7 +17,6 @@ import MaterialTable from "../tables/TableMaterial";
 
 const TabMaterial = () => {
   const [openAddMaterial, setOpenAddMaterial] = useState<boolean>(false);
-
   const [openAddImportNote, setOpenAddImportNote] = useState<boolean>(false);
   const [openAddExportNote, setOpenAddExportNote] = useState<boolean>(false);
   const [materials, setMaterials] = useState<Material[]>([]);
@@ -44,25 +43,31 @@ const TabMaterial = () => {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="px-3 py-1 bg-white rounded-lg"
+        className="px-4 py-2 bg-white rounded-lg"
       >
-        <div className="flex justify-between bg-white py-1">
+        <div className="flex justify-between bg-white py-1 md:flex-row flex-col">
           <FormSearchMaterial setMaterials={setMaterials} />
           <div className="flex gap-2 py-2">
-            <Button size="small" onClick={() => setOpenAddImportNote(true)}>
-              <FontAwesomeIcon icon={faCircleDown} />
+            <Button
+              size="small"
+              onClick={() => setOpenAddImportNote(true)}
+              icon={<FontAwesomeIcon icon={faCircleDown} />}
+            >
               Tạo phiếu nhập
             </Button>
-            <Button size="small" onClick={() => setOpenAddExportNote(true)}>
-              <FontAwesomeIcon icon={faCircleUp} />
+            <Button
+              size="small"
+              onClick={() => setOpenAddExportNote(true)}
+              icon={<FontAwesomeIcon icon={faCircleUp} />}
+            >
               Tạo phiếu xuất
             </Button>
             <Button
               size="small"
               color="success"
               onClick={() => setOpenAddMaterial(true)}
+              icon={<FontAwesomeIcon icon={faPlus} />}
             >
-              <FontAwesomeIcon icon={faPlus} />
               Thêm mới
             </Button>
           </div>

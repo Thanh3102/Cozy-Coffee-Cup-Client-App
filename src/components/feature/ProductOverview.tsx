@@ -8,8 +8,8 @@ interface Props {
 const ProductOverview = ({ overview }: Props) => {
   return (
     <div className="p-4 rounded-lg bg-white shadow-md">
-      <h1 className="text-[20px] font-bold">Tổng quan sản phẩm</h1>
-      <ul className="flex justify-between mt-4 [&>li]:px-10 [&>:first-child]:pl-0 [&>:last-child]:pr-0 [&>:last-child]:border-none">
+      <h1 className="text-base md:text-lg font-bold">Tổng quan sản phẩm</h1>
+      <ul className="flex justify-between mt-4 [&>li]:px-5 [&>li]:md:px-10 [&>li]:lg:px-20 [&>:first-child]:pl-0 [&>:last-child]:pr-0 [&>:last-child]:border-none">
         <li className="flex-1 border-r-[1px] border-gray-200">
           <p className="font-bold text-blue-500">Danh mục</p>
           <AnimateNumber from={0} to={overview.categoryCount} />
@@ -35,10 +35,6 @@ const ProductOverview = ({ overview }: Props) => {
             />
           </p>
           <p className="text-[14px] text-gray-500">7 ngày gần nhất</p>
-        </li>
-        <li className="flex-1 border-r-[1px] border-gray-200">
-          <p className="font-bold text-orange-500">Bán chạy</p>
-          <p className="font-semibold">{overview.bestSellingProduct}</p>
         </li>
       </ul>
     </div>

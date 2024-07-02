@@ -88,9 +88,7 @@ const CategoryTable = ({ categories, fetchCategories }: Props) => {
         <Modal open={openDelete}>
           <ModalTitle>Xác nhận xóa ?</ModalTitle>
           <ModalDescription>
-            Bạn có chắc chắn muốn xóa danh mục ?
-            <br />
-            Hành động này sẽ không thể hoàn tác
+            Bạn có chắc chắn muốn xóa danh mục ? (Không thể hoàn tác)
           </ModalDescription>
           <div className="flex gap-4 justify-end mt-2">
             <Button size="small" onClick={() => setOpenDelete(false)}>

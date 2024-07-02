@@ -36,7 +36,7 @@ const TabAccountManagement = () => {
     <Fragment>
       <div className="bg-white p-4 rounded-lg shadow-lg">
         <div className="flex justify-between mb-8">
-          <h1 className="text-2xl font-bold">Quản lý tài khoản</h1>
+          <h1 className="lg:text-2xl font-bold text-lg">Quản lý tài khoản</h1>
           <div className="flex gap-4 items-center">
             <div className="flex items-center p-2 rounded-md border-gray-500 border-[2px]">
               <input

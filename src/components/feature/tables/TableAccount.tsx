@@ -74,12 +74,12 @@ const AccountTable = ({ accounts, fetchAccounts }: Props) => {
                 {`${account.name} (${account.username})`}
               </TableCell>
               <TableCell className="table-cell max-w-0">
-                <div className="flex flex-wrap">
+                <div className="flex flex-wrap -my-1">
                   {account.roles.length !== 0 ? (
                     account.roles.map((role) => (
                       <div
                         key={role.id}
-                        className="px-3 py-1 text-sm text-white rounded-xl pointer-events-none mr-2"
+                        className="px-3 py-1 text-white rounded-xl pointer-events-none mr-2 lg:text-sm text-xs my-1"
                         style={{ backgroundColor: role.color }}
                       >
                         {role.name}
@@ -93,34 +93,34 @@ const AccountTable = ({ accounts, fetchAccounts }: Props) => {
               <TableCell className="table-cell max-w-0">
                 <div className="flex gap-4 hover:cursor-pointer">
                   <div
-                    className="flex gap-2 items-center hover:text-green-500"
+                    className="flex gap-2 items-center hover:text-green-500 lg:text-base text-lg"
                     onClick={() => {
                       setLastSelectedItem(account);
                       setOpenEdit(true);
                     }}
                   >
                     <FontAwesomeIcon icon={faGear} />
-                    <span>Chỉnh sửa</span>
+                    <span className="hidden lg:inline-block">Chỉnh sửa</span>
                   </div>
                   <div
-                    className="flex gap-2 items-center hover:text-yellow-500"
+                    className="flex gap-2 items-center hover:text-yellow-500 lg:text-base text-lg"
                     onClick={() => {
                       setLastSelectedItem(account);
                       setOpenReset(true);
                     }}
                   >
                     <FontAwesomeIcon icon={faKey} />
-                    <span>Đặt lại mật khẩu</span>
+                    <span className="hidden lg:inline-block">Đặt lại mật khẩu</span>
                   </div>
                   <div
-                    className="flex gap-2 items-center hover:text-red-500"
+                    className="flex gap-2 items-center hover:text-red-500 lg:text-base text-lg"
                     onClick={() => {
                       setLastSelectedItem(account);
                       setOpenDelete(true);
                     }}
                   >
                     <FontAwesomeIcon icon={faTrash} />
-                    <span>Xóa</span>
+                    <span className="hidden lg:inline-block">Xóa</span>
                   </div>
                 </div>
               </TableCell>

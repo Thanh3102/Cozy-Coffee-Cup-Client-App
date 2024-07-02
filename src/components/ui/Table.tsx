@@ -55,7 +55,7 @@ const TableHead = ({
 }: TableHeadProps) => {
   return (
     <thead
-      className={`font-medium cursor-default [&>tr]:text-[16px] ${textColor} ${
+      className={`font-medium cursor-default [&>tr]:text-base ${textColor} ${
         sticky ? "sticky top-0 z-10" : ""
       } ${className}`}
       style={{
@@ -76,7 +76,7 @@ const TableBody = ({ children }: TableBodyProps) => {
 
 const TableRow = ({ children, className = "", ...rest }: TableRowProps) => {
   return (
-    <tr className={`${className} border-b-[1px] last:border-none`} {...rest}>
+    <tr className={`${className} border-b-[1px] text-sm md:text-base last:border-none`} {...rest}>
       {children}
     </tr>
   );

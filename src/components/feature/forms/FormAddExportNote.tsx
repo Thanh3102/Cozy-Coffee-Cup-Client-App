@@ -72,7 +72,10 @@ const FormAddExportNote = ({ closeModal, reFetchMaterial }: Props) => {
 
   return (
     <Fragment>
-      <form onSubmit={handleSubmit(onSubmit)} className="min-w-[30vw]">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-[30vw] min-w-[500px]"
+      >
         <div className="flex gap-10">
           <div className="flex flex-col gap-2 flex-1">
             <label htmlFor="">Tên người nhập</label>
@@ -90,8 +93,8 @@ const FormAddExportNote = ({ closeModal, reFetchMaterial }: Props) => {
             type="button"
             color="success"
             onClick={() => setOpenAddExportItem(true)}
+            icon={<FontAwesomeIcon icon={faPlus} />}
           >
-            <FontAwesomeIcon icon={faPlus} />
             Thêm
           </Button>
         </div>

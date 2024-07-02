@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 :root {
-    --sidebar-width: 230px
+    --sidebar-width: 230px;
+    --sidebar-width-sm: 115px;
 }
 
 ::-webkit-scrollbar {
@@ -40,7 +41,7 @@ body {
 
 @layer components {
     .input {
-        @apply px-4 py-2 border-black border-solid border-[1px] outline-none rounded-md
+        @apply px-3 py-2 text-sm md:text-base md:px-4 md:py-2 border-black border-solid border-[1px] outline-none rounded-md 
     }
 
     .errorMessage {

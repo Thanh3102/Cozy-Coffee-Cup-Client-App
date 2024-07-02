@@ -84,7 +84,7 @@ const FormEditProductOption = ({ id, closeModal, fetchOptions }: Props) => {
   return (
     <Fragment>
       <form
-        className="min-w-[25vw]"
+        className="w-[25vw] min-w-[400px]"
         onSubmit={handleSubmit(onSubmit)}
         id="formAddProductOption"
       >

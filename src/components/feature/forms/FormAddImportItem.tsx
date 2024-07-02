@@ -118,8 +118,13 @@ const FormAddImportItem = ({ setImportItems, closeModal }: Props) => {
         >
           Đóng
         </Button>
-        <Button color="success" size="small" type="submit">
-          <FontAwesomeIcon icon={faPlus} />
+
+        <Button
+          color="success"
+          size="small"
+          type="submit"
+          icon={<FontAwesomeIcon icon={faPlus} />}
+        >
           Thêm
         </Button>
       </div>

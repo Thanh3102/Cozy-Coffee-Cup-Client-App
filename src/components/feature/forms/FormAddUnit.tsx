@@ -25,7 +25,7 @@ const FormAddUnit = ({ closeModal, fetchUnit }: Props) => {
   };
   return (
     <form
-      className="min-w-[20vw] flex flex-col gap-4 mt-3"
+      className="w-[20vw] min-w-[200px] flex flex-col gap-4 mt-3"
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="flex flex-col gap-1">

@@ -6,11 +6,11 @@ interface Props extends BaseProps {
 }
 
 export const ModalTitle = ({ children }: BaseProps) => {
-  return <span className="text-[22px] font-semibold">{children}</span>;
+  return <span className="text-2xl font-semibold">{children}</span>;
 };
 
 export const ModalDescription = ({ children }: BaseProps) => {
-  return <p className="max-w-[25vw] my-3">{children}</p>;
+  return <p className="w-[25vw] min-w-[250px] my-3">{children}</p>;
 };
 
 const Modal = ({ children, open }: Props) => {

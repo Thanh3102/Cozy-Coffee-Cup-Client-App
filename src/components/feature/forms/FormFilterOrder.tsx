@@ -30,6 +30,7 @@ type FilterInput = {
 
 const FormFilterOrder = ({ form, fetchOrders }: Props) => {
   const { register, handleSubmit, setValue, getValues } = form;
+
   const onSubmit: SubmitHandler<FilterInput> = async (data) => {
     try {
       fetchOrders(
@@ -82,10 +83,10 @@ const FormFilterOrder = ({ form, fetchOrders }: Props) => {
     <div className="bg-white p-4 my-4 rounded-md shadow-md">
       <form
         id="orderFilterForm"
-        className="flex flex-wrap  items-center -mx-2"
+        className="flex flex-wrap items-center -mx-2"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div className="w-[20%] flex flex-col gap-2 px-2">
+        <div className="w-[50%] gap-y-1 md:w-[33%] lg:w-[20%] flex flex-col lg:gap-2 px-2">
           <label htmlFor="">Mã hóa đơn</label>
           <input
             type="text"
@@ -93,7 +94,7 @@ const FormFilterOrder = ({ form, fetchOrders }: Props) => {
             {...register("id", { valueAsNumber: true })}
           />
         </div>
-        <div className="w-[20%] flex flex-col gap-2 px-2">
+        <div className="w-[50%] gap-y-1 md:w-[33%] lg:w-[20%] flex flex-col gap-2 px-2">
           <label htmlFor="">Ngày bắt đầu</label>
           <input
             type="date"
@@ -103,7 +104,7 @@ const FormFilterOrder = ({ form, fetchOrders }: Props) => {
             {...register("startDate")}
           />
         </div>
-        <div className="w-[20%] flex flex-col gap-2 px-2">
+        <div className="w-[50%] gap-y-1 md:w-[33%] lg:w-[20%] flex flex-col gap-2 px-2">
           <label htmlFor="">Ngày kết thúc</label>
           <input
             type="date"
@@ -112,7 +113,7 @@ const FormFilterOrder = ({ form, fetchOrders }: Props) => {
             {...register("endDate")}
           />
         </div>
-        <div className="w-[20%] flex flex-col gap-2 px-2">
+        <div className="w-[50%] gap-y-1 md:w-[33%] lg:w-[20%] flex flex-col gap-2 px-2">
           <label htmlFor="">Trạng thái</label>
           <select {...register("status")} className="input">
             <option value="">Tất cả</option>
@@ -123,7 +124,7 @@ const FormFilterOrder = ({ form, fetchOrders }: Props) => {
             ))}
           </select>
         </div>
-        <div className="w-[20%] flex flex-col gap-2 px-2">
+        <div className="w-[50%] gap-y-1 md:w-[33%] lg:w-[20%] flex flex-col gap-2 px-2">
           <label htmlFor="">Phương thức</label>
           <select className="input" {...register("type")}>
             <option value="">Tất cả</option>

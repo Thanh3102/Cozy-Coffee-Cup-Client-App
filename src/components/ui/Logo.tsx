@@ -1,12 +1,11 @@
 import { faMugHot } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Fragment } from "react/jsx-runtime";
 
 const Logo = () => {
   return (
-    <div className="py-5 text-amber-700 text-center font-bold flex justify-center items-center gap-4 text-[18px] cursor-default">
+    <div className=" text-amber-700 text-center font-bold flex items-center  cursor-default justify-center text-xl gap-2 py-3 md:py-5 md:text-lg md:gap-4">
       <FontAwesomeIcon icon={faMugHot} />
-      <span>Cozy Coffee Cup</span>
+      <span className="hidden md:inline-block">Cozy Coffee Cup</span>
     </div>
   );
 };

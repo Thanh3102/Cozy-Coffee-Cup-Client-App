@@ -58,11 +58,11 @@ const FormAddMaterial = ({ reFetch, closeModal }: Props) => {
     fetchUnits();
   }, []);
   return (
-    <Fragment>
+    <div className="w-[25vw] min-w-[300px]">
       <form
         id="addMaterialForm"
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-5 w-[25vw]"
+        className="flex flex-col gap-5"
       >
         <div className="flex flex-col gap-1">
           <label htmlFor="name">Tên nguyên liệu</label>
@@ -161,7 +161,7 @@ const FormAddMaterial = ({ reFetch, closeModal }: Props) => {
           Thêm
         </Button>
       </div>
-    </Fragment>
+    </div>
   );
 };
 

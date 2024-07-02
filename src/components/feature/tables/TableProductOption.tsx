@@ -66,7 +66,7 @@ const ProductOptionTable = ({ options, fetchOptions }: Props) => {
       </Table>
       {selectedOption && (
         <Modal open={openEdit}>
-          <ModalTitle>Chỉnh sửa danh mục</ModalTitle>
+          <ModalTitle>Chỉnh sửa tùy chọn</ModalTitle>
           <FormEditProductOption
             id={selectedOption.id}
             closeModal={() => setOpenEdit(false)}

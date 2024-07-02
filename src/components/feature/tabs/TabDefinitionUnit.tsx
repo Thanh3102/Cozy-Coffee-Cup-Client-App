@@ -36,7 +36,7 @@ const TabCustomUnit = () => {
           Thêm mới
         </Button>
         <div className="bg-white p-4 mt-2 rounded-md">
-          <h5 className="font-semibold text-[22px] text-amber-700">
+          <h5 className="font-semibold text-2xl text-amber-700">
             Danh sách đơn vị tính
           </h5>
           <FormSearchUnit setUnits={setUnits} />
