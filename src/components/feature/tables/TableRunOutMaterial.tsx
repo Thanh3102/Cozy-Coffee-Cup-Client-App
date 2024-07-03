@@ -1,15 +1,44 @@
+import { useEffect, useState } from "react";
 import Table, {
   TableBody,
   TableCell,
   TableHead,
   TableRow,
 } from "../../ui/Table";
+import { toast } from "react-toastify";
+import axiosClient from "../../../lib/axios";
+
+type RunOutMaterial = {
+  id: number;
+  name: string;
+  stock_quantity: number;
+  unit: string;
+};
+
 const RunOutMaterialTable = () => {
+  const [runOutMaterials, setRunOutMaterials] = useState<RunOutMaterial[]>([]);
+
+  const fetchRunOutMaterials = async () => {
+    try {
+      const { materials } = await axiosClient<
+        void,
+        { materials: RunOutMaterial[] }
+      >("/api/material/getRunOutMaterial");
+      setRunOutMaterials(materials);
+    } catch (error: any) {
+      toast.error(error.message ?? "Không thể lấy dữ liệu nguyên liệu sắp hết");
+      return;
+    }
+  };
+
+  useEffect(() => {
+    fetchRunOutMaterials();
+  }, []);
+
   return (
     <Table>
       <TableHead sticky>
         <TableRow>
-          <TableCell>#</TableCell>
           <TableCell>Mã nguyên liệu</TableCell>
           <TableCell>Tên nguyên liệu</TableCell>
           <TableCell>Số lượng</TableCell>
@@ -17,83 +46,14 @@ const RunOutMaterialTable = () => {
         </TableRow>
       </TableHead>
       <TableBody>
-        <TableRow>
-          <TableCell>1</TableCell>
-          <TableCell>1</TableCell>
-          <TableCell>Cà phê</TableCell>
-          <TableCell>19</TableCell>
-          <TableCell>Kilogram</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>1</TableCell>
-          <TableCell>1</TableCell>
-          <TableCell>Cà phê</TableCell>
-          <TableCell>19</TableCell>
-          <TableCell>Kilogram</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>1</TableCell>
-          <TableCell>1</TableCell>
-          <TableCell>Cà phê</TableCell>
-          <TableCell>19</TableCell>
-          <TableCell>Kilogram</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>1</TableCell>
-          <TableCell>1</TableCell>
-          <TableCell>Cà phê</TableCell>
-          <TableCell>19</TableCell>
-          <TableCell>Kilogram</TableCell>
-        </TableRow>{" "}
-        <TableRow>
-          <TableCell>1</TableCell>
-          <TableCell>1</TableCell>
-          <TableCell>Cà phê</TableCell>
-          <TableCell>19</TableCell>
-          <TableCell>Kilogram</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>1</TableCell>
-          <TableCell>1</TableCell>
-          <TableCell>Cà phê</TableCell>
-          <TableCell>19</TableCell>
-          <TableCell>Kilogram</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>1</TableCell>
-          <TableCell>1</TableCell>
-          <TableCell>Cà phê</TableCell>
-          <TableCell>19</TableCell>
-          <TableCell>Kilogram</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>1</TableCell>
-          <TableCell>1</TableCell>
-          <TableCell>Cà phê</TableCell>
-          <TableCell>19</TableCell>
-          <TableCell>Kilogram</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>1</TableCell>
-          <TableCell>1</TableCell>
-          <TableCell>Cà phê</TableCell>
-          <TableCell>19</TableCell>
-          <TableCell>Kilogram</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>1</TableCell>
-          <TableCell>1</TableCell>
-          <TableCell>Cà phê</TableCell>
-          <TableCell>19</TableCell>
-          <TableCell>Kilogram</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>1</TableCell>
-          <TableCell>1</TableCell>
-          <TableCell>Cà phê</TableCell>
-          <TableCell>19</TableCell>
-          <TableCell>Kilogram</TableCell>
-        </TableRow>
+        {runOutMaterials.map((material) => (
+          <TableRow>
+            <TableCell>{material.id}</TableCell>
+            <TableCell>{material.name}</TableCell>
+            <TableCell>{material.stock_quantity}</TableCell>
+            <TableCell>{material.unit}</TableCell>
+          </TableRow>
+        ))}
       </TableBody>
     </Table>
   );

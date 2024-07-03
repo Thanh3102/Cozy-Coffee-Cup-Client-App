@@ -11,6 +11,7 @@ import OrderTypePercentChart from "../feature/charts/OrderTypePercentChart";
 import ProductCategoryPercentChart from "../feature/charts/ProductCategoryPercentChart";
 import TopSaleProductTable from "../feature/tables/TableTopSaleProduct";
 import RunOutMaterialTable from "../feature/tables/TableRunOutMaterial";
+import OrderPaymentTypeChart from "../feature/charts/OrderPaymentTypeChart";
 
 const HomeContent = () => {
   const [revenueOverview, setRevenueOverview] = useState<RevenueOverview>({
@@ -81,8 +82,7 @@ const HomeContent = () => {
               <OrderTypePercentChart />
             </div>
             <div className="flex-1 p-4 bg-white rounded-lg shadow-md">
-              {/* <ProductCategoryPercentChart /> */}
-              Hình thức thanh toán
+              <OrderPaymentTypeChart />
             </div>
             <div className="flex-1 p-4 bg-white rounded-lg shadow-md">
               <ProductCategoryPercentChart />

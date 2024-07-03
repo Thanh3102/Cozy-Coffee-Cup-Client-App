@@ -3,6 +3,7 @@ import { BaseProps } from "../../utils/types/interface";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { refreshToken } from "../../redux/slices/authSlice";
+import Loading from "../ui/Loading";
 
 interface Props extends BaseProps {}
 
@@ -27,7 +28,7 @@ const AuthGate = ({ children }: Props) => {
   if (status === "pending") {
     return (
       <Fragment>
-        <h1>Loading...</h1>
+        <Loading />
       </Fragment>
     );
   } else return <Fragment>{children}</Fragment>;

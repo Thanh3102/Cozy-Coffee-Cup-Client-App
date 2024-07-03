@@ -21,11 +21,11 @@ axiosClient.interceptors.response.use(
     const response = { status: res.status, ...res.data };
     return Promise.resolve(response);
   },
-  async (err) => {
+  async (err: any) => {
     if (err.message === "Network Error") {
       const response = {
         status: 500,
-        message: "Máy chủ không phản hồi",
+        message: "Lỗi đường truyền",
       };
       return Promise.reject(response);
     }

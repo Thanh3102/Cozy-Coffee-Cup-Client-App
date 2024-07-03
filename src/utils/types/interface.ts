@@ -4,8 +4,3 @@ export interface BaseProps {
   onClick?: () => void;
 }
 
-export interface SignInFormInput {
-  username: string;
-  password: string;
-}
-

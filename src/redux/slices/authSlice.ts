@@ -2,11 +2,12 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosClient from "../../lib/axios";
 import { toast } from "react-toastify";
 import { RootState } from "../store";
+import { AxiosError } from "axios";
 
 export interface AuthState {
   user: { id: string; username: string; name: string } | null;
   status: "authenciation" | "unauthenciation" | "pending";
-  error: string | null | unknown;
+  error: string | null | undefined;
   accessToken: string | null;
 }
 
@@ -16,9 +17,8 @@ interface SignInSuccess {
 }
 
 interface SignInFailed {
-  user: null;
-  message: string;
   status: number;
+  message: string;
 }
 
 interface SignInData {
@@ -64,9 +64,12 @@ export const signInUser = createAsyncThunk<
       }
     );
     return response;
-  } catch (error: any) {
-    let err: SignInFailed = error;
-    return rejectWithValue(err);
+  } catch (err: any) {
+    let error: AxiosError<SignInFailed> = err;
+    if (!error.response) {
+      throw err;
+    }
+    return rejectWithValue(error.response.data);
   }
 });
 
@@ -93,7 +96,7 @@ export const refreshToken = createAsyncThunk<
 >("auth/refresh", async (_, { getState, rejectWithValue }) => {
   const state = getState();
   const accessToken = state.auth.accessToken;
-  // console.log("Access token", state.auth.accessToken);
+
   try {
     const response = await axiosClient.post<void, RefreshSucess>(
       "/auth/refresh",
@@ -104,7 +107,6 @@ export const refreshToken = createAsyncThunk<
         },
       }
     );
-    // console.log(response);
     return response;
   } catch (error: any) {
     return rejectWithValue(error);
@@ -133,7 +135,7 @@ export const authSlice = createSlice({
         toast.error(payload?.message);
         state.status = "unauthenciation";
         state.user = null;
-        state.error = "";
+        state.error = payload?.message;
         state.accessToken = null;
       })
       .addCase(logout.fulfilled, (state, { payload }) => {
