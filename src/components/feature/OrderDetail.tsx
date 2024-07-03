@@ -84,41 +84,44 @@ const OrderDetail = ({ id, close }: Props) => {
       <div className="w-[80vw] h-[80vh] bg-white rounded-md flex gap-4">
         <div className="w-[40%] flex flex-col">
           <div className="flex-1">
-            <h1 className="font-bold text-[20px]">Chi tiết hóa đơn</h1>
-            <p>
-              Mã hóa đơn: <span className="font-semibold">{order.id}</span>
-            </p>
-            <p>
-              Loại hóa đơn: <span className="font-semibold">{order.type}</span>
-            </p>
-            <p>
-              Trạng thái: <span className="font-semibold">{order.status}</span>
-            </p>
-            <p>
-              Thời gian tạo:{" "}
-              <span className="font-semibold">
-                {formatDate(order.created_at)}
-              </span>
-            </p>
-            <p>
-              Thời gian thanh toán:{" "}
-              <span className="font-semibold">
-                {formatDate(order.payment_at)}
-              </span>
-            </p>
-            <p>
-              Hình thức thanh toán:{" "}
-              <span className="font-semibold">{order.payment.type}</span>
-            </p>
-            <p>
-              Người tạo:{" "}
-              <span className="font-semibold">{order.user.name}</span>
-            </p>
-            <p>
-              Người thanh toán:{" "}
-              <span className="font-semibold">{order.paymentUser.name}</span>
-            </p>
-            <p></p>
+            <h1 className="font-bold text-base lg:text-lg">Chi tiết hóa đơn</h1>
+            <div className="text-sm lg:text-base">
+              <p>
+                Mã hóa đơn: <span className="font-semibold">{order.id}</span>
+              </p>
+              <p>
+                Loại hóa đơn:{" "}
+                <span className="font-semibold">{order.type}</span>
+              </p>
+              <p>
+                Trạng thái:{" "}
+                <span className="font-semibold">{order.status}</span>
+              </p>
+              <p>
+                Thời gian tạo:{" "}
+                <span className="font-semibold">
+                  {formatDate(order.created_at)}
+                </span>
+              </p>
+              <p>
+                Thời gian thanh toán:{" "}
+                <span className="font-semibold">
+                  {formatDate(order.payment_at)}
+                </span>
+              </p>
+              <p>
+                Hình thức thanh toán:{" "}
+                <span className="font-semibold">{order.payment.type}</span>
+              </p>
+              <p>
+                Người tạo:{" "}
+                <span className="font-semibold">{order.user.name}</span>
+              </p>
+              <p>
+                Người thanh toán:{" "}
+                <span className="font-semibold">{order.paymentUser.name}</span>
+              </p>
+            </div>
           </div>
           <div className="flex gap-4">
             <Button

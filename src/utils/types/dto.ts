@@ -59,7 +59,7 @@ export type UpdateProductDto = {
   category_id: number;
   description: string;
   note: string;
-  image: File;
+  image: File | null;
   discount: number;
   status: boolean;
 };
@@ -67,7 +67,7 @@ export type UpdateProductDto = {
 export type CreateMaterialDto = {
   name: string;
   stock_quantity: number;
-  expiration_date: Date;
+  expiration_date: Date | null;
   unit_id: number;
   min_stock: number;
 };

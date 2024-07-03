@@ -1,27 +1,38 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import Button from "../../ui/Button";
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { BaseProps } from "../../../utils/types/interface";
 import { toast } from "react-toastify";
 import { Category, ProductType } from "../../../utils/types/type";
 import ProductApi from "../../../api/Product";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faX } from "@fortawesome/free-solid-svg-icons";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import ErrorMessage from "../../ui/ErrorMessage";
 
 interface Props extends BaseProps {
   fetchProduct: () => void;
   closeModal: () => void;
 }
 
-interface Inputs {
-  name: string;
-  price: number;
-  type_id: number;
-  category_id: number;
-  description: string;
-  note: string;
-  image: File;
-}
+const productSchema = z.object({
+  name: z.string().min(1, { message: "Chưa nhập tên sản phẩm" }),
+  price: z
+    .number({
+      required_error: "Chưa nhập giá trị",
+      invalid_type_error: "Giá trị phải là số",
+    })
+    .min(1000, { message: "Giá trị nhỏ nhất là 1000" })
+    .max(1000000000, { message: "Giá trị quá lớn" }),
+  type_id: z.number({ invalid_type_error: "Chưa chọn loại sản phẩm" }),
+  category_id: z.number({ invalid_type_error: "Chưa chọn danh mục" }),
+  description: z.string().max(1000, { message: "Mô tả không quá 1000 kí tự" }),
+  note: z.string().max(1000, { message: "Ghi chú không quá 1000 kí tự" }),
+  image: z.instanceof(File, { message: "Chưa chọn ảnh" }),
+});
+
+type Inputs = z.infer<typeof productSchema>;
 
 const FormAddProduct = ({ closeModal, fetchProduct }: Props) => {
   const [image, setImage] = useState<string>();
@@ -46,7 +57,12 @@ const FormAddProduct = ({ closeModal, fetchProduct }: Props) => {
     fetchTypes();
   }, []);
 
-  const { register, handleSubmit, setValue } = useForm<Inputs>();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<Inputs>({ resolver: zodResolver(productSchema) });
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     setLoading(true);
     const productApi = new ProductApi();
@@ -79,6 +95,7 @@ const FormAddProduct = ({ closeModal, fetchProduct }: Props) => {
             className="input"
             {...register("name", { required: true })}
           />
+          {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
         </div>
         <div className="flex flex-col gap-2 col-start-1 row-start-2 md:col-start-2 md:row-start-1">
           <label htmlFor="">Giá tiền</label>
@@ -87,6 +104,7 @@ const FormAddProduct = ({ closeModal, fetchProduct }: Props) => {
             className="input"
             {...register("price", { required: true, valueAsNumber: true })}
           />
+          {errors.price && <ErrorMessage>{errors.price.message}</ErrorMessage>}
         </div>
         <div className="flex flex-col gap-2 col-start-1 row-start-3 md:col-start-1 md:row-start-2">
           <label htmlFor="">Loại sản phẩm</label>
@@ -103,6 +121,9 @@ const FormAddProduct = ({ closeModal, fetchProduct }: Props) => {
               </option>
             ))}
           </select>
+          {errors.type_id && (
+            <ErrorMessage>{errors.type_id.message}</ErrorMessage>
+          )}
         </div>
         <div className="flex flex-col gap-2 col-start-1 row-start-4 md:col-start-2 md:row-start-2">
           <label htmlFor="">Danh mục</label>
@@ -122,6 +143,9 @@ const FormAddProduct = ({ closeModal, fetchProduct }: Props) => {
               </option>
             ))}
           </select>
+          {errors.category_id && (
+            <ErrorMessage>{errors.category_id.message}</ErrorMessage>
+          )}
         </div>
         <div className="flex flex-col gap-2 col-start-1 row-start-5 col-span-2 row-span-2 md:col-start-1 md:row-start-3 md:row-span-2 md:col-span-full">
           <label htmlFor="">Mô tả</label>
@@ -132,6 +156,10 @@ const FormAddProduct = ({ closeModal, fetchProduct }: Props) => {
             {...register("description")}
           />
         </div>
+        {errors.description && (
+          <ErrorMessage>{errors.description.message}</ErrorMessage>
+        )}
+
         <div className="flex flex-col gap-2 col-start-1 row-start-7 col-span-2 row-span-2 md:col-start-1 md:row-start-5 md:row-span-3 md:col-span-full">
           <label htmlFor="">Ghi chú</label>
           <textarea
@@ -140,6 +168,7 @@ const FormAddProduct = ({ closeModal, fetchProduct }: Props) => {
             className="input resize-none"
             {...register("note")}
           />
+          {errors.note && <ErrorMessage>{errors.note.message}</ErrorMessage>}
         </div>
         <div className="flex flex-col gap-4 items-center justify-center col-start-2 col-span-1 row-span-4 md:col-start-3 md:row-start-1 md:row-span-2">
           <div
@@ -161,6 +190,8 @@ const FormAddProduct = ({ closeModal, fetchProduct }: Props) => {
           >
             Chọn hình ảnh
           </span>
+          {errors.image && <ErrorMessage>{errors.image.message}</ErrorMessage>}
+
           <input
             className="hidden"
             type="file"

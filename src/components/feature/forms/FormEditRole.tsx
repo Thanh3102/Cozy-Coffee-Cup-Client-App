@@ -8,6 +8,9 @@ import Button from "../../ui/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileArchive, faPlus, faX } from "@fortawesome/free-solid-svg-icons";
 import axiosClient from "../../../lib/axios";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import ErrorMessage from "../../ui/ErrorMessage";
 
 interface Props {
   role: Role;
@@ -17,17 +20,25 @@ interface Props {
 
 type Permission = { id: string; name: string };
 
-type Inputs = {
-  id: string;
-  name: string;
-  color: string;
-  perms: string[];
-};
+const roleSchema = z.object({
+  id: z.string(),
+  name: z.string().min(1, { message: "Chưa nhập giá trị" }),
+  color: z.string(),
+  perms: z.string().array(),
+});
+
+type Inputs = z.infer<typeof roleSchema>;
 
 const FormEditRole = ({ role, close, fetchRole }: Props) => {
   const [permissions, setPermission] = useState<Permission[]>([]);
 
-  const { register, handleSubmit, setValue } = useForm<Inputs>({
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<Inputs>({
+    resolver: zodResolver(roleSchema),
     defaultValues: {
       id: role.id,
       color: role.color,
@@ -91,6 +102,7 @@ const FormEditRole = ({ role, close, fetchRole }: Props) => {
               id="name"
               {...register("name", { required: true })}
             />
+            {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
           </div>
           <div className="w-[20%] flex flex-col gap-2">
             <label htmlFor="color" className="font-semibold text-lg">

@@ -19,18 +19,23 @@ import { toast } from "react-toastify";
 import { CreateImportNoteDto } from "../../../utils/types/dto";
 import MaterialApi from "../../../api/Material";
 import ProviderApi from "../../../api/Provider";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import ErrorMessage from "../../ui/ErrorMessage";
 
 interface Props extends BaseProps {
   closeModal: () => void;
   reFetchMaterial: () => void;
 }
 
-type Inputs = {
-  receiver_name: string;
-  provider_id: string;
-  note: string;
-  total: number;
-};
+const noteSchema = z.object({
+  receiver_name: z.string().min(1, { message: "Chưa nhập giá trị" }),
+  provider_id: z.string().min(1, { message: "Chưa nhập giá trị" }),
+  note: z.string(),
+  total: z.number(),
+});
+
+type Inputs = z.infer<typeof noteSchema>;
 
 const FormAddImportNote = ({ closeModal, reFetchMaterial }: Props) => {
   const [deliveryItems, setImportItems] = useState<ImportItem[]>([]);
@@ -42,7 +47,7 @@ const FormAddImportNote = ({ closeModal, reFetchMaterial }: Props) => {
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm<Inputs>({ resolver: zodResolver(noteSchema) });
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const importList: {
@@ -112,6 +117,9 @@ const FormAddImportNote = ({ closeModal, reFetchMaterial }: Props) => {
               className="input"
               {...register("receiver_name", { required: true })}
             />
+            {errors.receiver_name && (
+              <ErrorMessage>{errors.receiver_name.message}</ErrorMessage>
+            )}
           </div>
           <div className="flex flex-col gap-2 flex-1">
             <label htmlFor="provider_id">Nhà cung cấp</label>
@@ -131,10 +139,13 @@ const FormAddImportNote = ({ closeModal, reFetchMaterial }: Props) => {
                 );
               })}
             </select>
+            {errors.provider_id && (
+              <ErrorMessage>{errors.provider_id.message}</ErrorMessage>
+            )}
           </div>
         </div>
         <div className="flex justify-between items-center my-3">
-          <h5>Danh sách nguyên liệu</h5>
+          <h5 className="font-semibold text-lg">Danh sách nguyên liệu</h5>
           <Button
             size="small"
             type="button"
@@ -146,8 +157,8 @@ const FormAddImportNote = ({ closeModal, reFetchMaterial }: Props) => {
           </Button>
         </div>
         <Table height={200}>
-          <TableHead>
-            <TableRow className="text-[12px]">
+          <TableHead sticky>
+            <TableRow className="text-sm">
               <TableCell>Tên nguyên liệu</TableCell>
               <TableCell>Số lượng</TableCell>
               <TableCell>Giá tiền</TableCell>

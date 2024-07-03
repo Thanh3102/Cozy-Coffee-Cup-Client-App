@@ -10,6 +10,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFloppyDisk, faX } from "@fortawesome/free-solid-svg-icons";
 import { UpdateMaterialDto } from "../../../utils/types/dto";
 import MaterialApi from "../../../api/Material";
+import { z } from "zod";
+import ErrorMessage from "../../ui/ErrorMessage";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 interface Props extends BaseProps {
   reFetch: () => void;
@@ -17,14 +20,32 @@ interface Props extends BaseProps {
   material: Material;
 }
 
-type Inputs = {
-  name: string;
-  stock_quantity: number;
-  expiration_date: Date;
-  unit_id: number;
-  min_stock: number;
-  active: boolean;
-};
+const materialSchema = z.object({
+  id: z.number(),
+  name: z.string().min(1, { message: "Chưa nhập giá trị" }),
+  stock_quantity: z
+    .number({
+      invalid_type_error: "Giá trị phải là số",
+      required_error: "Chưa nhập giá trị",
+    })
+    .min(1, { message: "Giá trị phải là số nguyên dương" })
+    .max(100000, { message: "Giá trị quá lớn" }),
+  expiration_date: z.coerce.date(),
+  min_stock: z
+    .number({
+      invalid_type_error: "Chưa chọn giá trị",
+      required_error: "Chưa chọn giá trị",
+    })
+    .min(0, { message: "Giá trị nhỏ nhất là 0" })
+    .max(100000, { message: "Giá trị quá lớn" }),
+  unit_id: z.number({
+    invalid_type_error: "Chưa chọn giá trị",
+    required_error: "Chưa chọn giá trị",
+  }),
+  active: z.boolean(),
+});
+
+type Inputs = z.infer<typeof materialSchema>;
 
 type Unit = { name: string; short: string; id: number };
 
@@ -37,7 +58,9 @@ const FormEditMaterial = ({ reFetch, closeModal, material }: Props) => {
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>({
+    resolver: zodResolver(materialSchema),
     defaultValues: {
+      id: material.id,
       name: material.name,
       unit_id: material.unit.id,
       stock_quantity: material.stock_quantity,
@@ -47,19 +70,22 @@ const FormEditMaterial = ({ reFetch, closeModal, material }: Props) => {
   });
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    setFormLoading(true);
-    const dto: UpdateMaterialDto = {
-      id: material.id,
-      ...data,
-    };
-    const materialApi = new MaterialApi();
-    const message = await materialApi.updateMaterial(dto);
-    setFormLoading(false);
-    if (message !== null) {
-      message && toast.success(message ?? "Cập nhật thành công");
+    try {
+      setFormLoading(true);
+      const dto: UpdateMaterialDto = {
+        ...data,
+      };
+      const materialApi = new MaterialApi();
+      const message = await materialApi.updateMaterial(dto);
+      setFormLoading(false);
+      if (message !== null) {
+        message && toast.success(message ?? "Cập nhật thành công");
+      }
+      reFetch();
+      closeModal();
+    } catch (error: any) {
+      toast.error(error);
     }
-    reFetch();
-    closeModal();
   };
 
   const fetchUnits = async () => {
@@ -86,11 +112,11 @@ const FormEditMaterial = ({ reFetch, closeModal, material }: Props) => {
             id="name"
             {...register("name", { required: true })}
           />
+          {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
         </div>
         <div className="flex flex-col gap-2">
           <label htmlFor="expiration_date">Ngày hết hạn</label>
           <input
-            min={new Date().toISOString().split("T")[0]}
             defaultValue={
               material.expiration_date
                 ? material.expiration_date.toString().split("T")[0]
@@ -101,6 +127,9 @@ const FormEditMaterial = ({ reFetch, closeModal, material }: Props) => {
             id="expiration_date"
             {...register("expiration_date", { valueAsDate: true })}
           />
+          {errors.expiration_date && (
+            <ErrorMessage>{errors.expiration_date.message}</ErrorMessage>
+          )}
         </div>
         <div className="flex flex-col gap-2">
           <label htmlFor="stock_quantity">Số lượng</label>
@@ -109,12 +138,12 @@ const FormEditMaterial = ({ reFetch, closeModal, material }: Props) => {
             type="text"
             id="stock_quantity"
             {...register("stock_quantity", {
-              required: true,
-              min: 0,
-              max: 10000,
               valueAsNumber: true,
             })}
           />
+          {errors.stock_quantity && (
+            <ErrorMessage>{errors.stock_quantity.message}</ErrorMessage>
+          )}
         </div>
         <div className="flex flex-col gap-2">
           <label htmlFor="unit_id">Đơn vị tính</label>
@@ -132,6 +161,9 @@ const FormEditMaterial = ({ reFetch, closeModal, material }: Props) => {
               );
             })}
           </select>
+          {errors.unit_id && (
+            <ErrorMessage>{errors.unit_id.message}</ErrorMessage>
+          )}
         </div>
         <div className="flex flex-col gap-2">
           <label htmlFor="min_stock">Số lượng tối thiểu</label>
@@ -140,11 +172,12 @@ const FormEditMaterial = ({ reFetch, closeModal, material }: Props) => {
             type="text"
             id="min_stock"
             {...register("min_stock", {
-              required: true,
-              min: 0,
               valueAsNumber: true,
             })}
           />
+          {errors.min_stock && (
+            <ErrorMessage>{errors.min_stock.message}</ErrorMessage>
+          )}
         </div>
         <div className="flex items-center gap-2">
           <input

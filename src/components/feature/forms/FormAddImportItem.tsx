@@ -6,17 +6,33 @@ import { faPlus, faX } from "@fortawesome/free-solid-svg-icons";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { BaseProps } from "../../../utils/types/interface";
 import MaterialApi from "../../../api/Material";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import ErrorMessage from "../../ui/ErrorMessage";
 
 interface Props extends BaseProps {
   setImportItems: Dispatch<SetStateAction<ImportItem[]>>;
   closeModal: () => void;
 }
 
-type ImportItemInput = {
-  material_id: number;
-  price: number;
-  quantity: number;
-};
+const itemSchema = z.object({
+  material_id: z.number({ invalid_type_error: "Chưa chọn giá trị" }),
+  price: z
+    .number({
+      required_error: "Chưa nhập giá trị",
+      invalid_type_error: "Giá trị phải là số",
+    })
+    .min(1000, { message: "Giá trị nhỏ nhất là 1000" }),
+  quantity: z
+    .number({
+      required_error: "Chưa nhập giá trị",
+      invalid_type_error: "Giá trị phải là số",
+    })
+    .min(1, { message: "Giá trị nhỏ nhất là 1" })
+    .max(100000, "Giá trị không quá 100000"),
+});
+
+type ImportItemInput = z.infer<typeof itemSchema>;
 
 const fetchData = async (
   setMaterial: React.Dispatch<React.SetStateAction<Material[]>>
@@ -36,7 +52,13 @@ const FormAddImportItem = ({ setImportItems, closeModal }: Props) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ImportItemInput>();
+  } = useForm<ImportItemInput>({
+    resolver: zodResolver(itemSchema),
+    defaultValues: {
+      quantity: 1,
+      price: 1000,
+    },
+  });
 
   const onSubmit: SubmitHandler<ImportItemInput> = async (data) => {
     setImportItems((prev) => {
@@ -59,10 +81,10 @@ const FormAddImportItem = ({ setImportItems, closeModal }: Props) => {
 
   return (
     <form
-      className="flex flex-col min-w-[25vw]"
+      className="flex flex-col w-[20vw] min-w-[250px]"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="flex flex-col gap-2 my-2">
+      <div className="flex flex-col gap-1">
         <label htmlFor="material_name">Tên nguyên liệu</label>
         <select
           className="input"
@@ -82,16 +104,22 @@ const FormAddImportItem = ({ setImportItems, closeModal }: Props) => {
             return <option value={material.id}>{material.name}</option>;
           })}
         </select>
+        {errors.material_id && (
+          <ErrorMessage>{errors.material_id.message}</ErrorMessage>
+        )}
       </div>
-      <div className="flex flex-col gap-2 my-2">
+      <div className="flex flex-col gap-1">
         <label htmlFor="stock_quantity">Số lượng</label>
         <input
           className="input"
           id="stock_quantity"
           {...register("quantity", { required: true, valueAsNumber: true })}
         />
+        {errors.quantity && (
+          <ErrorMessage>{errors.quantity.message}</ErrorMessage>
+        )}
       </div>
-      <div className="flex flex-col gap-2 my-2">
+      <div className="flex flex-col gap-1">
         <label htmlFor="unit">Đơn vị tính</label>
         <input
           className="input disable"
@@ -100,15 +128,16 @@ const FormAddImportItem = ({ setImportItems, closeModal }: Props) => {
           defaultValue={selectedMaterial ? `${selectedMaterial.unit.name}` : ""}
         />
       </div>
-      <div className="flex flex-col gap-2 my-2">
+      <div className="flex flex-col gap-1">
         <label htmlFor="price">Giá tiền</label>
         <input
           className="input"
           id="price"
           {...register("price", { required: true, valueAsNumber: true })}
         />
+        {errors.price && <ErrorMessage>{errors.price.message}</ErrorMessage>}
       </div>
-      <div className="flex justify-end gap-4">
+      <div className="flex justify-end gap-4 mt-4">
         <Button
           color="danger"
           size="small"

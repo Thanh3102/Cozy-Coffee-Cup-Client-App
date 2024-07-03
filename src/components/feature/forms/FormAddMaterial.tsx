@@ -8,19 +8,39 @@ import { BaseProps } from "../../../utils/types/interface";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faRotateRight, faX } from "@fortawesome/free-solid-svg-icons";
 import MaterialApi from "../../../api/Material";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import ErrorMessage from "../../ui/ErrorMessage";
 
 interface Props extends BaseProps {
   reFetch: () => void;
   closeModal: () => void;
 }
 
-type Inputs = {
-  name: string;
-  stock_quantity: number;
-  expiration_date: Date;
-  min_stock: number;
-  unit_id: number;
-};
+const materialSchema = z.object({
+  name: z.string().min(1, { message: "Chưa nhập giá trị" }),
+  stock_quantity: z
+    .number({
+      invalid_type_error: "Giá trị phải là số",
+      required_error: "Chưa nhập giá trị",
+    })
+    .min(1, { message: "Giá trị phải là số nguyên dương" })
+    .max(100000, { message: "Giá trị quá lớn" }),
+  expiration_date: z.coerce.date().nullable(),
+  min_stock: z
+    .number({
+      invalid_type_error: "Chưa chọn giá trị",
+      required_error: "Chưa chọn giá trị",
+    })
+    .min(0, { message: "Giá trị nhỏ nhất là 0" })
+    .max(100000, { message: "Giá trị quá lớn" }),
+  unit_id: z.number({
+    invalid_type_error: "Chưa chọn giá trị",
+    required_error: "Chưa chọn giá trị",
+  }),
+});
+
+type Inputs = z.infer<typeof materialSchema>;
 
 type Unit = { name: string; short: string; id: number };
 
@@ -33,8 +53,10 @@ const FormAddMaterial = ({ reFetch, closeModal }: Props) => {
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>({
+    resolver: zodResolver(materialSchema),
     defaultValues: {
       min_stock: 0,
+      expiration_date: null,
     },
   });
 
@@ -62,7 +84,7 @@ const FormAddMaterial = ({ reFetch, closeModal }: Props) => {
       <form
         id="addMaterialForm"
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-5"
+        className="flex flex-col gap-2"
       >
         <div className="flex flex-col gap-1">
           <label htmlFor="name">Tên nguyên liệu</label>
@@ -72,6 +94,7 @@ const FormAddMaterial = ({ reFetch, closeModal }: Props) => {
             id="name"
             {...register("name", { required: true })}
           />
+          {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
         </div>
         <div className="flex flex-col gap-1">
           <label htmlFor="expiration_date">Ngày hết hạn</label>
@@ -82,6 +105,9 @@ const FormAddMaterial = ({ reFetch, closeModal }: Props) => {
             min={new Date().toISOString().split("T")[0]}
             {...register("expiration_date", { valueAsDate: true })}
           />
+          {errors.expiration_date && (
+            <ErrorMessage>{errors.expiration_date.message}</ErrorMessage>
+          )}
         </div>
         <div className="flex flex-col gap-1">
           <label htmlFor="stock_quantity">Số lượng</label>
@@ -90,12 +116,12 @@ const FormAddMaterial = ({ reFetch, closeModal }: Props) => {
             type="text"
             id="stock_quantity"
             {...register("stock_quantity", {
-              required: true,
-              min: 0,
-              max: 10000,
               valueAsNumber: true,
             })}
           />
+          {errors.stock_quantity && (
+            <ErrorMessage>{errors.stock_quantity.message}</ErrorMessage>
+          )}
         </div>
         <div className="flex flex-col gap-1">
           <label htmlFor="unit_id">Đơn vị tính</label>
@@ -115,6 +141,9 @@ const FormAddMaterial = ({ reFetch, closeModal }: Props) => {
               );
             })}
           </select>
+          {errors.unit_id && (
+            <ErrorMessage>{errors.unit_id.message}</ErrorMessage>
+          )}
         </div>
         <div className="flex flex-col gap-1">
           <label htmlFor="min_stock">Số lượng tối thiểu</label>

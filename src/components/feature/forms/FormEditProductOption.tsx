@@ -20,6 +20,9 @@ import { SetStateAction, useEffect, useState } from "react";
 import { currencyFormatter } from "../../../utils/currencyFormat";
 import { toast } from "react-toastify";
 import axiosClient from "../../../lib/axios";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import ErrorMessage from "../../ui/ErrorMessage";
 
 interface Props extends BaseProps {
   id: number;
@@ -27,14 +30,17 @@ interface Props extends BaseProps {
   fetchOptions: () => void;
 }
 
-interface Inputs {
-  id: number;
-  title: string;
-  required: boolean;
-  allows_multiple: boolean;
-}
+const productOptionSchema = z.object({
+  id: z.number(),
+  title: z.string().min(1, { message: "Chưa nhập tiêu đề" }),
+  required: z.boolean(),
+  allows_multiple: z.boolean(),
+});
+
+type Inputs = z.infer<typeof productOptionSchema>;
 
 type Value = { id: number; name: string; price: number };
+
 type Option = {
   id: number;
   title: string;
@@ -46,7 +52,12 @@ type Option = {
 const FormEditProductOption = ({ id, closeModal, fetchOptions }: Props) => {
   const [openAddValue, setOpenAddValue] = useState<boolean>(false);
   const [option, setOption] = useState<Option>();
-  const { register, handleSubmit, setValue } = useForm<Inputs>();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<Inputs>({ resolver: zodResolver(productOptionSchema) });
 
   const fetchOption = async () => {
     try {
@@ -95,6 +106,7 @@ const FormEditProductOption = ({ id, closeModal, fetchOptions }: Props) => {
             className="input"
             {...register("title", { required: true })}
           />
+          {errors.title && <ErrorMessage>{errors.title.message}</ErrorMessage>}
         </div>
       </form>
       <div className="flex justify-between mt-2">

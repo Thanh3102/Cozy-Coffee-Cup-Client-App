@@ -7,6 +7,9 @@ import { faPlus, faX } from "@fortawesome/free-solid-svg-icons";
 import { SubmitHandler, useForm } from "react-hook-form";
 import AccountApi from "../../../api/Account";
 import { toast } from "react-toastify";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import ErrorMessage from "../../ui/ErrorMessage";
 
 interface Props {
   close: () => void;
@@ -15,16 +18,23 @@ interface Props {
 
 type Permission = { id: string; name: string };
 
-type Inputs = {
-  name: string;
-  color: string;
-  perms: string[];
-};
+const roleSchema = z.object({
+  name: z.string().min(1, { message: "Chưa nhập giá trị" }),
+  color: z.string(),
+  perms: z.string().array(),
+});
+
+type Inputs = z.infer<typeof roleSchema>;
 
 const FormAddRole = ({ close, fetchRoles }: Props) => {
   const [permissions, setPermission] = useState<Permission[]>([]);
 
-  const { register, handleSubmit } = useForm<Inputs>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>({
+    resolver: zodResolver(roleSchema),
     defaultValues: {
       color: "#686D76",
     },
@@ -60,7 +70,10 @@ const FormAddRole = ({ close, fetchRoles }: Props) => {
 
   return (
     <Fragment>
-      <form className="w-[35vw] min-w-[400px]" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        className="w-[35vw] min-w-[400px]"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <div className="flex gap-4">
           <div className="w-[80%] flex flex-col gap-2">
             <label htmlFor="">Tên vai trò</label>
@@ -69,6 +82,7 @@ const FormAddRole = ({ close, fetchRoles }: Props) => {
               className="input"
               {...register("name", { required: true })}
             />
+            {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
           </div>
           <div className="w-[20%] flex flex-col gap-2">
             <label htmlFor="">Màu sắc</label>
@@ -93,7 +107,12 @@ const FormAddRole = ({ close, fetchRoles }: Props) => {
                     value={perm.id}
                     {...register("perms")}
                   />
-                  <label htmlFor={`cb-perm-${perm.id}`} className="lg:text-base text-sm">{perm.name}</label>
+                  <label
+                    htmlFor={`cb-perm-${perm.id}`}
+                    className="lg:text-base text-sm"
+                  >
+                    {perm.name}
+                  </label>
                 </div>
               );
             })}

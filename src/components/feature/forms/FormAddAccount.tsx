@@ -7,23 +7,37 @@ import { Role } from "../../../utils/types/type";
 import AccountApi from "../../../api/Account";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import ErrorMessage from "../../ui/ErrorMessage";
 
 interface Props {
   fetchAccounts: () => void;
   close: () => void;
 }
 
-type FormInput = {
-  username: string;
-  password: string;
-  name: string;
-  roles: string[];
-};
+const accountSchema = z.object({
+  username: z.string().min(1, { message: "Chưa nhập tên đăng nhập" }),
+  password: z
+    .string()
+    .min(6, { message: "Mật khẩu phải từ 6 - 30 kí tự" })
+    .max(30, { message: "Mật khẩu phải từ 6 - 30 kí tự" }),
+  name: z.string().min(1, { message: "Chưa nhập giá trị" }),
+  roles: z.string().array(),
+});
+
+type FormInput = z.infer<typeof accountSchema>;
 
 const FormAddAccount = ({ close, fetchAccounts }: Props) => {
   const [roles, setRoles] = useState<Role[]>([]);
 
-  const { register, handleSubmit } = useForm<FormInput>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormInput>({
+    resolver: zodResolver(accountSchema),
+  });
 
   const onSubmit: SubmitHandler<FormInput> = async (data) => {
     try {
@@ -62,6 +76,9 @@ const FormAddAccount = ({ close, fetchAccounts }: Props) => {
               className="input"
               {...register("username", { required: true })}
             />
+            {errors.username && (
+              <ErrorMessage>{errors.username.message}</ErrorMessage>
+            )}
           </div>
           <div className="flex-col flex px-2 gap-1 lg:w-[33.33%] w-full">
             <label htmlFor="">Mật khẩu</label>
@@ -70,6 +87,9 @@ const FormAddAccount = ({ close, fetchAccounts }: Props) => {
               className="input"
               {...register("password", { required: true })}
             />
+            {errors.password && (
+              <ErrorMessage>{errors.password.message}</ErrorMessage>
+            )}
           </div>
           <div className="flex-col flex px-2 gap-1 lg:w-[33.33%] w-full">
             <label htmlFor="">Tên hiển thị</label>
@@ -78,6 +98,7 @@ const FormAddAccount = ({ close, fetchAccounts }: Props) => {
               className="input"
               {...register("name", { required: true })}
             />
+            {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
           </div>
         </div>
         <div className="mt-2 h-40 overflow-y-auto overflow-x-hidden">

@@ -5,16 +5,30 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import axiosClient from "../../../lib/axios";
 import ProductApi from "../../../api/Product";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { error } from "console";
+import ErrorMessage from "../../ui/ErrorMessage";
 
 interface Props extends BaseProps {
   close: () => void;
   fetchProductType: () => void;
 }
 
-type Inputs = { name: string };
+const productTypeSchema = z.object({
+  name: z.string().min(1, { message: "Chưa nhập giá trị" }),
+});
+
+type Inputs = z.infer<typeof productTypeSchema>;
 
 const FormAddProductType = ({ close, fetchProductType }: Props) => {
-  const { register, handleSubmit } = useForm<Inputs>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>({
+    resolver: zodResolver(productTypeSchema),
+  });
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
       const productApi = new ProductApi();
@@ -36,6 +50,7 @@ const FormAddProductType = ({ close, fetchProductType }: Props) => {
             className="input"
             {...register("name", { required: true })}
           />
+          {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
         </div>
         <div className="flex gap-3 justify-end">
           <Button type="button" size="small" color="danger" onClick={close}>

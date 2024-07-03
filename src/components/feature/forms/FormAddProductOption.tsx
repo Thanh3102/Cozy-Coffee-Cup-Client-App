@@ -16,30 +16,44 @@ import { currencyFormatter } from "../../../utils/currencyFormat";
 import { toast } from "react-toastify";
 import ProductApi from "../../../api/Product";
 import { CreateProductOptionDto } from "../../../utils/types/dto";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import ErrorMessage from "../../ui/ErrorMessage";
 
 interface Props extends BaseProps {
   closeModal: () => void;
   fetchOptions: () => void;
 }
 
-interface Inputs {
-  title: string;
-  required: boolean;
-  allows_multiple: boolean;
-}
+const productOptionSchema = z.object({
+  title: z.string().min(1, { message: "Chưa nhập tiêu đề" }),
+  required: z.boolean(),
+  allows_multiple: z.boolean(),
+});
+
+type Inputs = z.infer<typeof productOptionSchema>;
 
 type Value = { name: string; price: number };
 
 const FormAddProductOption = ({ closeModal, fetchOptions }: Props) => {
   const [openAddValue, setOpenAddValue] = useState<boolean>(false);
   const [values, setValues] = useState<Value[]>([]);
-  const { register, handleSubmit } = useForm<Inputs>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>({
+    resolver: zodResolver(productOptionSchema),
     defaultValues: {
       required: false,
       allows_multiple: false,
     },
   });
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    if (values.length == 0) {
+      toast.warn("Chưa nhập giá trị");
+      return;
+    }
     const dto: CreateProductOptionDto = {
       ...data,
       values: values,
@@ -65,6 +79,7 @@ const FormAddProductOption = ({ closeModal, fetchOptions }: Props) => {
             className="input"
             {...register("title", { required: true })}
           />
+          {errors.title && <ErrorMessage>{errors.title.message}</ErrorMessage>}
         </div>
       </form>
       <div className="flex justify-between mt-2">

@@ -136,7 +136,7 @@ export default class MaterialApi {
       >("/api/material/addMaterial", dto);
       return message;
     } catch (error: any) {
-      toast.error(error.message ?? "Đã có lỗi xảy ra");
+      throw new Error(error.message ?? "Đã có lỗi xảy ra");
     }
   };
 

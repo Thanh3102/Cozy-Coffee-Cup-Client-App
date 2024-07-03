@@ -8,28 +8,39 @@ import Button from "../../ui/Button";
 import ProviderApi from "../../../api/Provider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileArchive, faX } from "@fortawesome/free-solid-svg-icons";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import ErrorMessage from "../../ui/ErrorMessage";
 interface Props extends BaseProps {
   provider: Provider;
   closeModal: () => void;
   fetchProvider: () => void;
 }
 
-type Inputs = {
-  id: string;
-  name: string;
-  address: string;
-  email: string;
-  phone: string;
-  active: boolean;
-};
+const providerSchema = z.object({
+  id: z.string(),
+  name: z.string().min(1, { message: "Chưa nhập giá trị" }),
+  address: z.string().min(1, { message: "Chưa nhập giá trị" }),
+  email: z
+    .string()
+    .min(1, { message: "Chưa nhập giá trị" })
+    .email({ message: "Định dạng email không đúng" }),
+  phone: z
+    .string()
+    .regex(/^\d+$/, { message: "Chỉ chứa số" })
+    .length(10, { message: "Số điện thoại không hợp lệ" }),
+  active: z.boolean(),
+});
+
+type Inputs = z.infer<typeof providerSchema>;
 
 const FormEditProvider = ({ provider, closeModal, fetchProvider }: Props) => {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<Inputs>({
+    resolver: zodResolver(providerSchema),
     defaultValues: {
       id: provider.id,
       name: provider.name,
@@ -52,7 +63,7 @@ const FormEditProvider = ({ provider, closeModal, fetchProvider }: Props) => {
     <Fragment>
       <form
         id="editProviderForm"
-        className="flex flex-col gap-4 min-w-[60vh]"
+        className="flex flex-col gap-2 w-[25vw] min-w-[250px]"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="flex flex-col gap-1">
@@ -63,6 +74,7 @@ const FormEditProvider = ({ provider, closeModal, fetchProvider }: Props) => {
             id="name"
             {...register("name", { required: true })}
           />
+          {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
         </div>
         <div className="flex flex-col gap-1">
           <label htmlFor="address">Địa chỉ</label>
@@ -72,6 +84,9 @@ const FormEditProvider = ({ provider, closeModal, fetchProvider }: Props) => {
             id="address"
             {...register("address", { required: true })}
           />
+          {errors.address && (
+            <ErrorMessage>{errors.address.message}</ErrorMessage>
+          )}
         </div>
         <div className="flex flex-col gap-1">
           <label htmlFor="phone">Số điện thoại</label>
@@ -81,6 +96,7 @@ const FormEditProvider = ({ provider, closeModal, fetchProvider }: Props) => {
             id="phone"
             {...register("phone")}
           />
+          {errors.phone && <ErrorMessage>{errors.phone.message}</ErrorMessage>}
         </div>
         <div className="flex flex-col gap-1">
           <label htmlFor="email">Email</label>
@@ -90,6 +106,7 @@ const FormEditProvider = ({ provider, closeModal, fetchProvider }: Props) => {
             id="email"
             {...register("email")}
           />
+          {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
         </div>
         <div className="flex items-center">
           <input

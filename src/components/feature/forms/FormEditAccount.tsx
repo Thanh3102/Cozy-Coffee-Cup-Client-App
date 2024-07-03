@@ -7,6 +7,9 @@ import { Role } from "../../../utils/types/type";
 import AccountApi from "../../../api/Account";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import ErrorMessage from "../../ui/ErrorMessage";
 
 interface Props {
   id: string;
@@ -14,24 +17,36 @@ interface Props {
   close: () => void;
 }
 
-type FormInput = {
-  id: string;
-  name: string;
-  roles: string[];
-};
+const accountSchema = z.object({
+  id: z.string(),
+  name: z.string().min(1, { message: "Chưa nhập giá trị" }),
+  roles: z.string().array(),
+});
+
+type FormInput = z.infer<typeof accountSchema>;
 
 const FormEditAccount = ({ close, fetchAccounts, id }: Props) => {
   const [roles, setRoles] = useState<Role[]>([]);
 
-  const { register, handleSubmit, setValue } = useForm<FormInput>();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<FormInput>({
+    resolver: zodResolver(accountSchema),
+  });
 
   const fetchAccount = async (id: string) => {
     const accountApi = new AccountApi();
     const account = await accountApi.getAccountDetail(id);
-    if(account){
-        setValue("id", account.id)
-        setValue("name", account.name);
-        setValue("roles", account.roles.map(r => r.id));
+    if (account) {
+      setValue("id", account.id);
+      setValue("name", account.name);
+      setValue(
+        "roles",
+        account.roles.map((r) => r.id)
+      );
     }
   };
 
@@ -76,6 +91,7 @@ const FormEditAccount = ({ close, fetchAccounts, id }: Props) => {
               className="input"
               {...register("name", { required: true })}
             />
+            {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
           </div>
         </div>
         <div className="mt-2 h-40 overflow-y-auto overflow-x-hidden">

@@ -6,19 +6,35 @@ import { toast } from "react-toastify";
 import { BaseProps } from "../../../utils/types/interface";
 import ProviderApi from "../../../api/Provider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlug, faPlus, faRotate, faX } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPlug,
+  faPlus,
+  faRotate,
+  faX,
+} from "@fortawesome/free-solid-svg-icons";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import ErrorMessage from "../../ui/ErrorMessage";
 
 interface Props extends BaseProps {
   closeModal: () => void;
   fetchProvider: () => void;
 }
 
-type Inputs = {
-  name: string;
-  address: string;
-  email: string;
-  phone: string;
-};
+const providerSchema = z.object({
+  name: z.string().min(1, { message: "Chưa nhập giá trị" }),
+  address: z.string().min(1, { message: "Chưa nhập giá trị" }),
+  email: z
+    .string()
+    .min(1, { message: "Chưa nhập giá trị" })
+    .email({ message: "Định dạng email không đúng" }),
+  phone: z
+    .string()
+    .regex(/^\d+$/, { message: "Chỉ chứa số" })
+    .length(10, { message: "Số điện thoại không hợp lệ" }),
+});
+
+type Inputs = z.infer<typeof providerSchema>;
 
 const FormAddProvider = ({ closeModal, fetchProvider }: Props) => {
   const {
@@ -26,7 +42,7 @@ const FormAddProvider = ({ closeModal, fetchProvider }: Props) => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm<Inputs>({ resolver: zodResolver(providerSchema) });
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const providerApi = new ProviderApi();
     const message = await providerApi.create(data);
@@ -40,7 +56,7 @@ const FormAddProvider = ({ closeModal, fetchProvider }: Props) => {
     <Fragment>
       <form
         id="addProviderForm"
-        className="flex flex-col gap-4 min-w-[60vh]"
+        className="flex flex-col gap-2 w-[25vw] min-w-[250px]"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="flex flex-col gap-1">
@@ -51,6 +67,7 @@ const FormAddProvider = ({ closeModal, fetchProvider }: Props) => {
             id="name"
             {...register("name", { required: true })}
           />
+          {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
         </div>
         <div className="flex flex-col gap-1">
           <label htmlFor="address">Địa chỉ</label>
@@ -60,6 +77,9 @@ const FormAddProvider = ({ closeModal, fetchProvider }: Props) => {
             id="address"
             {...register("address", { required: true })}
           />
+          {errors.address && (
+            <ErrorMessage>{errors.address.message}</ErrorMessage>
+          )}
         </div>
         <div className="flex flex-col gap-1">
           <label htmlFor="phone">Số điện thoại</label>
@@ -69,6 +89,7 @@ const FormAddProvider = ({ closeModal, fetchProvider }: Props) => {
             id="phone"
             {...register("phone")}
           />
+          {errors.phone && <ErrorMessage>{errors.phone.message}</ErrorMessage>}
         </div>
         <div className="flex flex-col gap-1">
           <label htmlFor="email">Email</label>
@@ -78,6 +99,7 @@ const FormAddProvider = ({ closeModal, fetchProvider }: Props) => {
             id="email"
             {...register("email")}
           />
+          {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
         </div>
       </form>
       <div className="flex justify-center gap-2 mt-4">

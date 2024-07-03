@@ -17,16 +17,21 @@ import { ExportItem } from "../../../utils/types/type";
 import { toast } from "react-toastify";
 import { CreateExportNoteDto } from "../../../utils/types/dto";
 import MaterialApi from "../../../api/Material";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import ErrorMessage from "../../ui/ErrorMessage";
 
 interface Props extends BaseProps {
   closeModal: () => void;
   reFetchMaterial: () => void;
 }
 
-type Inputs = {
-  picker_name: string;
-  note: string;
-};
+const noteSchema = z.object({
+  picker_name: z.string().min(1, { message: "Chưa nhập giá trị" }),
+  note: z.string(),
+});
+
+type Inputs = z.infer<typeof noteSchema>;
 
 const FormAddExportNote = ({ closeModal, reFetchMaterial }: Props) => {
   const [openAddExportItem, setOpenAddExportItem] = useState<boolean>(false);
@@ -36,7 +41,7 @@ const FormAddExportNote = ({ closeModal, reFetchMaterial }: Props) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm<Inputs>({ resolver: zodResolver(noteSchema) });
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const exportList: {
@@ -77,13 +82,16 @@ const FormAddExportNote = ({ closeModal, reFetchMaterial }: Props) => {
         className="w-[30vw] min-w-[500px]"
       >
         <div className="flex gap-10">
-          <div className="flex flex-col gap-2 flex-1">
+          <div className="flex flex-col gap-1 flex-1">
             <label htmlFor="">Tên người nhập</label>
             <input
               type="text"
               className="input"
               {...register("picker_name", { required: true })}
             />
+            {errors.picker_name && (
+              <ErrorMessage>{errors.picker_name.message}</ErrorMessage>
+            )}
           </div>
         </div>
         <div className="flex justify-between items-center my-3">
@@ -129,7 +137,7 @@ const FormAddExportNote = ({ closeModal, reFetchMaterial }: Props) => {
             ))}
           </TableBody>
         </Table>
-        <div className="flex flex-col gap-2 mt-2">
+        <div className="flex flex-col gap-1 mt-2">
           <label htmlFor="note">Ghi chú</label>
           <textarea
             id="note"

@@ -5,6 +5,9 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { ProductType } from "../../../utils/types/type";
 import ProductApi from "../../../api/Product";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import ErrorMessage from "../../ui/ErrorMessage";
 
 interface Props extends BaseProps {
   type: ProductType;
@@ -12,10 +15,20 @@ interface Props extends BaseProps {
   fetchType: () => void;
 }
 
-type Inputs = { id: number; name: string };
+const productTypeSchema = z.object({
+  id: z.number(),
+  name: z.string().min(1, { message: "Chưa nhập giá trị" }),
+});
+
+type Inputs = z.infer<typeof productTypeSchema>;
 
 const FormEditProductType = ({ type, close, fetchType }: Props) => {
-  const { register, handleSubmit } = useForm<Inputs>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>({
+    resolver: zodResolver(productTypeSchema),
     defaultValues: { name: type.name, id: type.id },
   });
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
@@ -37,8 +50,9 @@ const FormEditProductType = ({ type, close, fetchType }: Props) => {
           <input
             type="text"
             className="input"
-            {...register("name", { required: true })}
+            {...register("name")}
           />
+          {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
         </div>
         <div className="flex gap-3 justify-end">
           <Button type="button" size="small" color="danger" onClick={close}>
