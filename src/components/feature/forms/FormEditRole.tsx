@@ -121,7 +121,10 @@ const FormEditRole = ({ role, close, fetchRole }: Props) => {
           <div className="flex flex-wrap -mx-4 gap-y-4 h-60 overflow-y-auto my-4">
             {permissions.map((perm) => {
               return (
-                <div className="px-4 w-1/2 flex items-center gap-2">
+                <div
+                  className="px-4 w-1/2 flex items-center gap-2"
+                  key={perm.id}
+                >
                   <input
                     type="checkbox"
                     id={`cb-perm-${perm.id}`}

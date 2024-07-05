@@ -15,6 +15,7 @@ interface TableRowProps extends BaseProps {}
 interface TableCellProps extends BaseProps {
   align?: "left" | "center" | "right";
   colSpan?: number;
+  rowSpan?: number;
 }
 
 const TableOption = {
@@ -76,7 +77,10 @@ const TableBody = ({ children }: TableBodyProps) => {
 
 const TableRow = ({ children, className = "", ...rest }: TableRowProps) => {
   return (
-    <tr className={`${className} border-b-[1px] text-sm md:text-base last:border-none`} {...rest}>
+    <tr
+      className={`${className} border-b-[1px] text-sm md:text-base last:border-none`}
+      {...rest}
+    >
       {children}
     </tr>
   );
@@ -87,10 +91,13 @@ const TableCell = ({
   className = "",
   align = "left",
   colSpan = 1,
+  rowSpan = 1,
 }: TableCellProps) => {
   return (
     <td
       align={align}
+      colSpan={colSpan}
+      rowSpan={rowSpan}
       className={`px-2 py-4 ${TableOption.tableCol.align[align]} ${className}`}
       // colSpan={colSpan}
     >

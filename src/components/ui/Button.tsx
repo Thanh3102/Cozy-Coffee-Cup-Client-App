@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { HTMLProps, ReactElement } from "react";
 import { motion } from "framer-motion";
 import { BaseProps } from "../../utils/types/interface";
 interface Props extends BaseProps {

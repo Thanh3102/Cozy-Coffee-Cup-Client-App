@@ -44,7 +44,7 @@ const ProductList = ({ products, setSelected }: ProductListProps) => {
         ) : (
           products.map((product) => (
             <Fragment>
-              <div className="px-3 w-[25%]">
+              <div className="px-3 w-[25%]" key={product.id}>
                 <div
                   className={`${
                     product === selectedProduct

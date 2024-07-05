@@ -47,7 +47,7 @@ const RunOutMaterialTable = () => {
       </TableHead>
       <TableBody>
         {runOutMaterials.map((material) => (
-          <TableRow>
+          <TableRow key={material.id}>
             <TableCell>{material.id}</TableCell>
             <TableCell>{material.name}</TableCell>
             <TableCell>{material.stock_quantity}</TableCell>

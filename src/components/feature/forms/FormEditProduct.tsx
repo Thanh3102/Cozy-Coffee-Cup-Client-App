@@ -73,8 +73,6 @@ const FormEditProduct = ({ product, close, fetchProduct }: Props) => {
     },
   });
 
-  console.log(errors);
-
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const productApi = new ProductApi();
     setLoading(true);

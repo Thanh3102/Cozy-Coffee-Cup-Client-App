@@ -15,7 +15,6 @@ const AuthGate = ({ children }: Props) => {
     await dispatch(refreshToken());
   };
   useEffect(() => {
-    console.log("Refresh new access token");
     refresh();
     const intervalId = setInterval(() => {
       console.log("Interval refresh token");

@@ -45,8 +45,8 @@ const TopSaleProductTable = () => {
         </TableRow>
       </TableHead>
       <TableBody>
-        {saleProducts.map((product, index) => (
-          <TableRow>
+        {saleProducts.map((product) => (
+          <TableRow key={product.id}>
             <TableCell>{product.id}</TableCell>
             <TableCell className="text-sm">{product.name}</TableCell>
             <TableCell>{product.sales}</TableCell>

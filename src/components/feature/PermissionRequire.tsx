@@ -4,6 +4,7 @@ import { Permission } from "../../utils/types/enum";
 import { BaseProps } from "../../utils/types/interface";
 import AccountApi from "../../api/Account";
 import DeniedAccess from "../page/DeniedAccess";
+import Loading from "../ui/Loading";
 
 interface Props extends BaseProps {
   require: Permission;
@@ -28,8 +29,9 @@ const PermissionRequire = ({ require, children }: Props) => {
     if (permissions.includes(require)) {
       return <Fragment>{children}</Fragment>;
     }
+  } else {
+    return <Loading />;
   }
-
   return <DeniedAccess />;
 };
 

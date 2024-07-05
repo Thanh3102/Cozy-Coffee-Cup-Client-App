@@ -1,4 +1,4 @@
-import { ReactInstance, forwardRef } from "react";
+import { forwardRef } from "react";
 import {
   ItemOption,
   OrderDetail,
@@ -62,16 +62,18 @@ const OrderPrint = ({ order, refer }: Props) => {
         <div className="w-full mt-2">
           <table width={"100%"}>
             <thead className="border-y-[1px] border-black text-[14px]">
-              <th className="font-normal py-2">TT</th>
-              <th className="font-normal py-2">Tên sản phẩm</th>
-              <th className="font-normal py-2">SL</th>
-              <th className="font-normal py-2">Đ.Giá</th>
-              <th className="font-normal py-2">T.Tiền</th>
+              <tr>
+                <th className="font-normal py-2">TT</th>
+                <th className="font-normal py-2">Tên sản phẩm</th>
+                <th className="font-normal py-2">SL</th>
+                <th className="font-normal py-2">Đ.Giá</th>
+                <th className="font-normal py-2">T.Tiền</th>
+              </tr>
             </thead>
             <tbody>
               {order.orderItems.map((item, index) => {
                 return (
-                  <tr className="text-[12px]">
+                  <tr className="text-[12px]" key={item.id}>
                     <td align="center">{index + 1}</td>
                     <td width={140}>{`${item.product.name} (${optionToString(
                       item

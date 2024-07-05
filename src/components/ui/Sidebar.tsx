@@ -65,7 +65,7 @@ const ItemList = ({
     <ul>
       {items.map((item: Item, index) => {
         return (
-          <Link to={item.to}>
+          <Link to={item.to} key={index}>
             <li
               key={index}
               className={`py-5 flex justify-center md:block md:px-8 hover:cursor-pointer ${

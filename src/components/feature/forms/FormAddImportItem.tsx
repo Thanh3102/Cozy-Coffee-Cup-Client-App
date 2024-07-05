@@ -101,7 +101,7 @@ const FormAddImportItem = ({ setImportItems, closeModal }: Props) => {
             Chọn nguyên liệu
           </option>
           {materials.map((material) => {
-            return <option value={material.id}>{material.name}</option>;
+            return <option value={material.id} key={material.id}>{material.name}</option>;
           })}
         </select>
         {errors.material_id && (

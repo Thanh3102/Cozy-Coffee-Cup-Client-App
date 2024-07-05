@@ -106,7 +106,7 @@ const FormAddAccount = ({ close, fetchAccounts }: Props) => {
           <div className="flex flex-wrap -mx-3">
             {roles.map((role) => {
               return (
-                <div className="px-4 w-[50%] items-center">
+                <div className="px-4 w-[50%] items-center" key={role.id}>
                   <input
                     type="checkbox"
                     className="scale-110 mr-2"
